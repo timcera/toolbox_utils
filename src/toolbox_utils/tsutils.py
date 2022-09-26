@@ -12,7 +12,7 @@ from functools import reduce, wraps
 from io import BytesIO, StringIO
 from math import gcd
 from string import Template
-from textwrap import TextWrapper
+from textwrap import TextWrapper, dedent
 from typing import Any, Callable, List, Optional, Tuple, Union
 from urllib.parse import urlparse
 
@@ -41,29 +41,62 @@ if __name__ == "__main__":
     pass
 
 
+def normalize_command_line_args(args):
+    """Normalize command line arguments."""
+
+    nargs = ",".join(args)
+    nargs = nargs.split(",")
+
+    rargs = []
+    for index, arg in enumerate(nargs):
+        if os.path.exists(arg):
+            rargs.append([arg])
+        else:
+            rargs[-1].append(arg)
+    return rargs
+
+
 @typic.al
 def error_wrapper(estr: str) -> str:
     """Wrap estr into error format used by toolboxes."""
     wrapper = TextWrapper(initial_indent="*   ", subsequent_indent="*   ")
+
+    estr = dedent(estr)
+
     nestr = ["", "*"]
     for paragraph in estr.split("\n\n"):
         nestr.extend(("\n".join(wrapper.wrap(paragraph.strip())), "*"))
     nestr.append("")
+
     return "\n".join(nestr)
 
 
 def tssplit(s, quote="\"'", quote_keep=False, delimiter=":;,", escape="/^", trim=""):
-    """Split a string by delimiters with quotes and escaped characters, optionally trimming results
+    """Split a string by delimiters with quotes and escaped characters.
 
-    :param s: A string to split into chunks
-    :param quote: Quote chars to protect a part of s from parsing
-    :param quote_keep: Preserve quote characters in the output or not
-    :param delimiter: A chunk separator character
-    :param escape: An escape character
-    :param trim: Trim characters from chunks
-    :return: A list of chunks
+    Can use multiple delimiters, multiple quotes, and optionally trim each
+    returned word.
+
+    Parameters
+    ----------
+    s: str
+        A string to split into chunks
+    quote: str
+        Quote chars to protect a part of s from parsing
+    quote_keep: bool
+        Preserve quote characters in the output or not
+    delimiter: str
+        A chunk separator character
+    escape: str
+        An escape character
+    trim: str
+        Trim characters from chunks
+
+    Return
+    ------
+    result: list of str
+        A list of chunks
     """
-
     in_quotes = in_escape = False
     token = ""
     result = []
@@ -223,22 +256,22 @@ docstrings = {
         series with missing values to include the exterior `start_date` or
         `end_date`.""",
     "lat": r"""lat
-        The latitude of the point. North hemisphere is positive from 0 to 90. South
-        hemisphere is negative from 0 to -90.""",
+        The latitude of the point. North hemisphere is positive from 0 to 90.
+        South hemisphere is negative from 0 to -90.""",
     "lon": r"""lon
-        The longitude of the point.  Western hemisphere (west of Greenwich Prime
-        Meridian) is negative 0 to -180.  The eastern hemisphere (east of the Greenwich
-        Prime Meridian) is positive 0 to 180.""",
+        The longitude of the point.  Western hemisphere (west of Greenwich
+        Prime Meridian) is negative 0 to -180.  The eastern hemisphere (east of
+        the Greenwich Prime Meridian) is positive 0 to 180.""",
     "target_units": r"""target_units: str
         [optional, default is None, transformation]
 
         The purpose of this option is to specify target units for unit
-        conversion.  The source units are specified in the header line
-        of the input or using the 'source_units' keyword.
+        conversion.  The source units are specified in the header line of the
+        input or using the 'source_units' keyword.
 
-        The units of the input time-series or values are specified as
-        the second field of a ':' delimited name in the header line of
-        the input or in the 'source_units' keyword.
+        The units of the input time-series or values are specified as the
+        second field of a ':' delimited name in the header line of the input or
+        in the 'source_units' keyword.
 
         Any unit string compatible with the 'pint' library can be used.
 
@@ -248,24 +281,23 @@ docstrings = {
         [optional, default is None, transformation]
 
         If unit is specified for the column as the second field of a ':'
-        delimited column name, then the specified units and the
-        'source_units' must match exactly.
+        delimited column name, then the specified units and the 'source_units'
+        must match exactly.
 
-        Any unit string compatible with the 'pint' library can be
-        used.""",
+        Any unit string compatible with the 'pint' library can be used.""",
     "names": r"""names: str
         [optional, default is None, transformation]
 
-        If None, the column names are taken from the first row after
-        'skiprows' from the input dataset.
+        If None, the column names are taken from the first row after 'skiprows'
+        from the input dataset.
 
-        MUST include a name for all columns in the input dataset,
-        including the index column.""",
+        MUST include a name for all columns in the input dataset, including the
+        index column.""",
     "index_type": r"""index_type : str
         [optional, default is 'datetime', output format]
 
-        Can be either 'number' or 'datetime'.  Use 'number' with index
-        values that are Julian dates, or other epoch reference.""",
+        Can be either 'number' or 'datetime'.  Use 'number' with index values
+        that are Julian dates, or other epoch reference.""",
     "input_ts": r"""input_ts : str
         [optional though required if using within Python, default is '-'
         (stdin)]
@@ -275,12 +307,11 @@ docstrings = {
         input, but this can be changed for CSV files using the 'skiprows'
         option.
 
-        For CSV files separators will be automatically detected.
-
         Most common date formats can be used, but the closer to ISO 8601
         date/time standard the better.
 
-        Comma-separated values (CSV) files or tab-separated values (TSV):
+        Comma-separated values (CSV) files or tab-separated values (TSV)::
+
             File separators will be automatically detected.  Columns can be
             selected by name or index, where the index for data columns starts
             at 1.
@@ -319,21 +350,20 @@ docstrings = {
             |                                   | standard input (stdin)       |
             +-----------------------------------+------------------------------+
 
-            If working with CSV or TSV files it is better to use redirection
-            rather than use `--input_ts=fname.csv`.  The following are
-            identical:
+        If working with CSV or TSV files you can use redirection rather than
+        use `--input_ts=fname.csv`.  The following are identical:
 
-            From a file:
+        From a file:
 
-                command subcmd --input_ts=fname.csv
+            command subcmd --input_ts=fname.csv
 
-            From standard input (since '--input_ts=-' is the default:
+        From standard input (since '--input_ts=-' is the default:
 
-                command subcmd < fname.csv
+            command subcmd < fname.csv
 
-            Can also combine commands by piping:
+        Can also combine commands by piping:
 
-                command subcmd < filein.csv | command subcmd1 > fileout.csv
+            command subcmd < filein.csv | command subcmd1 > fileout.csv
 
         Python library examples::
 
@@ -343,20 +373,19 @@ docstrings = {
     "columns": r"""columns
         [optional, defaults to all columns, input filter]
 
-        Columns to select out of input.  Can use column names from the
-        first line header or column numbers.  If using numbers, column
-        number 1 is the first data column.  To pick multiple columns;
-        separate by commas with no spaces. As used in `toolbox_utils pick`
-        command.
+        Columns to select out of input.  Can use column names from the first
+        line header or column numbers.  If using numbers, column number 1 is
+        the first data column.  To pick multiple columns; separate by commas
+        with no spaces. As used in `toolbox_utils pick` command.
 
-        This solves a big problem so that you don't have to create
-        a data set with a certain column order, you can rearrange
-        columns when data is read in.""",
+        This solves a big problem so that you don't have to create a data set
+        with a certain column order, you can rearrange columns when data is
+        read in.""",
     "start_date": r"""start_date : str
         [optional, defaults to first date in time-series, input filter]
 
-        The start_date of the series in ISOdatetime format, or 'None'
-        for beginning.""",
+        The start_date of the series in ISOdatetime format, or 'None' for
+        beginning.""",
     "end_date": r"""end_date : str
         [optional, defaults to last date in time-series, input filter]
 
@@ -365,10 +394,9 @@ docstrings = {
     "dropna": r"""dropna : str
         [optional, defauls it 'no', input filter]
 
-        Set `dropna` to 'any' to have records dropped that have NA value
-        in any column, or 'all' to have records dropped that have NA in
-        all columns.  Set to 'no' to not drop any records.  The default
-        is 'no'.""",
+        Set `dropna` to 'any' to have records dropped that have NA value in any
+        column, or 'all' to have records dropped that have NA in all columns.
+        Set to 'no' to not drop any records.  The default is 'no'.""",
     "print_input": r"""print_input
         [optional, default is False, output format]
 
@@ -378,11 +406,11 @@ docstrings = {
         [optional, default is None which will do nothing to the index,
         output format]
 
-        Round the index to the nearest time point.  Can significantly
-        improve the performance since can cut down on memory and
-        processing requirements, however be cautious about rounding to
-        a very course interval from a small one.  This could lead to
-        duplicate values in the index.""",
+        Round the index to the nearest time point.  Can significantly improve
+        the performance since can cut down on memory and processing
+        requirements, however be cautious about rounding to a very course
+        interval from a small one.  This could lead to duplicate values in the
+        index.""",
     "float_format": r"""float_format
         [optional, output format]
 
@@ -390,15 +418,15 @@ docstrings = {
     "tablefmt": r"""tablefmt : str
         [optional, default is 'csv', output format]
 
-        The table format.  Can be one of 'csv', 'tsv', 'plain',
-        'simple', 'grid', 'pipe', 'orgtbl', 'rst', 'mediawiki', 'latex',
-        'latex_raw' and 'latex_booktabs'.""",
+        The table format.  Can be one of 'csv', 'tsv', 'plain', 'simple',
+        'grid', 'pipe', 'orgtbl', 'rst', 'mediawiki', 'latex', 'latex_raw' and
+        'latex_booktabs'.""",
     "header": r"""header : str
         [optional, default is 'default', output format]
 
-        This is if you want a different header than is the default for
-        this output table.  Pass a list with string column names for each
-        column in the table.""",
+        This is if you want a different header than is the default for this
+        output table.  Pass a list with string column names for each column in
+        the table.""",
     "pandas_offset_codes": r"""+-------+---------------+
         | Alias | Description   |
         +=======+===============+
@@ -544,68 +572,52 @@ docstrings = {
         | california | NA     | i/n                  |                       |
         +------------+--------+----------------------+-----------------------+
 
-        Where 'i' is the sorted rank of the y value, and 'n' is the
-        total number of values to be plotted.
+        Where 'i' is the sorted rank of the y value, and 'n' is the total
+        number of values to be plotted.
 
-        The 'blom' plotting position is also known as the 'Sevruk and Geiger'.""",
+        The 'blom' plotting position is also known as the 'Sevruk and
+        Geiger'.""",
     "clean": r"""clean
         [optional, default is False, input filter]
 
-        The 'clean' command will repair a input index, removing
-        duplicate index values and sorting.""",
+        The 'clean' command will repair a input index, removing duplicate index
+        values and sorting.""",
     "skiprows": r"""skiprows: list-like or integer or callable
-        [optional, default is None which will infer header from first
-        line, input filter]
+        [optional, default is None which will infer header from first line,
+        input filter]
 
         Line numbers to skip (0-indexed) if a list or number of lines to skip
         at the start of the file if an integer.
 
         If used in Python can be a callable, the callable function will be
-        evaluated against the row indices, returning True if the row should
-        be skipped and False otherwise.  An example of a valid callable
-        argument would be
+        evaluated against the row indices, returning True if the row should be
+        skipped and False otherwise.  An example of a valid callable argument
+        would be
 
         ``lambda x: x in [0, 2]``.""",
     "groupby": r"""groupby: str
         [optional, default is None, transformation]
 
-        The pandas offset code to group the time-series data into.
-        A special code is also available to group 'months_across_years'
-        that will group into twelve monthly categories across the entire
-        time-series.""",
+        The pandas offset code to group the time-series data into. A special
+        code is also available to group 'months_across_years' that will group
+        into twelve monthly categories across the entire time-series.""",
     "force_freq": r"""force_freq: str
         [optional, output format]
 
-        Force this frequency for the output.  Typically you will only
-        want to enforce a smaller interval where toolbox_utils will insert
-        missing values as needed.  WARNING: you may lose data if not
-        careful with this option.  In general, letting the algorithm
-        determine the frequency should always work, but this option will
-        override.  Use PANDAS offset codes.""",
+        Force this frequency for the output.  Typically you will only want to
+        enforce a smaller interval where toolbox_utils will insert missing
+        values as needed.  WARNING: you may lose data if not careful with this
+        option.  In general, letting the algorithm determine the frequency
+        should always work, but this option will override.  Use PANDAS offset
+        codes.""",
     "output_names": r"""output_names: str
         [optional, output_format]
 
-
-        The toolbox_utils will change the names of the output columns to include
-        some record of the operations used on each column.  The `output_names`
-        will override that feature.  Must be a list or tuple equal to the
-        number of columns in the output data.""",
+        The toolbox_utils will change the names of the output columns to
+        include some record of the operations used on each column.  The
+        `output_names` will override that feature.  Must be a list or tuple
+        equal to the number of columns in the output data.""",
 }
-
-# Decided this was inelegant, but left here in case I figure out what I want
-# and how I want it.
-# ntables = {}
-# for key in ["SUB_D", "DAILY", "WEEKLY", "QUATERLY", "ANNUAL"]:
-#     ntables[key] = tb(_CODES[key].items(),
-#                       tablefmt="grid",
-#                       headers=["Alias", "Description"],)
-#     ntables[key] = "        ".join(ntables[key].splitlines(True))
-# codes_table = f"""{ntables["SUB_D"]}
-#
-#     {ntables["DAILY"]}
-#     """
-#
-# docstrings["pandas_offset_codes"] = codes_table
 
 
 @typic.constrained(gt=0, lt=1)
@@ -701,21 +713,6 @@ def set_ppf(ptype: Optional[Literal["norm", "lognorm", "weibull"]]) -> Callable:
     return ppf
 
 
-PPDICT = {
-    "weibull": 0,
-    "benard": 0.3,
-    "filliben": 0.3175,
-    "yu": 0.326,
-    "tukey": 1 / 3,
-    "blom": 0.375,
-    "cunnane": 2 / 5,
-    "gringorton": 0.44,
-    "hazen": 1 / 2,
-    "larsen": 0.567,
-    "gumbel": 1,
-}
-
-
 @typic.al
 def set_plotting_position(
     n: Union[int, int64],
@@ -739,9 +736,24 @@ def set_plotting_position(
     ] = "weibull",
 ) -> ndarray:
     """Create plotting position 1D array using linspace."""
+
+    ppdict = {
+        "weibull": 0,
+        "benard": 0.3,
+        "filliben": 0.3175,
+        "yu": 0.326,
+        "tukey": 1 / 3,
+        "blom": 0.375,
+        "cunnane": 2 / 5,
+        "gringorton": 0.44,
+        "hazen": 1 / 2,
+        "larsen": 0.567,
+        "gumbel": 1,
+    }
+
     if plotting_position == "california":
         return np.linspace(1.0 / n, 1.0, n)
-    a = PPDICT.get(plotting_position, plotting_position)
+    a = ppdict.get(plotting_position, plotting_position)
     i = np.arange(1, n + 1)
     return (i - a) / float(n + 1 - 2 * a)
 
@@ -767,14 +779,6 @@ def copy_doc(source: Callable) -> Callable:
     ----------
     source : Callable
         Function to take doc string from.
-
-    Examples
-    --------
-    >>> @decorit.copy_doc(func_to_copy_docstring_from)
-    >>> def func(args):
-    ...     pass  # function goes here
-    # Function uses parameters of given func
-
     """
 
     @wraps(source)
@@ -825,8 +829,7 @@ def parsedate(
         raise ValueError(
             error_wrapper(
                 f"""
-Could not parse date string '{dstr}'.
-"""
+                Could not parse date string '{dstr}'. """
             )
         )
 
@@ -845,7 +848,7 @@ def merge_dicts(*dict_args: dict) -> dict:
 
 
 def about(name):
-    """Return generic 'about' information used across all toolboxes."""
+    """Print generic 'about' information used across all toolboxes."""
     import platform
 
     import pkg_resources
@@ -923,8 +926,8 @@ def make_list(*strorlist, **kwds: Any) -> Any:
         raise ValueError(
             error_wrapper(
                 f"""
-The list {strorlist} for "{kwdname}" should have {n} members according to function requirements.
-"""
+                The list {strorlist} for "{kwdname}" should have {n} members
+                according to function requirements. """
             )
         )
 
@@ -988,8 +991,8 @@ The list {strorlist} for "{kwdname}" should have {n} members according to functi
         raise ValueError(
             error_wrapper(
                 f"""
-The list {strorlist} for "{kwdname}" should have {n} members according to function requirements.
-"""
+                The list {strorlist} for "{kwdname}" should have {n} members
+                according to function requirements. """
             )
         )
 
@@ -1126,12 +1129,12 @@ def _normalize_units(
                 raise ValueError(
                     error_wrapper(
                         f"""
-The units specified by the "source_units" keyword and in the second ":"
-delimited field in the DataFrame column name must match.
+                        The units specified by the "source_units" keyword and
+                        in the second ":" delimited field in the DataFrame
+                        column name must match.
 
-"source_unit" keyword is {isource_units}
-Column name source units are {tsource_units}
-                                                       """
+                        "source_unit" keyword is {isource_units} Column name
+                        source units are {tsource_units}"""
                     )
                 )
             su.append(tsource)
@@ -1142,9 +1145,9 @@ Column name source units are {tsource_units}
         raise ValueError(
             error_wrapper(
                 f"""
-Source units must be specified either using "source_units" keyword of in the
-second ":" delimited field in the column name.  Instead you have {su}.
-                                           """
+                Source units must be specified either using "source_units"
+                keyword of in the second ":" delimited field in the column
+                name.  Instead you have {su}. """
             )
         )
     names = []
@@ -1166,13 +1169,13 @@ second ":" delimited field in the column name.  Instead you have {su}.
         raise ValueError(
             error_wrapper(
                 f"""
-To specify target_units, you must also specify source_units.  You can
-specify source_units either by using the `source_units` keyword or placing
-in the name of the data column as the second ':' separated field.
+                To specify target_units, you must also specify source_units.
+                You can specify source_units either by using the `source_units`
+                keyword or placing in the name of the data column as the second
+                ':' separated field.
 
-The `source_units` keyword must specify units that are convertible
-to the `target_units`: {target_units}
-"""
+                The `source_units` keyword must specify units that are
+                convertible to the `target_units`: {target_units} """
             )
         )
 
@@ -1201,7 +1204,8 @@ to the `target_units`: {target_units}
                     raise ValueError(
                         error_wrapper(
                             f"""
-No conversion between {words[1]} and {target_units[inx]}."""
+                            No conversion between {words[1]} and
+                            {target_units[inx]}."""
                         )
                     )
             ncolumns.append(":".join(words))
@@ -1370,27 +1374,24 @@ def _pick(tsd: DataFrame, columns: Any) -> DataFrame:
             raise ValueError(
                 error_wrapper(
                     f"""
-The name {i} isn't in the list of column names
-{tsd.columns}.
-"""
+                    The name {i} isn't in the list of column names
+                    {tsd.columns}. """
                 )
             )
         if target_col < -1:
             raise ValueError(
                 error_wrapper(
                     f"""
-The requested column "{i}" must be greater than or equal to 0.
-First data column is 1, index is column 0.
-"""
+                    The requested column "{i}" must be greater than or equal to
+                    0. First data column is 1, index is column 0. """
                 )
             )
         if target_col > len(tsd.columns):
             raise ValueError(
                 error_wrapper(
                     f"""
-The request column index {i} must be less than or equal to the
-number of columns {len(tsd.columns)}.
-"""
+                    The request column index {i} must be less than or equal to
+                    the number of columns {len(tsd.columns)}. """
                 )
             )
 
@@ -1987,7 +1988,7 @@ def read_iso_ts(
                 newkwds = {}
 
             # Command line API
-            # Uses wdmtoolbox, hspfbintoolbox, or pd.read_* functions.
+            # Uses hspf_reader or pd.read_* functions.
             fpi = None
             if fname in ["-", b"-"]:
                 # if from stdin format must be the toolbox_utils standard
@@ -2002,18 +2003,17 @@ def read_iso_ts(
             elif os.path.exists(str(fname)):
                 # a local file
                 # Read all wdm, hdf5, and, xls* files here
-                header = "infer"
                 sep = ","
                 index_col = 0
                 usecols = None
                 fpi = fname
                 _, ext = os.path.splitext(fname)
                 if ext.lower() == ".wdm":
-                    from wdmtoolbox import wdmtoolbox
+                    from hspf_reader.hspf_reader import wdm
 
                     nres = []
                     for par in args:
-                        nres.append(wdmtoolbox.extract(",".join([fname] + [str(par)])))
+                        nres.append(wdm(",".join([fname] + [str(par)])))
                     res = pd.concat(nres, axis="columns")
                 elif ext.lower() == ".hdf5":
                     if len(args) == 0:
@@ -2033,6 +2033,10 @@ def read_iso_ts(
                     ".ods",
                     ".odt",
                 ]:
+                    # Sometime in the future, we may want to be able to
+                    # create a multi-index, but for now, we'll just
+                    # use the first row as the header.
+                    header = 0
                     if len(args) == 0:
                         sheet = 0
                     else:
