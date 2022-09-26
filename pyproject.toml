@@ -9,16 +9,11 @@ dependencies = [
     "scipy",
     "pandas",
     "pint-pandas",
-    "xlsxwriter",
     "setuptools",
     "setuptools_scm",
     "typical>=2.6.0",
     "typing-extensions",
-    "xlrd >= 1.0.0",
-    "openpyxl",
-    "odfpy",
-    "wdmtoolbox",
-    "hspfbintoolbox",
+    "hspf_reader",
     ]
 license = {file = "LICENSE.txt"}
 authors = [
