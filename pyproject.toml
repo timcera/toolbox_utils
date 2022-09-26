@@ -14,6 +14,9 @@ dependencies = [
     "typical>=2.6.0",
     "typing-extensions",
     "hspf_reader",
+    "xlrd",
+    "openpyxl",
+    "pyxlsb",
     ]
 license = {file = "LICENSE.txt"}
 authors = [
