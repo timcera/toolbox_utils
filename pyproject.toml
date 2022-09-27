@@ -18,7 +18,7 @@ dependencies = [
     "openpyxl",
     "pyxlsb",
     ]
-license = {file = "LICENSE.txt"}
+license = {text = "BSD-3-Clause"}
 authors = [
     {name = "Tim Cera", email = "tim@cerazone.net"}
     ]
@@ -74,6 +74,7 @@ github = "https://github.com/timcera/toolbox_utils"
 bitbucket = "https://bitbucket.org/timcera/toolbox_utils/src/main/"
 
 [tool.setuptools]
+license-files = ["LICENSE.txt"]
 include-package-data = true
 
 [tool.setuptools.dynamic]
