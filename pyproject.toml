@@ -1,3 +1,11 @@
+[build-system]
+requires = [
+    "setuptools",
+    "wheel",
+    "oldest-supported-numpy",
+]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "toolbox_utils"
 dynamic = ["readme", "version"]
@@ -9,11 +17,10 @@ dependencies = [
     "scipy",
     "pandas",
     "pint-pandas",
+    "pydantic",
     "setuptools",
     "setuptools_scm",
-    "typical>=2.6.0",
     "typing-extensions",
-    "hspf_reader",
     "xlrd",
     "openpyxl",
     "pyxlsb",
@@ -47,7 +54,7 @@ keywords = ["time-series",
             ]
 
 [project.optional-dependencies]
-dev =  ["black",
+dev = ["black",
         "cleanpy",
         "twine",
         "pytest",
@@ -65,36 +72,12 @@ dev =  ["black",
         "commitizen",
         ]
 
-[project.scripts]
-toolbox_utils = "toolbox_utils.toolbox_utils:main"
-
-[project_urls]
+[project.urls]
 documentation = "https://timcera.bitbucket.io/toolbox_utils/docs/index.html#toolbox_utils-documentation"
 github = "https://github.com/timcera/toolbox_utils"
 bitbucket = "https://bitbucket.org/timcera/toolbox_utils/src/main/"
 
-[tool.setuptools]
-license-files = ["LICENSE.txt"]
-include-package-data = true
-
-[tool.setuptools.dynamic]
-readme = {file = "README.rst"}
-version = {file = "VERSION"}
-
-[tool.setuptools.packages.find]
-where = ["src"]
-exclude = ["examples*", "tools*", "docs*", "toolbox_utils.tests*"]
-
-[tool.coverage.run]
-relative_files = true
-
-[build-system]
-requires = [
-    "setuptools",
-    "wheel",
-    "oldest-supported-numpy",
-]
-build-backend = "setuptools.build_meta"
+[tool]
 
 [tool.check-manifest]
 ignore = ["docs/_function_autosummary/*",
@@ -108,3 +91,18 @@ version = "0.1.2"
 tag_format = "v$version"
 version_files = ["VERSION"]
 update_changelog_on_bump = true
+
+[tool.coverage.run]
+relative_files = true
+
+[tool.setuptools]
+license-files = ["LICENSE.txt"]
+include-package-data = true
+
+[tool.setuptools.dynamic]
+readme = {file = "README.rst"}
+version = {file = "VERSION"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+exclude = ["examples*", "tools*", "docs*", "toolbox_utils.tests*"]

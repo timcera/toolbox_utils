@@ -1,41 +1,47 @@
-# -*- coding: utf-8 -*-
 """A collection of functions used by toolbox_utils, wdmtoolbox, ...etc."""
-
 
 import bz2
 import datetime
 import gzip
 import inspect
 import os
+import platform
 import sys
+from contextlib import suppress
 from functools import reduce, wraps
 from io import BytesIO, StringIO
 from math import gcd
 from string import Template
 from textwrap import TextWrapper, dedent
 from typing import Any, Callable, List, Optional, Tuple, Union
-from urllib.parse import urlparse
 
-import dateparser
-import numpy as np
-import pandas as pd
-import pint_pandas  # not used directly, but required to use pint in pandas
-import typic
-from _io import TextIOWrapper
-from numpy import int64, ndarray
-from pandas._libs.tslibs.timestamps import Timestamp
-from pandas.core.frame import DataFrame
-from pandas.core.indexes.base import Index
-from pandas.tseries.frequencies import to_offset
-from scipy.stats.distributions import lognorm, norm
-from tabulate import simple_separated_format
-from tabulate import tabulate as tb
+from pydantic import Field, validate_arguments
 
 try:
     from typing import Literal
 except ImportError:
     from typing_extensions import Literal
 
+from urllib.parse import urlparse
+
+import dateparser
+import numpy as np
+import pandas as pd
+import pint_pandas  # not used directly, but required to use pint in pandas
+import pkg_resources
+from _io import TextIOWrapper
+
+# Because of circular imports, use that base functions from hspf_reader.
+from hspf_reader.functions.hbn import hbn_extract as hbn
+from hspf_reader.functions.plotgen import plotgen_extract as plotgen
+from hspf_reader.functions.wdm import wdm_extract as wdm
+from numpy import int64, ndarray
+from pandas.core.frame import DataFrame
+from pandas.core.indexes.base import Index
+from pandas.tseries.frequencies import to_offset
+from scipy.stats.distributions import lognorm, norm
+from tabulate import simple_separated_format
+from tabulate import tabulate as tb
 
 if __name__ == "__main__":
     pass
@@ -48,7 +54,7 @@ def normalize_command_line_args(args):
     nargs = nargs.split(",")
 
     rargs = []
-    for index, arg in enumerate(nargs):
+    for arg in nargs:
         if os.path.exists(arg):
             rargs.append([arg])
         else:
@@ -56,7 +62,6 @@ def normalize_command_line_args(args):
     return rargs
 
 
-@typic.al
 def error_wrapper(estr: str) -> str:
     """Wrap estr into error format used by toolboxes."""
     wrapper = TextWrapper(initial_indent="*   ", subsequent_indent="*   ")
@@ -71,7 +76,9 @@ def error_wrapper(estr: str) -> str:
     return "\n".join(nestr)
 
 
-def tssplit(s, quote="\"'", quote_keep=False, delimiter=":;,", escape="/^", trim=""):
+def tssplit(
+    input_str, quote="\"'", quote_keep=False, delimiter=":;,", escape="/^", trim=""
+):
     """Split a string by delimiters with quotes and escaped characters.
 
     Can use multiple delimiters, multiple quotes, and optionally trim each
@@ -101,25 +108,25 @@ def tssplit(s, quote="\"'", quote_keep=False, delimiter=":;,", escape="/^", trim
     token = ""
     result = []
 
-    for c in s:
+    for letter in input_str:
         if in_escape:
-            token += c
+            token += letter
             in_escape = False
-        elif c in escape:
+        elif letter in escape:
             in_escape = True
             if in_quotes:
-                token += c
-        elif c in quote and not in_escape:
-            in_quotes = False if in_quotes else True
+                token += letter
+        elif letter in quote and not in_escape:
+            in_quotes = not in_quotes
             if quote_keep:
-                token += c
-        elif c in delimiter and not in_quotes:
+                token += letter
+        elif letter in delimiter and not in_quotes:
             if trim:
                 token = token.strip(trim)
             result.append(token)
             token = ""
         else:
-            token += c
+            token += letter
 
     if trim:
         token = token.strip(trim)
@@ -184,7 +191,6 @@ _CODES["QUARTERLY"]: {
     "QS-AUG": "Quarterly, quarter Starts end of AUGust",
     "QS-SEP": "Quarterly, quarter Starts end of SEPtember",
     "QS-OCT": "Quarterly, quarter Starts end of OCTober",
-    "QS-NOV": "Quarterly, quarter Starts end of NOVember",
     "QS-NOV": "Quarterly, quarter Starts end of NOVember",
     "QS-DEC": "Quarterly, quarter Starts end of DECember",
     "BQ": "Business Quarter end",
@@ -318,37 +324,38 @@ docstrings = {
 
         Command line examples:
 
-            +-----------------------------------+------------------------------+
-            | Keyword Example                   | Description                  |
-            +===================================+==============================+
-            | --input_ts=fname.csv              | read all columns             |
-            |                                   | from 'fname.csv'             |
-            +-----------------------------------+------------------------------+
-            | --input_ts=fname.csv,2,1          | read data columns 2 and 1    |
-            |                                   | from 'fname.csv'             |
-            +-----------------------------------+------------------------------+
-            | --input_ts=fname.csv,2,skiprows=2 | read data column 2           |
-            |                                   | from 'fname.csv', skipping   |
-            |                                   | first 2 rows so header is    |
-            |                                   | read from third row          |
-            +-----------------------------------+------------------------------+
-            | --input_ts=fname.xlsx,2,Sheet21   | read all data from 2nd sheet |
-            |                                   | then all data from "Sheet21" |
-            |                                   | of 'fname.xlsx'              |
-            +-----------------------------------+------------------------------+
-            | --input_ts=fname.hdf5,Table12,T2  | read all data from table     |
-            |                                   | "Table12" then all data from |
-            |                                   | table "T2" of 'fname.hdf5'   |
-            +-----------------------------------+------------------------------+
-            | --input_ts=fname.wdm,210,110      | read DSNs 210, then 110      |
-            |                                   | from 'fname.wdm'             |
-            +-----------------------------------+------------------------------+
-            | --input_ts='-'                    | read all columns from        |
-            |                                   | standard input (stdin)       |
-            +-----------------------------------+------------------------------+
-            | --input_ts='-' --columns=4,1      | read column 4 and 1 from     |
-            |                                   | standard input (stdin)       |
-            +-----------------------------------+------------------------------+
+            +-----------------------------------+----------------------------+
+            | Keyword Example                   | Description                |
+            +===================================+============================+
+            | --input_ts=fname.csv              | read all columns           |
+            |                                   | from 'fname.csv'           |
+            +-----------------------------------+----------------------------+
+            | --input_ts=fname.csv,2,1          | read data columns 2 and 1  |
+            |                                   | from 'fname.csv'           |
+            +-----------------------------------+----------------------------+
+            | --input_ts=fname.csv,2,skiprows=2 | read data column 2         |
+            |                                   | from 'fname.csv', skipping |
+            |                                   | first 2 rows so header is  |
+            |                                   | read from third row        |
+            +-----------------------------------+----------------------------+
+            | --input_ts=fname.xlsx,2,Sheet21   | read all data from 2nd     |
+            |                                   | sheet all data from        |
+            |                                   | "Sheet21" of 'fname.xlsx'  |
+            +-----------------------------------+----------------------------+
+            | --input_ts=fname.hdf5,Table12,T2  | read all data from table   |
+            |                                   | "Table12" then all data    |
+            |                                   | from table "T2" of         |
+            |                                   | 'fname.hdf5'               |
+            +-----------------------------------+----------------------------+
+            | --input_ts=fname.wdm,210,110      | read DSNs 210, then 110    |
+            |                                   | from 'fname.wdm'           |
+            +-----------------------------------+----------------------------+
+            | --input_ts='-'                    | read all columns from      |
+            |                                   | standard input (stdin)     |
+            +-----------------------------------+----------------------------+
+            | --input_ts='-' --columns=4,1      | read column 4 and 1 from   |
+            |                                   | standard input (stdin)     |
+            +-----------------------------------+----------------------------+
 
         If working with CSV or TSV files you can use redirection rather than
         use `--input_ts=fname.csv`.  The following are identical:
@@ -620,56 +627,6 @@ docstrings = {
 }
 
 
-@typic.constrained(gt=0, lt=1)
-class FloatBetweenZeroAndOne(float):
-    """0.0 < float < 1.0"""
-
-
-@typic.constrained(ge=0, le=1)
-class FloatBetweenZeroAndOneInclusive(float):
-    """0.0 <= float <= 1.0"""
-
-
-@typic.constrained(ge=0)
-class FloatGreaterEqualToZero(float):
-    """float >= 0.0"""
-
-
-@typic.constrained(ge=1)
-class FloatGreaterEqualToOne(float):
-    """float >= 1.0"""
-
-
-@typic.constrained(ge=0)
-class IntGreaterEqualToZero(int):
-    """int >= 0"""
-
-
-@typic.constrained(ge=1)
-class IntGreaterEqualToOne(int):
-    """int >= 1"""
-
-
-@typic.constrained(ge=1, le=3)
-class IntBetweenOneAndThree(int):
-    """1 <= int <= 3"""
-
-
-@typic.constrained(ge=-90, le=90)
-class FloatLatitude(float):
-    """-90 <= float <= 90"""
-
-
-@typic.constrained(ge=-180, le=180)
-class FloatLongitude(float):
-    """-180 <= float <= 180"""
-
-
-@typic.constrained(gt=0)
-class FloatGreaterThanZero(float):
-    """0 < float"""
-
-
 def flatten(list_of_lists) -> List:
     """Recursively flatten a list of lists or tuples into a single list."""
     if isinstance(list_of_lists, (list, tuple)):
@@ -681,18 +638,18 @@ def flatten(list_of_lists) -> List:
     return list_of_lists
 
 
-@typic.al
+@validate_arguments
 def stride_and_unit(sunit: str) -> Tuple[str, int]:
     """Split a stride/unit combination into component parts."""
     if sunit is None:
         return sunit
     unit = sunit.lstrip("+-. 1234567890")
     stride = sunit[: sunit.index(unit)]
-    stride = int(stride) if len(stride) > 0 else 1
+    stride = int(stride) if stride else 1
     return unit, stride
 
 
-@typic.al
+@validate_arguments
 def set_ppf(ptype: Optional[Literal["norm", "lognorm", "weibull"]]) -> Callable:
     """Return correct Percentage Point Function for `ptype`."""
     if ptype == "norm":
@@ -701,21 +658,21 @@ def set_ppf(ptype: Optional[Literal["norm", "lognorm", "weibull"]]) -> Callable:
         ppf = lognorm.freeze(0.5, loc=0).ppf
     elif ptype == "weibull":
 
-        def ppf(y):
+        def ppf(y_vals):
             """Percentage Point Function for the weibull distribution."""
-            return np.log(-np.log(1 - np.array(y)))
+            return np.log(-np.log(1 - np.array(y_vals)))
 
     elif ptype is None:
 
-        def ppf(y):
-            return y
+        def ppf(y_vals):
+            return y_vals
 
     return ppf
 
 
-@typic.al
+@validate_arguments(config=dict(arbitrary_types_allowed=True))
 def set_plotting_position(
-    n: Union[int, int64],
+    cnt: Union[int, int64],
     plotting_position: Union[
         float,
         Literal[
@@ -752,26 +709,26 @@ def set_plotting_position(
     }
 
     if plotting_position == "california":
-        return np.linspace(1.0 / n, 1.0, n)
-    a = ppdict.get(plotting_position, plotting_position)
-    i = np.arange(1, n + 1)
-    return (i - a) / float(n + 1 - 2 * a)
+        return np.linspace(1.0 / cnt, 1.0, cnt)
+    coeff = ppdict.get(plotting_position, plotting_position)
+    index = np.arange(1, cnt + 1)
+    return (index - coeff) / float(cnt + 1 - 2 * coeff)
 
 
-@typic.al
-def _handle_curly_braces_in_docstring(s: str, **kwargs) -> str:
+@validate_arguments
+def _handle_curly_braces_in_docstring(input_str: str, **kwargs) -> str:
     """Replace missing keys with a pattern."""
-    RET = "{{{}}}"
+    ret = "{{{}}}"
     try:
-        return s.format(**kwargs)
-    except KeyError as e:
-        keyname = e.args[0]
+        return input_str.format(**kwargs)
+    except KeyError as exc:
+        keyname = exc.args[0]
         return _handle_curly_braces_in_docstring(
-            s, **{keyname: RET.format(keyname)}, **kwargs
+            input_str, **{keyname: ret.format(keyname)}, **kwargs
         )
 
 
-@typic.al
+@validate_arguments
 def copy_doc(source: Callable) -> Callable:
     """Copy docstring from source.
 
@@ -790,26 +747,26 @@ def copy_doc(source: Callable) -> Callable:
     return wrapper_copy_doc
 
 
-@typic.al
+@validate_arguments
 def doc(fdict: dict, **kwargs) -> Callable:
     """Return a decorator that formats a docstring."""
 
-    def f(fn):
-        fn.__doc__ = Template(fn.__doc__).safe_substitute(**fdict)
+    def outer_func(inner_func):
+        inner_func.__doc__ = Template(inner_func.__doc__).safe_substitute(**fdict)
 
         # kwargs is currently always empty.
         # Could remove, but keeping in case useful in future.
-        for attr in kwargs:
-            setattr(fn, attr, kwargs[attr])
-        return fn
+        for key, value in kwargs.items():
+            setattr(inner_func, key, value)
+        return inner_func
 
-    return f
+    return outer_func
 
 
-@typic.al
+@validate_arguments
 def parsedate(
-    dstr: Optional[str], strftime: Optional[Any] = None, settings: Optional[Any] = None
-) -> Timestamp:
+    dstr: Optional[Any], strftime: Optional[Any] = None, settings: Optional[Any] = None
+):
     """Use dateparser to parse a wide variety of dates.
 
     Used for start and end dates.
@@ -838,24 +795,21 @@ def parsedate(
     return pdate.strftime(strftime)
 
 
-@typic.al
+@validate_arguments
 def merge_dicts(*dict_args: dict) -> dict:
     """Merge multiple dictionaries."""
     result = {}
-    for d in dict_args:
-        result.update(d)
+    for dic in dict_args:
+        result.update(dic)
     return result
 
 
 def about(name):
     """Print generic 'about' information used across all toolboxes."""
-    import platform
 
-    import pkg_resources
-
-    namever = str(pkg_resources.get_distribution(name.split(".")[0]))
-    print("package name = {}\npackage version = {}".format(*namever.split()))
-
+    nme, ver = str(pkg_resources.get_distribution(name.split(".")[0])).split()
+    print(f"package name = {nme}")
+    print(f"package version = {ver}")
     print(f"platform architecture = {platform.architecture()}")
     print(f"platform machine = {platform.machine()}")
     print(f"platform = {platform.platform()}")
@@ -891,11 +845,11 @@ def _pick_column_or_value(tsd, var):
 def make_list(*strorlist, **kwds: Any) -> Any:
     """Normalize strings, converting to numbers or lists."""
     try:
-        n = kwds.pop("n")
+        cnt = kwds.pop("n")
     except KeyError:
-        n = None
-    if n is not None:
-        n = int(n)
+        cnt = None
+    if cnt is not None:
+        cnt = int(cnt)
 
     try:
         sep = kwds.pop("sep")
@@ -922,11 +876,15 @@ def make_list(*strorlist, **kwds: Any) -> Any:
             # further processing.
             strorlist = strorlist[0]
 
-    if isinstance(strorlist, (list, tuple)) and n is not None and len(strorlist) != n:
+    if (
+        isinstance(strorlist, (list, tuple))
+        and cnt is not None
+        and len(strorlist) != cnt
+    ):
         raise ValueError(
             error_wrapper(
                 f"""
-                The list {strorlist} for "{kwdname}" should have {n} members
+                The list {strorlist} for "{kwdname}" should have {cnt} members
                 according to function requirements. """
             )
         )
@@ -949,7 +907,7 @@ def make_list(*strorlist, **kwds: Any) -> Any:
         return [strorlist]
 
     if isinstance(strorlist, (str, bytes)):
-        if strorlist in ["None", "", b"None", b""]:
+        if strorlist in ("None", "", b"None", b""):
             # 'None' -> None
             # ''     -> None
             #
@@ -963,10 +921,8 @@ def make_list(*strorlist, **kwds: Any) -> Any:
         try:
             return [int(strorlist)]
         except ValueError:
-            try:
+            with suppress(ValueError):
                 return [float(strorlist)]
-            except ValueError:
-                pass
         # Deal with a str or bytes.
         strorlist = strorlist.strip()
 
@@ -983,15 +939,15 @@ def make_list(*strorlist, **kwds: Any) -> Any:
     if isinstance(strorlist, (StringIO, BytesIO)):
         return strorlist
 
-    if n is None:
-        n = len(strorlist)
+    if cnt is None:
+        cnt = len(strorlist)
 
     # At this point 'strorlist' variable should be a list or tuple.
-    if len(strorlist) != n:
+    if len(strorlist) != cnt:
         raise ValueError(
             error_wrapper(
                 f"""
-                The list {strorlist} for "{kwdname}" should have {n} members
+                The list {strorlist} for "{kwdname}" should have {cnt} members
                 according to function requirements. """
             )
         )
@@ -1119,8 +1075,8 @@ def _normalize_units(
         else:
             tsource_units.append(ntsd.columns[inx])
 
-    # Combine isource_units and tsource_units into su.
-    su = []
+    # Combine isource_units and tsource_units into stu.
+    stu = []
     if isource_units is not None:
         for isource, tsource in zip(isource_units, tsource_units):
             if not tsource:
@@ -1137,21 +1093,21 @@ def _normalize_units(
                         source units are {tsource_units}"""
                     )
                 )
-            su.append(tsource)
+            stu.append(tsource)
     else:
-        su = [""] * len(ntsd.columns)
+        stu = [""] * len(ntsd.columns)
 
-    if source_units_required and "" in su:
+    if source_units_required and "" in stu:
         raise ValueError(
             error_wrapper(
                 f"""
                 Source units must be specified either using "source_units"
                 keyword of in the second ":" delimited field in the column
-                name.  Instead you have {su}. """
+                name.  Instead you have {stu}. """
             )
         )
     names = []
-    for inx, unit in enumerate(su):
+    for inx, unit in enumerate(stu):
         if isinstance(ntsd.columns[inx], (str, bytes)):
             words = ntsd.columns[inx].split(":")
             if unit:
@@ -1165,7 +1121,7 @@ def _normalize_units(
             names.append(ntsd.columns[inx])
     ntsd.columns = names
 
-    if su is None and target_units is not None:
+    if stu is None and target_units is not None:
         raise ValueError(
             error_wrapper(
                 f"""
@@ -1183,8 +1139,8 @@ def _normalize_units(
     if target_units is not None:
         ncolumns = []
         for inx, colname in enumerate(ntsd.columns):
-            words = str(colname).split(":")
-            if len(words) > 1:
+            words = colname.split(":")
+            if words:
                 # convert words[1] to target_units[inx]
                 try:
                     # Would be nice in the future to carry around units,
@@ -1200,14 +1156,14 @@ def _normalize_units(
                         dtype=float,
                     )
                     words[1] = target_units[inx]
-                except AttributeError:
+                except AttributeError as exc:
                     raise ValueError(
                         error_wrapper(
                             f"""
                             No conversion between {words[1]} and
                             {target_units[inx]}."""
                         )
-                    )
+                    ) from exc
             ncolumns.append(":".join(words))
         ntsd.columns = ncolumns
 
@@ -1256,7 +1212,7 @@ def transform_args(**trans_func_for_arg):
 @transform_args(
     pick=make_list, names=make_list, source_units=make_list, target_units=make_list
 )
-@typic.al
+@validate_arguments
 def common_kwds(
     input_tsd=None,
     start_date=None,
@@ -1332,14 +1288,12 @@ def common_kwds(
     if ntsd.index.inferred_type == "datetime64":
         ntsd.index.name = "Datetime"
 
-    if dropna in ["any", "all"]:
+    if dropna in ("any", "all"):
         ntsd = ntsd.dropna(axis="index", how=dropna)
     else:
-        try:
+        with suppress(ValueError):
             if bestfreq:
                 ntsd = asbestfreq(ntsd, force_freq=force_freq)
-        except ValueError:
-            pass
 
     if groupby is not None:
         if groupby == "months_across_years":
@@ -1366,18 +1320,17 @@ def _pick(tsd: DataFrame, columns: Any) -> DataFrame:
             # making it -1 that will be evaluated later...
             ncolumns.append(-1)
             continue
-
         # if using column numbers
         try:
             target_col = int(i) - 1
-        except ValueError:
+        except ValueError as exc:
             raise ValueError(
                 error_wrapper(
                     f"""
                     The name {i} isn't in the list of column names
                     {tsd.columns}. """
                 )
-            )
+            ) from exc
         if target_col < -1:
             raise ValueError(
                 error_wrapper(
@@ -1522,10 +1475,8 @@ Python or edit the input data..
     #
     # This gets most of the frequencies...
     if data.index.inferred_freq is not None:
-        try:
+        with suppress(ValueError):
             return data.asfreq(data.index.inferred_freq)
-        except ValueError:
-            pass
 
     # pd.infer_freq would fail if given a large dataset
     slic = slice(None, 999) if len(data.index) > 1000 else slice(None, None)
@@ -1598,26 +1549,35 @@ Python or edit the input data..
     return data
 
 
-def dedupIndex(
-    idx: List[str], fmt: Optional[Any] = None, ignoreFirst: bool = True
+def dedup_index(
+    idx: List[str], fmt: Optional[Any] = None, ignore_first: bool = True
 ) -> Index:
-    # fmt:          A string format that receives two arguments:
-    #               name and a counter. By default: fmt='%s.%03d'
-    # ignoreFirst:  Disable/enable postfixing of first element.
+    """Remove duplicates values in list.
+
+    Parameters
+    ----------
+    idx: List[str]
+        List of strings.
+    fmt:
+        A string format that receives two arguments: name and a counter. By
+        default: fmt='%s.%03d'
+    ignore_first: bool
+        Disable/enable postfixing of first element.
+    """
     idx = pd.Series(idx)
     duplicates = idx[idx.duplicated()].unique()
     fmt = "%s.%03d" if fmt is None else fmt
     for name in duplicates:
         dups = idx == name
         ret = [
-            fmt % (name, i) if (i != 0 or not ignoreFirst) else name
+            fmt % (name, i) if (i != 0 or not ignore_first) else name
             for i in range(dups.sum())
         ]
         idx.loc[dups] = ret
     return pd.Index(idx)
 
 
-@typic.al
+@validate_arguments
 def renamer(xloc: str, suffix: Optional[str] = "") -> str:
     """Print the suffix into the third ":" separated field of the header."""
     if suffix is None:
@@ -1709,7 +1669,7 @@ def _printiso(
         tablefmt = None
 
     ntablefmt = None
-    if tablefmt in ["csv", "tsv", "csv_nos", "tsv_nos"]:
+    if tablefmt in ("csv", "tsv", "csv_nos", "tsv_nos"):
         sep = {"csv": ",", "tsv": "\t", "csv_nos": ",", "tsv_nos": "\t"}[tablefmt]
         if isinstance(tsd, pd.DataFrame):
             try:
@@ -1721,7 +1681,7 @@ def _printiso(
                     index=showindex,
                 )
                 return
-            except IOError:
+            except OSError:
                 return
         else:
             ntablefmt = simple_separated_format(sep)
@@ -1746,7 +1706,7 @@ def _printiso(
             floatfmt=float_format,
         )
 
-    if tablefmt in ["csv_nos", "tsv_nos"]:
+    if tablefmt in ("csv_nos", "tsv_nos"):
         print(all_table.replace(" ", ""))
     else:
         print(all_table)
@@ -1764,11 +1724,11 @@ def open_local(filein: str) -> TextIOWrapper:
 
     """
     base, ext = os.path.splitext(os.path.basename(filein))
-    if ext in [".gz", ".GZ"]:
+    if ext in (".gz", ".GZ"):
         return gzip.open(filein, "rb"), base
-    if ext in [".bz", ".bz2"]:
+    if ext in (".bz", ".bz2"):
         return bz2.BZ2File(filein, "rb"), base
-    return open(filein, "r"), os.path.basename(filein)
+    return open(filein, encoding="utf-8"), os.path.basename(filein)
 
 
 def reduce_mem_usage(props):
@@ -1784,8 +1744,8 @@ def reduce_mem_usage(props):
             continue
 
         # make variables for Int, max and min
-        mx = props[col].max()
-        mn = props[col].min()
+        mxx = props[col].max()
+        mnn = props[col].min()
 
         # test if column can be converted to an integer
         try:
@@ -1797,22 +1757,22 @@ def reduce_mem_usage(props):
             result = False
 
         if result:
-            if mn >= 0:
-                if mx < np.iinfo(np.uint8).max:
+            if mnn >= 0:
+                if mxx < np.iinfo(np.uint8).max:
                     props[col] = props[col].astype(np.uint8)
-                elif mx < np.iinfo(np.uint16).max:
+                elif mxx < np.iinfo(np.uint16).max:
                     props[col] = props[col].astype(np.uint16)
-                elif mx < np.iinfo(np.uint32).max:
+                elif mxx < np.iinfo(np.uint32).max:
                     props[col] = props[col].astype(np.uint32)
                 else:
                     props[col] = props[col].astype(np.uint64)
-            elif mn > np.iinfo(np.int8).min and mx < np.iinfo(np.int8).max:
+            elif mnn > np.iinfo(np.int8).min and mxx < np.iinfo(np.int8).max:
                 props[col] = props[col].astype(np.int8)
-            elif mn > np.iinfo(np.int16).min and mx < np.iinfo(np.int16).max:
+            elif mnn > np.iinfo(np.int16).min and mxx < np.iinfo(np.int16).max:
                 props[col] = props[col].astype(np.int16)
-            elif mn > np.iinfo(np.int32).min and mx < np.iinfo(np.int32).max:
+            elif mnn > np.iinfo(np.int32).min and mxx < np.iinfo(np.int32).max:
                 props[col] = props[col].astype(np.int32)
-            elif mn > np.iinfo(np.int64).min and mx < np.iinfo(np.int64).max:
+            elif mnn > np.iinfo(np.int64).min and mxx < np.iinfo(np.int64).max:
                 props[col] = props[col].astype(np.int64)
 
     return props
@@ -1827,12 +1787,10 @@ def memory_optimize(tsd: DataFrame) -> DataFrame:
     """
     tsd.index = pd.Index(tsd.index, dtype=None)
     tsd = tsd.convert_dtypes()
-    try:
-        tsd.index.freq = pd.infer_freq(tsd.index)
-    except (TypeError, ValueError):
+    with suppress(TypeError, ValueError):
         # TypeError: Not datetime like index
         # ValueError: Less than three rows
-        pass
+        tsd.index.freq = pd.infer_freq(tsd.index)
     return tsd
 
 
@@ -1844,7 +1802,7 @@ def is_valid_url(url: Union[bytes, str], qualifying: Optional[Any] = None) -> bo
     return all(getattr(token, qualifying_attr) for qualifying_attr in qualifying)
 
 
-# @typic.al
+@validate_arguments
 def read_iso_ts(
     *inindat,
     dropna: Literal["no", "any", "all"] = None,
@@ -1912,8 +1870,7 @@ def read_iso_ts(
     na_values = []
     for spc in range(20)[1:]:
         spcs = " " * spc
-        na_values.append(spcs)
-        na_values.append(f"{spcs}nan")
+        na_values.extend([spcs, f"{spcs}nan"])
 
     fstr = "{1}"
     if extended_columns is True:
@@ -1978,8 +1935,6 @@ def read_iso_ts(
                 quote="[]",
                 quote_keep=True,
                 delimiter=",",
-                escape="/^",
-                trim="",
             )
             newkwds = [i.split("=") for i in newkwds]
             if newkwds[0][0]:
@@ -1990,7 +1945,7 @@ def read_iso_ts(
             # Command line API
             # Uses hspf_reader or pd.read_* functions.
             fpi = None
-            if fname in ["-", b"-"]:
+            if fname in ("-", b"-"):
                 # if from stdin format must be the toolbox_utils standard
                 # pandas read_csv supports file like objects
                 if "header" not in kwds:
@@ -2009,14 +1964,21 @@ def read_iso_ts(
                 fpi = fname
                 _, ext = os.path.splitext(fname)
                 if ext.lower() == ".wdm":
-                    from hspf_reader.hspf_reader import wdm
-
                     nres = []
                     for par in args:
-                        nres.append(wdm(",".join([fname] + [str(par)])))
+                        nres.append(wdm(fname, par))
                     res = pd.concat(nres, axis="columns")
+                elif ext.lower() == ".hbn":
+                    res = pd.DataFrame()
+                    # fname: str,
+                    # interval: Literal["yearly", "monthly", "daily", "bivl"],
+                    # *labels,
+                    interval, *labels = args
+                    res = res.join(hbn(fname, interval, labels), how="outer")
+                elif ext.lower() == ".plt":
+                    res = plotgen(fname)
                 elif ext.lower() == ".hdf5":
-                    if len(args) == 0:
+                    if not args:
                         res = pd.read_hdf(fpi, **newkwds)
                     else:
                         res = pd.DataFrame()
@@ -2024,7 +1986,7 @@ def read_iso_ts(
                             res = res.join(
                                 pd.read_hdf(fname, key=i, **newkwds), how="outer"
                             )
-                elif ext.lower() in [
+                elif ext.lower() in (
                     ".xls",
                     ".xlsx",
                     ".xlsm",
@@ -2032,12 +1994,12 @@ def read_iso_ts(
                     ".odf",
                     ".ods",
                     ".odt",
-                ]:
+                ):
                     # Sometime in the future, we may want to be able to
                     # create a multi-index, but for now, we'll just
                     # use the first row as the header.
                     header = 0
-                    if len(args) == 0:
+                    if not args:
                         sheet = 0
                     else:
                         sheet = make_list(args)
@@ -2056,7 +2018,6 @@ def read_iso_ts(
                             **newkwds,
                         )
                     except ValueError:
-                        sheet = int(sheet)
                         res = pd.read_excel(
                             fname,
                             sheet_name=sheet,
@@ -2072,9 +2033,11 @@ def read_iso_ts(
                     if isinstance(res, dict):
                         res = pd.concat(res, axis="columns")
                         # Collapse columns MultiIndex
-                        fi = res.columns.to_flat_index()
-                        fi = ["_".join((str(i[0]), str(i[1]))) for i in fi]
-                        res.columns = fi
+                        flat_index = res.columns.to_flat_index()
+                        flat_index = [
+                            "_".join((str(i[0]), str(i[1]))) for i in flat_index
+                        ]
+                        res.columns = flat_index
 
             elif is_valid_url(str(fname)):
                 # a url?
@@ -2107,7 +2070,8 @@ def read_iso_ts(
                 header = "infer"
                 fpi = fname
             else:
-                # Maybe fname and args are actual column names of standard input.
+                # Maybe fname and args are actual column names of standard
+                # input.
                 args.insert(0, fname)
                 fname = "-"
                 header = 0
@@ -2135,10 +2099,8 @@ def read_iso_ts(
                 res = _pick(res, args)
 
         lresult_list.append(res)
-        try:
+        with suppress(AttributeError):
             zones.add(res.index.tzinfo)
-        except AttributeError:
-            pass
 
     first = []
     second = []
@@ -2157,31 +2119,27 @@ def read_iso_ts(
             rest.append(nwords[2:])
         else:
             rest.append([])
-    first = [[i.strip()] for i in dedupIndex(first)]
+    first = [[i.strip()] for i in dedup_index(first)]
     res.columns = [":".join(i + j + k) for i, j, k in zip(first, second, rest)]
 
     res = memory_optimize(res)
 
     if res.index.inferred_type != "datetime64":
-        try:
+        with suppress(KeyError):
             res.set_index(0, inplace=True)
-        except KeyError:
-            pass
     else:
         try:
             words = res.index.name.split(":")
         except AttributeError:
             words = ""
         if len(words) > 1:
-            try:
+            with suppress(TypeError):
                 res.index = res.index.tz_localize(words[1])
-            except TypeError:
-                pass
             res.index.name = f"Datetime:{words[1]}"
         else:
             res.index.name = "Datetime"
 
-    if dropna in ["any", "all"]:
+    if dropna in ("any", "all"):
         res.dropna(how=dropna, inplace=True)
 
     if len(lresult_list) > 1:
@@ -2192,10 +2150,8 @@ def read_iso_ts(
             if res.index.inferred_type != "datetime64":
                 continue
             if len(zones) != 1:
-                try:
+                with suppress(TypeError, AttributeError):
                     res.index = res.index.tz_convert(None)
-                except (TypeError, AttributeError):
-                    pass
 
             # Remove duplicate times if hourly and daylight savings.
             if clean is True:
@@ -2210,12 +2166,12 @@ def read_iso_ts(
                 offset_set.add(moffset)
 
         result = pd.DataFrame()
-        for df in lresult_list:
+        for lres in lresult_list:
             if len(offset_set) < 2:
-                result = result.join(df, how="outer", rsuffix="_r")
+                result = result.join(lres, how="outer", rsuffix="_r")
             else:
                 result = result.join(
-                    df.asfreq(moffset - epoch), how="outer", rsuffix="_r"
+                    lres.asfreq(moffset - epoch), how="outer", rsuffix="_r"
                 )
     else:
         result = lresult_list[0]
