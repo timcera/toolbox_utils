@@ -24,6 +24,7 @@ dependencies = [
     "xlrd",
     "openpyxl",
     "pyxlsb",
+    "hspf_reader >= 1.0.0, < 2.0.0",
     ]
 license = {text = "BSD-3-Clause"}
 authors = [
