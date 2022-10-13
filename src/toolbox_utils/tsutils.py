@@ -30,11 +30,6 @@ import pandas as pd
 import pint_pandas  # not used directly, but required to use pint in pandas
 import pkg_resources
 from _io import TextIOWrapper
-
-# Because of circular imports, use that base functions from hspf_reader.
-from hspf_reader.functions.hbn import hbn_extract as hbn
-from hspf_reader.functions.plotgen import plotgen_extract as plotgen
-from hspf_reader.functions.wdm import wdm_extract as wdm
 from numpy import int64, ndarray
 from pandas.core.frame import DataFrame
 from pandas.core.indexes.base import Index
@@ -42,6 +37,10 @@ from pandas.tseries.frequencies import to_offset
 from scipy.stats.distributions import lognorm, norm
 from tabulate import simple_separated_format
 from tabulate import tabulate as tb
+
+from .readers.hbn import hbn_extract as hbn
+from .readers.plotgen import plotgen_extract as plotgen
+from .readers.wdm import wdm_extract as wdm
 
 if __name__ == "__main__":
     pass
