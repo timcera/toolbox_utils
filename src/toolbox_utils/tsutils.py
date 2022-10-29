@@ -14,14 +14,6 @@ from math import gcd
 from string import Template
 from textwrap import TextWrapper, dedent
 from typing import Any, Callable, List, Optional, Tuple, Union
-
-from pydantic import Field, validate_arguments
-
-try:
-    from typing import Literal
-except ImportError:
-    from typing_extensions import Literal
-
 from urllib.parse import urlparse
 
 import dateparser
@@ -34,9 +26,11 @@ from numpy import int64, ndarray
 from pandas.core.frame import DataFrame
 from pandas.core.indexes.base import Index
 from pandas.tseries.frequencies import to_offset
+from pydantic import validate_arguments
 from scipy.stats.distributions import lognorm, norm
 from tabulate import simple_separated_format
 from tabulate import tabulate as tb
+from typing_extensions import Literal
 
 from .readers.hbn import hbn_extract as hbn
 from .readers.plotgen import plotgen_extract as plotgen

@@ -1,3 +1,7 @@
+"""
+Pure python WDM file reader.
+"""
+
 from datetime import datetime
 
 import numpy as np
@@ -44,14 +48,15 @@ freq = {
 
 
 def wdm_extract(wdmfile, *idsn):
+    """Extract DSN from WDM file."""
     idsn = [int(i) for i in idsn]
 
     iarray = np.fromfile(wdmfile, dtype=np.int32)
     farray = np.fromfile(wdmfile, dtype=np.float32)
 
     if iarray[0] != -998:
-        print("Not a WDM file, magic number is not -990. Stopping!")
-        return
+        raise ValueError("Not a WDM file, magic number is not -990. Stopping!")
+
     nrecords = iarray[28]  # first record is File Definition Record
     ntimeseries = iarray[31]
 
@@ -81,7 +86,6 @@ def wdm_extract(wdmfile, *idsn):
             sacnt = iarray[index + psa - 1]
         pdat = iarray[index + 10]
         pdatv = iarray[index + 11]
-        frepos = iarray[index + pdat]
 
         # get attributes
         dattr = {
@@ -92,18 +96,18 @@ def wdm_extract(wdmfile, *idsn):
             "TFILL": -999.0,
         }  # preset defaults
         for i in range(psa + 1, psa + 1 + 2 * sacnt, 2):
-            id = iarray[index + i]
+            iarray_id = iarray[index + i]
             ptr = iarray[index + i + 1] - 1 + index
-            if id not in attrinfo:
+            if iarray_id not in attrinfo:
                 print(
                     "PROGRAM ERROR: ATTRIBUTE INDEX not found",
-                    id,
+                    iarray_id,
                     "Attribute pointer",
                     iarray[index + i + 1],
                 )
                 continue
 
-            name, atype, length = attrinfo[id]
+            name, atype, length = attrinfo[iarray_id]
             if atype == "I":
                 dattr[name] = iarray[ptr]
             elif atype == "R":
@@ -116,19 +120,17 @@ def wdm_extract(wdmfile, *idsn):
         # Get timeseries timebase data
         records = []
         for i in range(pdat + 1, pdatv - 1):
-            a = iarray[index + i]
-            if a:
-                records.append(splitposition(a))
+            a_record = iarray[index + i]
+            if a_record:
+                records.append(splitposition(a_record))
         if len(records) == 0:
             continue  # WDM preallocated, but nothing saved here yet
 
         srec, soffset = records[0]
         start = splitdate(iarray[srec * 512 + soffset])
 
-        sprec, spoffset = splitposition(frepos)
-        finalindex = sprec * 512 + spoffset
-
-        # calculate number of data points in each group, tindex is final index for storage
+        # calculate number of data points in each group, tindex is final index
+        # for storage
         tgroup = dattr["TGROUP"]
         tstep = dattr["TSSTEP"]
         tcode = dattr["TCODE"]
@@ -138,13 +140,11 @@ def wdm_extract(wdmfile, *idsn):
         )
         counts = np.diff(np.searchsorted(tindex, cindex))
 
-        ## Get timeseries data
+        # Get timeseries data
         floats = np.zeros(sum(counts), dtype=np.float32)
         findex = 0
         for (rec, offset), count in zip(records, counts):
-            findex = getfloats(
-                iarray, farray, floats, findex, rec, offset, count, finalindex
-            )
+            findex = getfloats(iarray, farray, floats, findex, rec, offset, count)
 
         series = pd.DataFrame(floats[:findex], index=tindex[:findex])
         series = series[series[0] != dattr["TFILL"]]
@@ -153,39 +153,38 @@ def wdm_extract(wdmfile, *idsn):
     return retdf
 
 
-def todatetime(y=1900, m=1, d=1, h=0):
+def todatetime(year=1900, month=1, day=1, hour=0):
     """takes yr,mo,dy,hr information then returns its datetime64"""
     return (
-        datetime(y, m, d, 23) + pd.Timedelta(1, "h")
-        if h == 24
-        else datetime(y, m, d, h)
+        datetime(year, month, day, 23) + pd.Timedelta(1, "h")
+        if hour == 24
+        else datetime(year, month, day, hour)
     )
 
 
-def splitdate(x):
-    """splits WDM int32 DATWRD into year, month, day, hour -> then returns its datetime64"""
-    return todatetime(
-        x >> 14, x >> 10 & 0xF, x >> 5 & 0x1F, x & 0x1F
-    )  # args: year, month, day, hour
+def splitdate(datwrd):
+    """splits WDM compressed datetime int32 DATWRD into year, month, day, hour
+    -> datetime64"""
+    year = int((datwrd / 16384) % 131072)
+    month = int((datwrd / 1024) % 16)
+    day = int((datwrd / 32) % 32)
+    hour = int(datwrd % 32)
+
+    return todatetime(year, month, day, hour)
 
 
-def splitcontrol(x):
-    """splits int32 into (qual, compcode, units, tstep, nvalues)"""
-    return (x & 0x1F, x >> 5 & 0x3, x >> 7 & 0x7, x >> 10 & 0x3F, x >> 16)
-
-
-def splitposition(x):
-    """splits int32 into (record, offset), converting to Pyton zero based indexing"""
-    return ((x >> 9) - 1, (x & 0x1FF) - 1)
+def splitposition(recoffset):
+    """splits int32 into (record, offset), converting to Python zero based
+    indexing"""
+    return ((recoffset >> 9) - 1, (recoffset & 511) - 1)
 
 
 def itostr(i):
-    return (
-        chr(i & 0xFF) + chr(i >> 8 & 0xFF) + chr(i >> 16 & 0xFF) + chr(i >> 24 & 0xFF)
-    )
+    """Convert integer to string."""
+    return chr(i & 255) + chr(i >> 8 & 255) + chr(i >> 16 & 255) + chr(i >> 24 & 255)
 
 
-def getfloats(iarray, farray, floats, findex, rec, offset, count, finalindex):
+def getfloats(iarray, farray, floats, findex, rec, offset, count):
     index = rec * 512 + offset + 1
     stop = (rec + 1) * 512
     cntr = 0
@@ -197,11 +196,11 @@ def getfloats(iarray, farray, floats, findex, rec, offset, count, finalindex):
             index = rec * 512 + 4  # 4 is index of start of new data
             stop = (rec + 1) * 512
 
-        x = iarray[index]  # control word, don't need most of it here
-        nval = x >> 16
+        control_word = iarray[index]  # control word, don't need most of it here
+        nval = control_word >> 16
 
         index += 1
-        if x >> 5 & 0x3:  # comp from control word, x
+        if control_word >> 5 & 0x3:  # comp from control word, x
             for k in range(nval):
                 if findex >= len(floats):
                     return findex

@@ -17,6 +17,7 @@ dependencies = [
     "scipy",
     "pandas",
     "pint-pandas",
+    "pint<=0.18",
     "pydantic",
     "setuptools",
     "setuptools_scm",

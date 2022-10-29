@@ -3,7 +3,6 @@ hspfbintoolbox to read HSPF binary files.
 """
 
 import datetime
-import os
 import struct
 import sys
 
