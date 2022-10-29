@@ -1,3 +1,9 @@
+## v1.0.1 (2022-10-29)
+
+### Fix
+
+- limit the pint version to work on python 3.8, 3.9, 3.10
+
 ## v1.0.0 (2022-10-12)
 
 ### BREAKING CHANGE
