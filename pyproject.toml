@@ -15,13 +15,19 @@ dependencies = [
     "tabulate",
     "numpy",
     "scipy",
-    "pandas[excel,hdf5]",
+    "pandas",
     "pint-pandas",
     "pint",
     "pydantic",
     "setuptools",
     "setuptools_scm",
     "typing-extensions",
+    "odfpy>=1.4.1",
+    "xlrd>=2.0.1",
+    "openpyxl>=3.0.7",
+    "pyxlsb>=1.0.8",
+    "tables>=3.6.1",
+    "matplotlib>=3.3.2",
     ]
 license = {text = "BSD-3-Clause"}
 authors = [
