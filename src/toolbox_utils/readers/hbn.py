@@ -13,6 +13,8 @@ except ImportError:
 
 import pandas as pd
 
+from .. import tsutils
+
 code2intervalmap = {5: "yearly", 4: "monthly", 3: "daily", 2: "bivl"}
 
 interval2codemap = {"yearly": 5, "monthly": 4, "daily": 3, "bivl": 2}
@@ -31,6 +33,7 @@ def tuple_match(findme, hay):
     """Part of partial ordered matching.
     See http://stackoverflow.com/a/4559604
     """
+
     return len(findme) == len(hay) and all(
         i is None or j is None or i == j for i, j in zip(findme, hay)
     )
@@ -40,6 +43,7 @@ def tuple_combine(findme, hay):
     """Part of partial ordered matching.
     See http://stackoverflow.com/a/4559604
     """
+
     return tuple(i is None and j or i for i, j in zip(findme, hay))
 
 
@@ -47,6 +51,7 @@ def tuple_search(findme, haystack):
     """Partial ordered matching with 'None' as wildcard
     See http://stackoverflow.com/a/4559604
     """
+
     return [
         (index, tuple_combine(findme, hay))
         for index, hay in enumerate(haystack)
@@ -57,6 +62,7 @@ def tuple_search(findme, haystack):
 def _range_to_numlist(rangestr):
     numlist = []
     subranges = rangestr.split("+")
+
     for sub in subranges:
         try:
             if ":" not in sub:
@@ -64,22 +70,25 @@ def _range_to_numlist(rangestr):
                 numlist.append(num)
             else:
                 ends = sub.split(":")
+
                 if len(ends) != 2:
                     raise ValueError()
                 rstart = int(ends[0])
                 rend = int(ends[1]) + 1
+
                 if rstart > rend:
                     raise ValueError()
                 numlist.extend(iter(range(rstart, rend)))
         except ValueError as exc:
             raise ValueError(
-                f"""
-* Invalid range specification in '{sub}' of the '{rangestr}'.
-* The correct syntax is one or more integers or
-* colon-delimited range groups such as "99", "1:2", or
-* "101:120", with multiple groups connected by "+" signs.
-* Example: "1:4+16:22+30"
+                tsutils.error_wrapper(
+                    f"""Invalid range specification in '{sub}' of the
+                    '{rangestr}'. The correct syntax is one or more integers or
+                    colon-delimited range groups such as "99", "1:2", or
+                    "101:120", with multiple groups connected by "+" signs.
+                    Example: "1:4+16:22+30"
                     """
+                )
             ) from exc
     return numlist
 
@@ -151,9 +160,10 @@ def _get_data(binfilename, interval="daily", labels=None, catalog_only=True):
     for label in labels:
         if len(label) != 4:
             raise ValueError(
-                f"""
-* The label '{label}' has the wrong number of entries.
+                tsutils.error_wrapper(
+                    f"""The label '{label}' has the wrong number of entries.
                     """
+                )
             )
 
         # replace empty fields with None
@@ -165,11 +175,12 @@ def _get_data(binfilename, interval="daily", labels=None, catalog_only=True):
             words[0] = words[0].upper()
             if words[0] not in testem:
                 raise ValueError(
-                    f"""
-* Operation type must be one of 'PERLND', 'IMPLND',
-* 'RCHRES', or 'BMPRAC', or missing (to get all) instead
-* of {words[0]}.
+                    tsutils.error_wrapper(
+                        f"""Operation type must be one of 'PERLND', 'IMPLND',
+                        'RCHRES', or 'BMPRAC', or missing (to get all) instead
+                        of {words[0]}.
                         """
+                    )
                 )
 
         # second word must be integer 1-999 or None or range to parse
@@ -182,10 +193,11 @@ def _get_data(binfilename, interval="daily", labels=None, catalog_only=True):
             for luenum in luelist:
                 if luenum < 1 or luenum > 999:
                     raise ValueError(
-                        f"""
-* The land use element must be an integer from 1 to
-* 999 inclusive, instead of {luenum}.
+                        tsutils.error_wrapper(
+                            f"""The land use element must be an integer from
+                            1 to 999 inclusive, instead of {luenum}.
                             """
+                        )
                     )
         else:
             luelist = [None]
@@ -195,11 +207,12 @@ def _get_data(binfilename, interval="daily", labels=None, catalog_only=True):
             words[2] = words[2].upper()
             if words[2] not in testem[words[0]]:
                 raise ValueError(
-                    f"""
-* The {words[0]} operation type only allows the variable
-* groups: {testem[words[0]][:-1]},
-* instead you gave {words[2]}.
+                    tsutils.error_wrapper(
+                        f"""The {words[0]} operation type only allows the
+                        variable groups: {testem[words[0]][:-1]}, instead you
+                        gave {words[2]}.
                         """
+                    )
                 )
 
         # fourth word is currently not checked - assumed to be a variable name
@@ -225,11 +238,12 @@ def _get_data(binfilename, interval="daily", labels=None, catalog_only=True):
         if magicbyte != b"\xfd":
             # not a valid HSPF binary file
             raise ValueError(
-                f"""
-* {binfilename} is not a valid HSPF binary output file
-* (.hbn),  The first byte must be FD hexadecimal, but it was
-* {magicbyte}.
+                tsutils.error_wrapper(
+                    f"""{binfilename} is not a valid HSPF binary output file
+                    (.hbn),  The first byte must be FD hexadecimal, but it was
+                    {magicbyte}.
                     """
+                )
             )
 
         # loop through each record
@@ -346,12 +360,13 @@ def _get_data(binfilename, interval="daily", labels=None, catalog_only=True):
 
     if not collect_dict:
         raise ValueError(
-            f"""
-* The label specifications below matched no records in the binary
-* file.
-*
-* {lablist}
+            tsutils.error_wrapper(
+                f"""The label specifications below matched no records in the
+                binary file.
+
+                {lablist}
                 """
+            )
         )
 
     ndates = sorted(list(ndates))
@@ -360,10 +375,11 @@ def _get_data(binfilename, interval="daily", labels=None, catalog_only=True):
         for lbl in lablist:
             if tuple(lbl) not in labeltest:
                 sys.stderr.write(
-                    f"""
-* Warning: The label '{lbl}' matched no records in the
-* binary file.
+                    tsutils.error_wrapper(
+                        f"""Warning: The label '{lbl}' matched no records in
+                        the binary file.
                         """
+                    )
                 )
     else:
         for key in collect_dict:
@@ -387,12 +403,14 @@ def hbn_extract(
 ):
     r"""Returns a DataFrame from a HSPF binary output file."""
     interval = interval.lower()
+
     if interval not in ["bivl", "daily", "monthly", "yearly"]:
         raise ValueError(
-            f"""
-* The "interval" argument must be one of "bivl", "daily",
-* "monthly", or "yearly".  You supplied "{interval}".
+            tsutils.error_wrapper(
+                f"""The "interval" argument must be one of "bivl", "daily",
+                "monthly", or "yearly".  You supplied "{interval}".
                 """
+            )
         )
 
     index, data = _get_data(hbnfilename, interval, labels, catalog_only=False)

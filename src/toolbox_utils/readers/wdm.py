@@ -61,6 +61,7 @@ def wdm_extract(wdmfile, *idsn):
     ntimeseries = iarray[31]
 
     dsnlist = []
+
     for index in range(512, nrecords * 512, 512):
         if (
             not (
@@ -72,16 +73,20 @@ def wdm_extract(wdmfile, *idsn):
             and iarray[index + 5] == 1
         ):
             dsnlist.append(index)
+
     if len(dsnlist) != ntimeseries:
         print("PROGRAM ERROR, wrong number of DSN records found")
 
     retdf = pd.DataFrame()
+
     for index in dsnlist:
         # get layout information for TimeSeries Dataset frame
         dsn = iarray[index + 4]
+
         if dsn not in idsn:
             continue
         psa = iarray[index + 9]
+
         if psa > 0:
             sacnt = iarray[index + psa - 1]
         pdat = iarray[index + 10]
@@ -95,9 +100,11 @@ def wdm_extract(wdmfile, *idsn):
             "TSBYR": 1900,
             "TFILL": -999.0,
         }  # preset defaults
+
         for i in range(psa + 1, psa + 1 + 2 * sacnt, 2):
             iarray_id = iarray[index + i]
             ptr = iarray[index + i + 1] - 1 + index
+
             if iarray_id not in attrinfo:
                 print(
                     "PROGRAM ERROR: ATTRIBUTE INDEX not found",
@@ -105,9 +112,11 @@ def wdm_extract(wdmfile, *idsn):
                     "Attribute pointer",
                     iarray[index + i + 1],
                 )
+
                 continue
 
             name, atype, length = attrinfo[iarray_id]
+
             if atype == "I":
                 dattr[name] = iarray[ptr]
             elif atype == "R":
@@ -119,10 +128,13 @@ def wdm_extract(wdmfile, *idsn):
 
         # Get timeseries timebase data
         records = []
+
         for i in range(pdat + 1, pdatv - 1):
             a_record = iarray[index + i]
+
             if a_record:
                 records.append(splitposition(a_record))
+
         if len(records) == 0:
             continue  # WDM preallocated, but nothing saved here yet
 
@@ -143,6 +155,7 @@ def wdm_extract(wdmfile, *idsn):
         # Get timeseries data
         floats = np.zeros(sum(counts), dtype=np.float32)
         findex = 0
+
         for (rec, offset), count in zip(records, counts):
             findex = getfloats(iarray, farray, floats, findex, rec, offset, count)
 
@@ -150,11 +163,13 @@ def wdm_extract(wdmfile, *idsn):
         series = series[series[0] != dattr["TFILL"]]
         series.columns = [f"{wdmfile}_{dsn}"]
         retdf = retdf.join(series, how="outer")
+
     return retdf
 
 
 def todatetime(year=1900, month=1, day=1, hour=0):
     """takes yr,mo,dy,hr information then returns its datetime64"""
+
     return (
         datetime(year, month, day, 23) + pd.Timedelta(1, "h")
         if hour == 24
@@ -176,11 +191,13 @@ def splitdate(datwrd):
 def splitposition(recoffset):
     """splits int32 into (record, offset), converting to Python zero based
     indexing"""
+
     return ((recoffset >> 9) - 1, (recoffset & 511) - 1)
 
 
 def itostr(i):
     """Convert integer to string."""
+
     return chr(i & 255) + chr(i >> 8 & 255) + chr(i >> 16 & 255) + chr(i >> 24 & 255)
 
 
@@ -188,6 +205,7 @@ def getfloats(iarray, farray, floats, findex, rec, offset, count):
     index = rec * 512 + offset + 1
     stop = (rec + 1) * 512
     cntr = 0
+
     while cntr < count and findex < len(floats):
         if index >= stop:
             rec = (
@@ -200,6 +218,7 @@ def getfloats(iarray, farray, floats, findex, rec, offset, count):
         nval = control_word >> 16
 
         index += 1
+
         if control_word >> 5 & 0x3:  # comp from control word, x
             for k in range(nval):
                 if findex >= len(floats):
@@ -215,4 +234,5 @@ def getfloats(iarray, farray, floats, findex, rec, offset, count):
                 findex += 1
             index += nval
         cntr += nval
+
     return findex

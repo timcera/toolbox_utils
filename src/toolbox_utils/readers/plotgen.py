@@ -1,4 +1,5 @@
 """For reading HSPF plotgen files."""
+
 import datetime
 
 import pandas as pd
@@ -17,6 +18,7 @@ def plotgen_extract(filename):
                 foundcols = False
             elif i < 25 and foundcols:
                 header = line[4:30].strip()
+
                 if not header:
                     foundcols = False
                 else:
@@ -24,6 +26,7 @@ def plotgen_extract(filename):
 
             if i > 25:
                 year, month, day, hour, minute = line[4:22].split()
+
                 if int(hour) == 24:
                     day = [
                         datetime.datetime(int(year), int(month), int(day), tzinfo=None)
@@ -47,4 +50,5 @@ def plotgen_extract(filename):
     pgdf.columns = ["Datetime"] + cols
     pgdf = pgdf.set_index(["Datetime"])
     pgdf.index = pd.DatetimeIndex(pgdf.index)
+
     return pgdf

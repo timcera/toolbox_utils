@@ -47,11 +47,13 @@ def normalize_command_line_args(args):
     nargs = nargs.split(",")
 
     rargs = []
+
     for arg in nargs:
         if os.path.exists(arg):
             rargs.append([arg])
         else:
             rargs[-1].append(arg)
+
     return rargs
 
 
@@ -62,6 +64,7 @@ def error_wrapper(estr: str) -> str:
     estr = dedent(estr)
 
     nestr = ["", "*"]
+
     for paragraph in estr.split("\n\n"):
         nestr.extend(("\n".join(wrapper.wrap(paragraph.strip())), "*"))
     nestr.append("")
@@ -107,10 +110,12 @@ def tssplit(
             in_escape = False
         elif letter in escape:
             in_escape = True
+
             if in_quotes:
                 token += letter
         elif letter in quote and not in_escape:
             in_quotes = not in_quotes
+
             if quote_keep:
                 token += letter
         elif letter in delimiter and not in_quotes:
@@ -124,6 +129,7 @@ def tssplit(
     if trim:
         token = token.strip(trim)
     result.append(token)
+
     return result
 
 
@@ -249,6 +255,7 @@ docstrings = {
         [optional, default is False]
 
         The `por` keyword adjusts the operation of `start_date` and `end_date`
+
         If "False" (the default) choose the indices in the time-series between
         `start_date` and `end_date`.  If "True" and if `start_date` or
         `end_date` is outside of the existing time-series will fill the time-
@@ -622,29 +629,36 @@ docstrings = {
 
 def flatten(list_of_lists) -> List:
     """Recursively flatten a list of lists or tuples into a single list."""
+
     if isinstance(list_of_lists, (list, tuple)):
         if len(list_of_lists) == 0:
             return list_of_lists
+
         if isinstance(list_of_lists[0], (list, tuple)):
             return list(flatten(list_of_lists[0])) + list(flatten(list_of_lists[1:]))
+
         return list(list_of_lists[:1]) + list(flatten(list_of_lists[1:]))
+
     return list_of_lists
 
 
 @validate_arguments
 def stride_and_unit(sunit: str) -> Tuple[str, int]:
     """Split a stride/unit combination into component parts."""
+
     if sunit is None:
         return sunit
     unit = sunit.lstrip("+-. 1234567890")
     stride = sunit[: sunit.index(unit)]
     stride = int(stride) if stride else 1
+
     return unit, stride
 
 
 @validate_arguments
 def set_ppf(ptype: Optional[Literal["norm", "lognorm", "weibull"]]) -> Callable:
     """Return correct Percentage Point Function for `ptype`."""
+
     if ptype == "norm":
         ppf = norm.ppf
     elif ptype == "lognorm":
@@ -653,6 +667,7 @@ def set_ppf(ptype: Optional[Literal["norm", "lognorm", "weibull"]]) -> Callable:
 
         def ppf(y_vals):
             """Percentage Point Function for the weibull distribution."""
+
             return np.log(-np.log(1 - np.array(y_vals)))
 
     elif ptype is None:
@@ -705,6 +720,7 @@ def set_plotting_position(
         return np.linspace(1.0 / cnt, 1.0, cnt)
     coeff = ppdict.get(plotting_position, plotting_position)
     index = np.arange(1, cnt + 1)
+
     return (index - coeff) / float(cnt + 1 - 2 * coeff)
 
 
@@ -716,6 +732,7 @@ def _handle_curly_braces_in_docstring(input_str: str, **kwargs) -> str:
         return input_str.format(**kwargs)
     except KeyError as exc:
         keyname = exc.args[0]
+
         return _handle_curly_braces_in_docstring(
             input_str, **{keyname: ret.format(keyname)}, **kwargs
         )
@@ -735,6 +752,7 @@ def copy_doc(source: Callable) -> Callable:
     def wrapper_copy_doc(func: Callable) -> Callable:
         if source.__doc__:
             func.__doc__ = source.__doc__  # noqa: WPS125
+
         return func
 
     return wrapper_copy_doc
@@ -749,8 +767,10 @@ def doc(fdict: dict, **kwargs) -> Callable:
 
         # kwargs is currently always empty.
         # Could remove, but keeping in case useful in future.
+
         for key, value in kwargs.items():
             setattr(inner_func, key, value)
+
         return inner_func
 
     return outer_func
@@ -764,10 +784,12 @@ def parsedate(
 
     Used for start and end dates.
     """
+
     if dstr is None:
         return dstr
 
     # The API should boomerang a datetime.datetime instance and None.
+
     if isinstance(dstr, datetime.datetime):
         return dstr if strftime is None else dstr.strftime(strftime)
     try:
@@ -785,6 +807,7 @@ def parsedate(
 
     if strftime is None:
         return pdate
+
     return pdate.strftime(strftime)
 
 
@@ -792,8 +815,10 @@ def parsedate(
 def merge_dicts(*dict_args: dict) -> dict:
     """Merge multiple dictionaries."""
     result = {}
+
     for dic in dict_args:
         result.update(dic)
+
     return result
 
 
@@ -820,9 +845,11 @@ def about(name):
 
 def _round_index(ntsd: DataFrame, round_index: Optional[str] = None) -> DataFrame:
     """Round the index, typically time, to the nearest interval."""
+
     if round_index is None:
         return ntsd
     ntsd.index = ntsd.index.round(round_index)
+
     return ntsd
 
 
@@ -832,6 +859,7 @@ def _pick_column_or_value(tsd, var):
         var = np.array([float(var)])
     except ValueError:
         var = tsd.loc[:, var].values
+
     return var
 
 
@@ -841,6 +869,7 @@ def make_list(*strorlist, **kwds: Any) -> Any:
         cnt = kwds.pop("n")
     except KeyError:
         cnt = None
+
     if cnt is not None:
         cnt = int(cnt)
 
@@ -861,6 +890,7 @@ def make_list(*strorlist, **kwds: Any) -> Any:
 
     if isinstance(strorlist, (list, tuple)):
         # The following will fix ((tuples, in, a, tuple, problem),)
+
         if flat:
             strorlist = flatten(strorlist)
 
@@ -891,12 +921,14 @@ def make_list(*strorlist, **kwds: Any) -> Any:
     if strorlist is None or isinstance(strorlist, (type(None))):
         # None -> None
         #
+
         return None
 
     if isinstance(strorlist, (int, float)):
         # 1      -> [1]
         # 1.2    -> [1.2]
         #
+
         return [strorlist]
 
     if isinstance(strorlist, (str, bytes)):
@@ -904,6 +936,7 @@ def make_list(*strorlist, **kwds: Any) -> Any:
             # 'None' -> None
             # ''     -> None
             #
+
             return None
 
         # '1'   -> [1]
@@ -936,6 +969,7 @@ def make_list(*strorlist, **kwds: Any) -> Any:
         cnt = len(strorlist)
 
     # At this point 'strorlist' variable should be a list or tuple.
+
     if len(strorlist) != cnt:
         raise ValueError(
             error_wrapper(
@@ -956,15 +990,21 @@ def make_list(*strorlist, **kwds: Any) -> Any:
     # ['1','None','5.6'] -> [1, None, 5.6]
 
     ret = []
+
     for each in strorlist:
         if isinstance(each, (type(None), int, float, pd.DataFrame, pd.Series)):
             ret.append(each)
+
             continue
+
         if not flat and isinstance(each, list):
             ret.append(each)
+
             continue
+
         if each is None or each.strip() == "" or each == "None":
             ret.append(None)
+
             continue
         try:
             ret.append(int(each))
@@ -973,6 +1013,7 @@ def make_list(*strorlist, **kwds: Any) -> Any:
                 ret.append(float(each))
             except ValueError:
                 ret.append(each)
+
     return ret
 
 
@@ -982,11 +1023,13 @@ def make_iloc(columns, col_list):
     # [1, 2, 3]          ->    [0, 1, 2]
     col_list = make_list(col_list)
     ntestc = []
+
     for i in col_list:
         try:
             ntestc.append(int(i) - 1)
         except ValueError:
             ntestc.append(columns.index(i))
+
     return ntestc
 
 
@@ -1050,17 +1093,21 @@ def _normalize_units(
     ntsd = pd.DataFrame(ntsd)
 
     target_units = make_list(target_units, n=len(ntsd.columns))
+
     if target_units is not None:
         target_units = ["" if i is None else i for i in target_units]
     isource_units = make_list(source_units, n=len(ntsd.columns))
+
     if isource_units is not None:
         isource_units = ["" if i is None else i for i in isource_units]
 
     # Create completely filled list of units from the column names.
     tsource_units = []
+
     for inx in list(range(len(ntsd.columns))):
         if isinstance(ntsd.columns[inx], (str, bytes)):
             words = ntsd.columns[inx].split(":")
+
             if len(words) >= 2:
                 tsource_units.append(words[1])
             else:
@@ -1070,10 +1117,12 @@ def _normalize_units(
 
     # Combine isource_units and tsource_units into stu.
     stu = []
+
     if isource_units is not None:
         for isource, tsource in zip(isource_units, tsource_units):
             if not tsource:
                 tsource = isource
+
             if isource != tsource:
                 raise ValueError(
                     error_wrapper(
@@ -1100,11 +1149,14 @@ def _normalize_units(
             )
         )
     names = []
+
     for inx, unit in enumerate(stu):
         if isinstance(ntsd.columns[inx], (str, bytes)):
             words = ntsd.columns[inx].split(":")
+
             if unit:
                 tmpname = ":".join([words[0], unit])
+
                 if len(words) > 2:
                     tmpname = f"{tmpname}:{':'.join(words[2:])}"
                 names.append(tmpname)
@@ -1129,10 +1181,13 @@ def _normalize_units(
         )
 
     # Convert source_units to target_units.
+
     if target_units is not None:
         ncolumns = []
+
         for inx, colname in enumerate(ntsd.columns):
             words = colname.split(":")
+
             if words:
                 # convert words[1] to target_units[inx]
                 try:
@@ -1166,6 +1221,7 @@ def _normalize_units(
 def get_default_args(func):
     """Get default arguments of the function through inspection."""
     signature = inspect.signature(func)
+
     return {
         k: v.default
         for k, v in signature.parameters.items()
@@ -1190,11 +1246,13 @@ def transform_args(**trans_func_for_arg):
             # there's only keyword args.
             val_of_argname = sig.bind(*args, **kwargs)
             val_of_argname.apply_defaults()
+
             for argname, trans_func in trans_func_for_arg.items():
                 val_of_argname.arguments[argname] = trans_func(
                     val_of_argname.arguments[argname]
                 )
             # apply transform functions to argument values
+
             return func(*val_of_argname.args, **val_of_argname.kwargs)
 
         return transform_args_wrapper
@@ -1244,6 +1302,7 @@ def common_kwds(
     # The "por" keyword is stupid, since it is a synonym for "dropna" equal
     # to "no".  Discovered this after implementation and should deprecate
     # and remove in the future.
+
     if por:
         dropna = "no"
 
@@ -1291,6 +1350,7 @@ def common_kwds(
     if groupby is not None:
         if groupby == "months_across_years":
             return ntsd.groupby(lambda x: x.month)
+
         return ntsd.resample(groupby)
 
     return ntsd
@@ -1298,6 +1358,7 @@ def common_kwds(
 
 def _pick(tsd: DataFrame, columns: Any) -> DataFrame:
     columns = make_list(columns)
+
     if not columns:
         return tsd
     ncolumns = []
@@ -1306,12 +1367,14 @@ def _pick(tsd: DataFrame, columns: Any) -> DataFrame:
         if i in tsd.columns:
             # if using column names
             ncolumns.append(tsd.columns.tolist().index(i))
+
             continue
 
         if i == tsd.index.name:
             # if wanting the index
             # making it -1 that will be evaluated later...
             ncolumns.append(-1)
+
             continue
         # if using column numbers
         try:
@@ -1324,6 +1387,7 @@ def _pick(tsd: DataFrame, columns: Any) -> DataFrame:
                     {tsd.columns}. """
                 )
             ) from exc
+
         if target_col < -1:
             raise ValueError(
                 error_wrapper(
@@ -1332,6 +1396,7 @@ def _pick(tsd: DataFrame, columns: Any) -> DataFrame:
                     0. First data column is 1, index is column 0. """
                 )
             )
+
         if target_col > len(tsd.columns):
             raise ValueError(
                 error_wrapper(
@@ -1349,6 +1414,7 @@ def _pick(tsd: DataFrame, columns: Any) -> DataFrame:
         return pd.DataFrame(tsd[tsd.columns[ncolumns]])
 
     newtsd = pd.DataFrame()
+
     for index, col in enumerate(ncolumns):
         if col == -1:
             # Use the -1 marker to indicate index
@@ -1360,6 +1426,7 @@ def _pick(tsd: DataFrame, columns: Any) -> DataFrame:
                 jtsd = pd.DataFrame(tsd.loc[:, col], index=tsd.index)
 
         newtsd = newtsd.join(jtsd, lsuffix=f"_{index}", how="outer")
+
     return newtsd
 
 
@@ -1370,6 +1437,7 @@ def _date_slice(
     por=False,
 ) -> DataFrame:
     """Private function to slice time series."""
+
     if input_tsd.index.inferred_type == "datetime64":
         if start_date is None:
             start_date = input_tsd.index[0]
@@ -1397,9 +1465,11 @@ def _date_slice(
         if por is True:
             if start_date < input_tsd.index[0]:
                 input_tsd = pd.DataFrame(index=[start_date]).append(input_tsd)
+
             if end_date > input_tsd.index[-1]:
                 input_tsd = input_tsd.append(pd.DataFrame(index=[end_date]))
             input_tsd = asbestfreq(input_tsd)
+
     return input_tsd
 
 
@@ -1436,6 +1506,7 @@ def asbestfreq(data: DataFrame, force_freq: Optional[str] = None) -> DataFrame:
     7. Gives up returning None for PANDAS offset string
 
     """
+
     if not isinstance(data.index, pd.DatetimeIndex):
         return data
 
@@ -1573,15 +1644,18 @@ def dedup_index(
 @validate_arguments
 def renamer(xloc: str, suffix: Optional[str] = "") -> str:
     """Print the suffix into the third ":" separated field of the header."""
+
     if suffix is None:
         suffix = ""
     words = xloc.split(":")
+
     if len(words) == 1:
         words.extend(("", suffix))
     elif len(words) == 2:
         words.append(suffix)
     elif len(words) == 3 and suffix:
         words[2] = f"{words[2]}_{suffix}" if words[2] else suffix
+
     return ":".join(words)
 
 
@@ -1597,6 +1671,7 @@ def print_input(
     showindex="never",
 ):
     """Print the input time series also."""
+
     return printiso(
         return_input(iftrue, intds, output, suffix=suffix),
         date_format=date_format,
@@ -1615,22 +1690,28 @@ def return_input(
     output_names: List = None,
 ) -> DataFrame:
     """Print the input time series also."""
+
     if output_names is None:
         output_names = []
     output.columns = output_names or [renamer(i, suffix) for i in output.columns]
+
     if iftrue:
         return memory_optimize(
             intds.join(output, lsuffix="_1", rsuffix="_2", how="outer")
         )
+
     if reverse_index:
         return memory_optimize(output.iloc[::-1])
+
     return memory_optimize(output)
 
 
 def _apply_across_columns(func, xtsd, **kwds):
     """Apply a function to each column in turn."""
+
     for col in xtsd.columns:
         xtsd[col] = func(xtsd[col], **kwds)
+
     return xtsd
 
 
@@ -1645,6 +1726,7 @@ def _printiso(
 ) -> None:
     """Separate this function so can use in tests."""
     showindex = {"always": True, "never": False, True: True, False: False}[showindex]
+
     if isinstance(tsd, (pd.DataFrame, pd.Series)):
         if isinstance(tsd, pd.Series):
             tsd = pd.DataFrame(tsd)
@@ -1662,8 +1744,10 @@ def _printiso(
         tablefmt = None
 
     ntablefmt = None
+
     if tablefmt in ("csv", "tsv", "csv_nos", "tsv_nos"):
         sep = {"csv": ",", "tsv": "\t", "csv_nos": ",", "tsv_nos": "\t"}[tablefmt]
+
         if isinstance(tsd, pd.DataFrame):
             try:
                 tsd.to_csv(
@@ -1673,6 +1757,7 @@ def _printiso(
                     sep=sep,
                     index=showindex,
                 )
+
                 return
             except OSError:
                 return
@@ -1717,10 +1802,13 @@ def open_local(filein: str) -> TextIOWrapper:
 
     """
     base, ext = os.path.splitext(os.path.basename(filein))
+
     if ext in (".gz", ".GZ"):
         return gzip.open(filein, "rb"), base
+
     if ext in (".bz", ".bz2"):
         return bz2.BZ2File(filein, "rb"), base
+
     return open(filein, encoding="utf-8"), os.path.basename(filein)
 
 
@@ -1729,6 +1817,7 @@ def reduce_mem_usage(props):
 
     Not used any longer.
     """
+
     for col in props.columns:
         try:
             if props[col].dtype == object:  # Exclude strings
@@ -1784,6 +1873,7 @@ def memory_optimize(tsd: DataFrame) -> DataFrame:
         # TypeError: Not datetime like index
         # ValueError: Less than three rows
         tsd.index.freq = pd.infer_freq(tsd.index)
+
     return tsd
 
 
@@ -1792,6 +1882,7 @@ def is_valid_url(url: Union[bytes, str], qualifying: Optional[Any] = None) -> bo
     min_attributes = ("scheme", "netloc")
     qualifying = min_attributes if qualifying is None else qualifying
     token = urlparse(url)
+
     return all(getattr(token, qualifying_attr) for qualifying_attr in qualifying)
 
 
@@ -1861,11 +1952,13 @@ def read_iso_ts(
 
     # Would want this to be more generic...
     na_values = []
+
     for spc in range(20)[1:]:
         spcs = " " * spc
         na_values.extend([spcs, f"{spcs}nan"])
 
     fstr = "{1}"
+
     if extended_columns is True:
         fstr = "{0}.{1}"
 
@@ -1882,21 +1975,25 @@ def read_iso_ts(
     ):
         inindat = inindat[0]
     sources = make_list(inindat, sep=" ", flat=False)
+
     if not isinstance(sources, (list, tuple)):
         sources = [sources]
     lresult_list = []
     zones = set()
     result = pd.DataFrame()
     stdin_df = pd.DataFrame()
+
     for source_index, source in enumerate(sources):
         res = pd.DataFrame()
         parameters = make_list(source, sep=",")
+
         if isinstance(parameters, list) and len(parameters) > 0:
             fname = parameters.pop(0)
         else:
             fname = parameters
             parameters = []
         # Python API
+
         if isinstance(fname, pd.DataFrame):
             if len(parameters) > 0:
                 res = fname[parameters]
@@ -1916,6 +2013,7 @@ def read_iso_ts(
             parameters = [str(p) for p in parameters]
 
             args = []
+
             for prm in parameters:
                 if "=" in prm:
                     break
@@ -1930,6 +2028,7 @@ def read_iso_ts(
                 delimiter=",",
             )
             newkwds = [i.split("=") for i in newkwds]
+
             if newkwds[0][0]:
                 newkwds = {k: eval(v) for k, v in newkwds}
             else:
@@ -1938,9 +2037,11 @@ def read_iso_ts(
             # Command line API
             # Uses hspf_reader or pd.read_* functions.
             fpi = None
+
             if fname in ("-", b"-"):
                 # if from stdin format must be the toolbox_utils standard
                 # pandas read_csv supports file like objects
+
                 if "header" not in kwds:
                     kwds["header"] = 0
                 header = 0
@@ -1956,8 +2057,10 @@ def read_iso_ts(
                 usecols = None
                 fpi = fname
                 _, ext = os.path.splitext(fname)
+
                 if ext.lower() == ".wdm":
                     nres = []
+
                     for par in args:
                         nres.append(wdm(fname, par))
                     res = pd.concat(nres, axis="columns")
@@ -1975,6 +2078,7 @@ def read_iso_ts(
                         res = pd.read_hdf(fpi, **newkwds)
                     else:
                         res = pd.DataFrame()
+
                         for i in args:
                             res = res.join(
                                 pd.read_hdf(fname, key=i, **newkwds), how="outer"
@@ -1992,6 +2096,7 @@ def read_iso_ts(
                     # create a multi-index, but for now, we'll just
                     # use the first row as the header.
                     header = 0
+
                     if not args:
                         sheet = 0
                     else:
@@ -2023,6 +2128,7 @@ def read_iso_ts(
                             skiprows=skiprows,
                             **newkwds,
                         )
+
                     if isinstance(res, dict):
                         res = pd.concat(res, axis="columns")
                         # Collapse columns MultiIndex
@@ -2038,6 +2144,7 @@ def read_iso_ts(
                 fpi = fname
             elif isinstance(fname, bytes):
                 # Python API
+
                 if b"\n" in fname or b"\r" in fname:
                     # a string?
                     header = 0
@@ -2049,6 +2156,7 @@ def read_iso_ts(
                     fpi = sys.stdin
             elif isinstance(fname, str):
                 # Python API
+
                 if "\n" in fname or "\r" in fname:
                     # a string?
                     header = 0
@@ -2087,6 +2195,7 @@ def read_iso_ts(
                         parse_dates=parse_dates,
                         **newkwds,
                     )
+
                 if fname == "-" and stdin_df.empty:
                     stdin_df = res
                 res = _pick(res, args)
@@ -2098,6 +2207,7 @@ def read_iso_ts(
     first = []
     second = []
     rest = []
+
     for col in res.columns:
         words = [i.strip() for i in str(col).split(":")]
         nwords = [i.strip("0123456789") for i in words]
@@ -2108,6 +2218,7 @@ def read_iso_ts(
             second.append([nwords[1]])
         else:
             second.append([])
+
         if len(nwords) > 2:
             rest.append(nwords[2:])
         else:
@@ -2125,6 +2236,7 @@ def read_iso_ts(
             words = res.index.name.split(":")
         except AttributeError:
             words = ""
+
         if len(words) > 1:
             with suppress(TypeError):
                 res.index = res.index.tz_localize(words[1])
@@ -2139,19 +2251,23 @@ def read_iso_ts(
         epoch = pd.to_datetime("2000-01-01")
         moffset = epoch + to_offset("A")
         offset_set = set()
+
         for res in lresult_list:
             if res.index.inferred_type != "datetime64":
                 continue
+
             if len(zones) != 1:
                 with suppress(TypeError, AttributeError):
                     res.index = res.index.tz_convert(None)
 
             # Remove duplicate times if hourly and daylight savings.
+
             if clean is True:
                 res = res.sort_index()
                 res = res[~res.index.duplicated()]
 
             res = asbestfreq(res)
+
             if res.index.inferred_freq is not None and moffset > epoch + to_offset(
                 res.index.inferred_freq
             ):
@@ -2159,6 +2275,7 @@ def read_iso_ts(
                 offset_set.add(moffset)
 
         result = pd.DataFrame()
+
         for lres in lresult_list:
             if len(offset_set) < 2:
                 result = result.join(lres, how="outer", rsuffix="_r")
@@ -2170,9 +2287,11 @@ def read_iso_ts(
         result = lresult_list[0]
 
     # Assign names to the index and columns.
+
     if names is not None:
         result.index.name = names.pop(0)
         result.columns = names
 
     result.sort_index(inplace=True)
+
     return result.convert_dtypes()
