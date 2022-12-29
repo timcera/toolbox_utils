@@ -1,3 +1,9 @@
+## v1.0.2 (2022-12-29)
+
+### Refactor
+
+- evaluating new formatting style with blank lines separating code blocks
+
 ## v1.0.1 (2022-10-29)
 
 ### Fix
