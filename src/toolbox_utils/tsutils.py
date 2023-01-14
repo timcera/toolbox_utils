@@ -324,38 +324,38 @@ docstrings = {
 
         Command line examples:
 
-            +-----------------------------------+----------------------------+
-            | Keyword Example                   | Description                |
-            +===================================+============================+
-            | --input_ts=fname.csv              | read all columns           |
-            |                                   | from 'fname.csv'           |
-            +-----------------------------------+----------------------------+
-            | --input_ts=fname.csv,2,1          | read data columns 2 and 1  |
-            |                                   | from 'fname.csv'           |
-            +-----------------------------------+----------------------------+
-            | --input_ts=fname.csv,2,skiprows=2 | read data column 2         |
-            |                                   | from 'fname.csv', skipping |
-            |                                   | first 2 rows so header is  |
-            |                                   | read from third row        |
-            +-----------------------------------+----------------------------+
-            | --input_ts=fname.xlsx,2,Sheet21   | read all data from 2nd     |
-            |                                   | sheet all data from        |
-            |                                   | "Sheet21" of 'fname.xlsx'  |
-            +-----------------------------------+----------------------------+
-            | --input_ts=fname.hdf5,Table12,T2  | read all data from table   |
-            |                                   | "Table12" then all data    |
-            |                                   | from table "T2" of         |
-            |                                   | 'fname.hdf5'               |
-            +-----------------------------------+----------------------------+
-            | --input_ts=fname.wdm,210,110      | read DSNs 210, then 110    |
-            |                                   | from 'fname.wdm'           |
-            +-----------------------------------+----------------------------+
-            | --input_ts='-'                    | read all columns from      |
-            |                                   | standard input (stdin)     |
-            +-----------------------------------+----------------------------+
-            | --input_ts='-' --columns=4,1      | read column 4 and 1 from   |
-            |                                   | standard input (stdin)     |
-            +-----------------------------------+----------------------------+
+            +-----------------------------------+-----------------------------+
+            | Keyword Example                   | Description                 |
+            +===================================+=============================+
+            | --input_ts=fname.csv              | read all columns from       |
+            |                                   | 'fname.csv'                 |
+            +-----------------------------------+-----------------------------+
+            | --input_ts=fname.csv,2,1          | read data columns 2 and 1   |
+            |                                   | from 'fname.csv'            |
+            +-----------------------------------+-----------------------------+
+            | --input_ts=fname.csv,2,skiprows=2 | read data column 2 from     |
+            |                                   | 'fname.csv', skipping first |
+            |                                   | 2 rows so header is read    |
+            |                                   | from third row              |
+            +-----------------------------------+-----------------------------+
+            | --input_ts=fname.xlsx,2,Sheet21   | read all data from 2nd      |
+            |                                   | sheet all data from         |
+            |                                   | "Sheet21" of 'fname.xlsx'   |
+            +-----------------------------------+-----------------------------+
+            | --input_ts=fname.hdf5,Table12,T2  | read all data from table    |
+            |                                   | "Table12" then all data     |
+            |                                   | from table "T2" of          |
+            |                                   | 'fname.hdf5'                |
+            +-----------------------------------+-----------------------------+
+            | --input_ts=fname.wdm,210,110      | read DSNs 210, then 110     |
+            |                                   | from 'fname.wdm'            |
+            +-----------------------------------+-----------------------------+
+            | --input_ts='-'                    | read all columns from       |
+            |                                   | standard input (stdin)      |
+            +-----------------------------------+-----------------------------+
+            | --input_ts='-' --columns=4,1      | read column 4 and 1 from    |
+            |                                   | standard input (stdin)      |
+            +-----------------------------------+-----------------------------+
 
         If working with CSV or TSV files you can use redirection rather than
         use `--input_ts=fname.csv`.  The following are identical:
@@ -1303,7 +1303,7 @@ def common_kwds(
     # to "no".  Discovered this after implementation and should deprecate
     # and remove in the future.
 
-    if por:
+    if por or force_freq:
         dropna = "no"
 
     ntsd = read_iso_ts(
@@ -1521,12 +1521,13 @@ def asbestfreq(data: DataFrame, force_freq: Optional[str] = None) -> DataFrame:
         raise ValueError(
             error_wrapper(
                 f"""
-Duplicate or time reversal index entry at record {np.where(ndiff <= 0)[0][0] + 1} (start count at 0):
-"{data.index[:-1][ndiff <= 0][0]}".
+                Duplicate or time reversal index entry at record
+                {np.where(ndiff <= 0)[0][0] + 1} (start count at 0):
+                "{data.index[:-1][ndiff <= 0][0]}".
 
-Perhaps use the "--clean" keyword on the CLI or "clean=True" if using
-Python or edit the input data..
-"""
+                Perhaps use the "--clean" keyword on the CLI or "clean=True" if
+                using Python or edit the input data..
+                """
             )
         )
 
@@ -1616,7 +1617,7 @@ Python or edit the input data..
 def dedup_index(
     idx: List[str], fmt: Optional[Any] = None, ignore_first: bool = True
 ) -> Index:
-    """Remove duplicates values in list.
+    """Remove duplicate values in list.
 
     Parameters
     ----------
@@ -1795,11 +1796,9 @@ printiso = _printiso
 
 
 def open_local(filein: str) -> TextIOWrapper:
-    """
-    Open the given input file.
+    """Open the given input file.
 
     It can decode various formats too, such as gzip and bz2.
-
     """
     base, ext = os.path.splitext(os.path.basename(filein))
 
