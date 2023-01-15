@@ -784,14 +784,12 @@ def parsedate(
 
     Used for start and end dates.
     """
-
+    # The API should boomerang a datetime.datetime instance and None.
     if dstr is None:
         return dstr
-
-    # The API should boomerang a datetime.datetime instance and None.
-
     if isinstance(dstr, datetime.datetime):
         return dstr if strftime is None else dstr.strftime(strftime)
+
     try:
         pdate = pd.to_datetime(dstr)
     except ValueError:
@@ -863,31 +861,10 @@ def _pick_column_or_value(tsd, var):
     return var
 
 
-def make_list(*strorlist, **kwds: Any) -> Any:
+def make_list(
+    *strorlist, n: Optional[int] = None, sep: str = ",", flat: bool = True
+) -> Any:
     """Normalize strings, converting to numbers or lists."""
-    try:
-        cnt = kwds.pop("n")
-    except KeyError:
-        cnt = None
-
-    if cnt is not None:
-        cnt = int(cnt)
-
-    try:
-        sep = kwds.pop("sep")
-    except KeyError:
-        sep = ","
-
-    try:
-        kwdname = kwds.pop("kwdname")
-    except KeyError:
-        kwdname = ""
-
-    try:
-        flat = kwds.pop("flat")
-    except KeyError:
-        flat = True
-
     if isinstance(strorlist, (list, tuple)):
         # The following will fix ((tuples, in, a, tuple, problem),)
 
@@ -899,19 +876,6 @@ def make_list(*strorlist, **kwds: Any) -> Any:
             # further processing.
             strorlist = strorlist[0]
 
-    if (
-        isinstance(strorlist, (list, tuple))
-        and cnt is not None
-        and len(strorlist) != cnt
-    ):
-        raise ValueError(
-            error_wrapper(
-                f"""
-                The list {strorlist} for "{kwdname}" should have {cnt} members
-                according to function requirements. """
-            )
-        )
-
     if isinstance(strorlist, pd.DataFrame):
         return [strorlist]
 
@@ -920,36 +884,30 @@ def make_list(*strorlist, **kwds: Any) -> Any:
 
     if strorlist is None or isinstance(strorlist, (type(None))):
         # None -> None
-        #
-
         return None
 
     if isinstance(strorlist, (int, float)):
         # 1      -> [1]
         # 1.2    -> [1.2]
-        #
 
-        return [strorlist]
+        strorlist = [strorlist]
 
     if isinstance(strorlist, (str, bytes)):
         if strorlist in ("None", "", b"None", b""):
             # 'None' -> None
             # ''     -> None
-            #
-
             return None
 
+        # Anything other than a scalar int or float continues.
         # '1'   -> [1]
         # '5.7' -> [5.7]
-
-        # Anything other than a scalar int or float continues.
-        #
         try:
             return [int(strorlist)]
         except ValueError:
             with suppress(ValueError):
                 return [float(strorlist)]
-        # Deal with a str or bytes.
+
+        # Deal with str or bytes.
         strorlist = strorlist.strip()
 
         if isinstance(strorlist, str):
@@ -965,16 +923,16 @@ def make_list(*strorlist, **kwds: Any) -> Any:
     if isinstance(strorlist, (StringIO, BytesIO)):
         return strorlist
 
-    if cnt is None:
-        cnt = len(strorlist)
-
     # At this point 'strorlist' variable should be a list or tuple.
 
-    if len(strorlist) != cnt:
+    if n is None:
+        n = len(strorlist)
+
+    if len(strorlist) != n:
         raise ValueError(
             error_wrapper(
                 f"""
-                The list {strorlist} for "{kwdname}" should have {cnt} members
+                The list {strorlist} should have {n} members
                 according to function requirements. """
             )
         )
