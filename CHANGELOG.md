@@ -1,3 +1,13 @@
+## v1.0.4 (2023-01-16)
+
+### Fix
+
+- fixed force_freq which was working and then NAs were dropped reversing what force_freq did
+
+### Refactor
+
+- refactor using refurb and pylint
+
 ## v1.0.3 (2023-01-08)
 
 ## v1.0.2 (2022-12-29)
