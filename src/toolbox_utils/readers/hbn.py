@@ -167,7 +167,7 @@ def _get_data(binfilename, interval="daily", labels=None, catalog_only=True):
             )
 
         # replace empty fields with None
-        words = [None if (i in ["", "None"]) else i for i in label]
+        words = [None if (i in ("", "None")) else i for i in label]
 
         # first word must be a valid operation type or None
         if words[0] is not None:
@@ -404,7 +404,7 @@ def hbn_extract(
     r"""Returns a DataFrame from a HSPF binary output file."""
     interval = interval.lower()
 
-    if interval not in ["bivl", "daily", "monthly", "yearly"]:
+    if interval not in ("bivl", "daily", "monthly", "yearly"):
         raise ValueError(
             tsutils.error_wrapper(
                 f"""The "interval" argument must be one of "bivl", "daily",

@@ -65,9 +65,7 @@ def wdm_extract(wdmfile, *idsn):
     for index in range(512, nrecords * 512, 512):
         if (
             not (
-                iarray[index] == 0
-                and iarray[index + 1] == 0
-                and iarray[index + 2] == 0
+                iarray[index] == iarray[index + 1] == iarray[index + 2] == 0
                 and iarray[index + 3]
             )
             and iarray[index + 5] == 1

@@ -1942,7 +1942,7 @@ def read_iso_ts(
 
     for source_index, source in enumerate(sources):
         res = pd.DataFrame()
-        parameters = make_list(source, sep=",")
+        parameters = make_list(source)
 
         if isinstance(parameters, list) and len(parameters) > 0:
             fname = parameters.pop(0)
