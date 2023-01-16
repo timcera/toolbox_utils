@@ -1,6 +1,7 @@
 [build-system]
 requires = [
-    "setuptools",
+    "setuptools>=45",
+    "setuptools_scm[toml]>=6.2",
     "wheel",
     "oldest-supported-numpy",
 ]
@@ -19,8 +20,6 @@ dependencies = [
     "pint-pandas",
     "pint",
     "pydantic",
-    "setuptools",
-    "setuptools_scm",
     "typing-extensions",
     "odfpy>=1.4.1",
     "xlrd>=2.0.1",
@@ -101,6 +100,9 @@ update_changelog_on_bump = true
 [tool.coverage.run]
 relative_files = true
 
+[tool.isort]
+profile = "black"
+
 [tool.setuptools]
 license-files = ["LICENSE.txt"]
 include-package-data = true
@@ -113,5 +115,4 @@ version = {file = "VERSION"}
 where = ["src"]
 exclude = ["examples*", "tools*", "docs*", "toolbox_utils.tests*"]
 
-[tool.isort]
-profile = "black"
+[tool.setuptools_scm]
