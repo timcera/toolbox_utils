@@ -809,17 +809,6 @@ def parsedate(
     return pdate.strftime(strftime)
 
 
-@validate_arguments
-def merge_dicts(*dict_args: dict) -> dict:
-    """Merge multiple dictionaries."""
-    result = {}
-
-    for dic in dict_args:
-        result.update(dic)
-
-    return result
-
-
 def about(name):
     """Print generic 'about' information used across all toolboxes."""
 
