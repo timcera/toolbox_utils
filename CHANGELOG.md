@@ -1,3 +1,13 @@
+## v2.0.0 (2023-01-22)
+
+### BREAKING CHANGE
+
+- removing function used in several toolboxes which requires breaking change
+
+### Refactor
+
+- **merge_dicts**: removed tsutils.merge_dicts and replaced with {**x, **y} in all toolboxes
+
 ## v1.0.4 (2023-01-16)
 
 ### Fix
