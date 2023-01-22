@@ -22,6 +22,7 @@ from toolbox_utils import tsutils
         ("2001-01-01", "%Y", "2001"),
         (pd.to_datetime("2001-01-01"), "%Y", "2001"),
         (pd.to_datetime("2001-01-01"), None, datetime.datetime(2001, 1, 1)),
+        (None, "%Y", None),
     ],
 )
 def test_parsedate(test_input, strftime, expected):
