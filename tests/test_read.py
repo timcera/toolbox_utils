@@ -1,5 +1,3 @@
-import shlex
-import subprocess
 from unittest import TestCase
 
 import pandas
