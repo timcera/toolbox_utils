@@ -4,9 +4,6 @@ catalog
 
 Tests for `hspfbintoolbox` module.
 """
-
-import shlex
-import subprocess
 import sys
 from unittest import TestCase
 

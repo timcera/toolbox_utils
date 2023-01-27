@@ -4,9 +4,6 @@ catalog
 
 Tests for `hspf_reader hbn` module.
 """
-
-import shlex
-import subprocess
 import sys
 from io import BytesIO, StringIO
 from unittest import TestCase
