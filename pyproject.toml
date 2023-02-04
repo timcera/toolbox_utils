@@ -27,6 +27,7 @@ dependencies = [
     "pyxlsb>=1.0.8",
     "tables>=3.6.1",
     "matplotlib>=3.3.2",
+    "xlsxwriter",
     ]
 license = {text = "BSD-3-Clause"}
 authors = [
