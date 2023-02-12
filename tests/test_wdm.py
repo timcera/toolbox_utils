@@ -4,33 +4,13 @@ test_wdm
 
 Tests for `hspf_reader` module.
 """
-import sys
-
-import pandas as pd
-
-from toolbox_utils import tsutils
-
-try:
-    from cStringIO import StringIO
-except:
-    from io import StringIO
 
 from unittest import TestCase
 
+import pandas as pd
 from pandas.testing import assert_frame_equal
 
 from toolbox_utils import tsutils
-
-
-def capture(func, *args, **kwds):
-    sys.stdout = StringIO()  # capture output
-    out = func(*args, **kwds)
-    out = sys.stdout.getvalue()  # release output
-    try:
-        out = bytes(out, "utf-8")
-    except:
-        pass
-    return out
 
 
 class TestWDM(TestCase):

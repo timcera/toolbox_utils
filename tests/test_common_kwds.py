@@ -5,9 +5,7 @@ tssplit
 Tests for `toolbox_utils` module.
 """
 
-import pandas as pd
 import pytest
-from pandas.testing import assert_frame_equal
 
 from toolbox_utils import tsutils
 

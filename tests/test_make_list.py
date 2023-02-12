@@ -88,5 +88,5 @@ def test_make_list(test_input, expected, kwds):
     ],
 )
 def test_make_list_exception(test_input, expected, kwds):
-    with pytest.raises(Exception) as e_info:
-        ret = tsutils.make_list(test_input, **kwds)
+    with pytest.raises(Exception):
+        _ = tsutils.make_list(test_input, **kwds)

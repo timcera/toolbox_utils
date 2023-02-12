@@ -37,6 +37,5 @@ def test_parsedate(test_input, strftime, expected):
     ],
 )
 def test_parsedate_exceptions(test_input, strftime, expected):
-    with pytest.raises(Exception) as excinfo:
-        ret = tsutils.parsedate(test_input, strftime=strftime)
-        print(ret)
+    with pytest.raises(Exception):
+        _ = tsutils.parsedate(test_input, strftime=strftime)
