@@ -7,13 +7,14 @@ import inspect
 import os
 import platform
 import sys
+from ast import literal_eval
 from contextlib import suppress
 from functools import reduce, wraps
 from io import BytesIO, StringIO
 from math import gcd
 from string import Template
 from textwrap import TextWrapper, dedent
-from typing import Any, Callable, List, Optional, Tuple, Union
+from typing import Any, Callable, List, Literal, Optional, Tuple, Union
 from urllib.parse import urlparse
 
 import dateparser
@@ -30,11 +31,15 @@ from pydantic import validate_arguments
 from scipy.stats.distributions import lognorm, norm
 from tabulate import simple_separated_format
 from tabulate import tabulate as tb
-from typing_extensions import Literal
 
 from .readers.hbn import hbn_extract as hbn
 from .readers.plotgen import plotgen_extract as plotgen
 from .readers.wdm import wdm_extract as wdm
+
+# This is here so that linters don't remove the pint_pandas import which is
+# needed to use pint in pandas
+_ = pint_pandas.version("pint")
+
 
 if __name__ == "__main__":
     pass
@@ -82,21 +87,21 @@ def tssplit(
 
     Parameters
     ----------
-    s: str
+    input_str : str
         A string to split into chunks
-    quote: str
+    quote : str
         Quote chars to protect a part of s from parsing
-    quote_keep: bool
+    quote_keep : bool
         Preserve quote characters in the output or not
-    delimiter: str
+    delimiter : str
         A chunk separator character
-    escape: str
+    escape : str
         An escape character
-    trim: str
+    trim : str
         Trim characters from chunks
 
-    Return
-    ------
+    Returns
+    -------
     result: list of str
         A list of chunks
     """
@@ -133,126 +138,126 @@ def tssplit(
     return result
 
 
-_CODES = {}
-_CODES["SUB_D"]: {
-    "N": "Nanoseconds",
-    "U": "microseconds",
-    "L": "miLliseconds",
-    "S": "Secondly",
-    "T": "minuTely",
-    "H": "Hourly",
-}
-_CODES["DAILY"]: {
-    "D": "calendar Day",
-    "B": "Business day",
-    "C": "Custom business day (experimental)",
-}
-_CODES["WEEKLY"]: {
-    "W": "Weekly",
-    "W-SUN": "Weekly frequency (SUNdays)",
-    "W-MON": "Weekly frequency (MONdays)",
-    "W-TUE": "Weekly frequency (TUEsdays)",
-    "W-WED": "Weekly frequency (WEDnesdays)",
-    "W-THU": "Weekly frequency (THUrsdays)",
-    "W-FRI": "Weekly frequency (FRIdays)",
-    "W-SAT": "Weekly frequency (SATurdays)",
-}
-_CODES["MONTH"]: {
-    "M": "Month end",
-    "MS": "Month Start",
-    "BM": "Business Month end",
-    "BMS": "Business Month Start",
-    "CBM": "Custom Business Month end",
-    "CBMS": "Custom Business Month Start",
-}
-_CODES["QUARTERLY"]: {
-    "Q": "Quarter end",
-    "Q-JAN": "Quarterly, quarter ends end of JANuary",
-    "Q-FEB": "Quarterly, quarter ends end of FEBruary",
-    "Q-MAR": "Quarterly, quarter ends end of MARch",
-    "Q-APR": "Quarterly, quarter ends end of APRil",
-    "Q-MAY": "Quarterly, quarter ends end of MAY",
-    "Q-JUN": "Quarterly, quarter ends end of JUNe",
-    "Q-JUL": "Quarterly, quarter ends end of JULy",
-    "Q-AUG": "Quarterly, quarter ends end of AUGust",
-    "Q-SEP": "Quarterly, quarter ends end of SEPtember",
-    "Q-OCT": "Quarterly, quarter ends end of OCTober",
-    "Q-NOV": "Quarterly, quarter ends end of NOVember",
-    "Q-DEC": "Quarterly, quarter ends end of DECember",
-    "QS": "Quarter Start",
-    "QS-JAN": "Quarterly, quarter Starts end of JANuary",
-    "QS-FEB": "Quarterly, quarter Starts end of FEBruary",
-    "QS-MAR": "Quarterly, quarter Starts end of MARch",
-    "QS-APR": "Quarterly, quarter Starts end of APRil",
-    "QS-MAY": "Quarterly, quarter Starts end of MAY",
-    "QS-JUN": "Quarterly, quarter Starts end of JUNe",
-    "QS-JUL": "Quarterly, quarter Starts end of JULy",
-    "QS-AUG": "Quarterly, quarter Starts end of AUGust",
-    "QS-SEP": "Quarterly, quarter Starts end of SEPtember",
-    "QS-OCT": "Quarterly, quarter Starts end of OCTober",
-    "QS-NOV": "Quarterly, quarter Starts end of NOVember",
-    "QS-DEC": "Quarterly, quarter Starts end of DECember",
-    "BQ": "Business Quarter end",
-    "BQS": "Business Quarter Start",
-}
-_CODES["ANNUAL"]: {
-    "A": "Annual end",
-    "A-JAN": "Annual, year ends end of JANuary",
-    "A-FEB": "Annual, year ends end of FEBruary",
-    "A-MAR": "Annual, year ends end of MARch",
-    "A-APR": "Annual, year ends end of APRil",
-    "A-MAY": "Annual, year ends end of MAY",
-    "A-JUN": "Annual, year ends end of JUNe",
-    "A-JUL": "Annual, year ends end of JULy",
-    "A-AUG": "Annual, year ends end of AUGust",
-    "A-SEP": "Annual, year ends end of SEPtember",
-    "A-OCT": "Annual, year ends end of OCTober",
-    "A-NOV": "Annual, year ends end of NOVember",
-    "A-DEC": "Annual, year ends end of DECember",
-    "AS": "Annual Start",
-    "AS-JAN": "Annual, year Starts end of JANuary",
-    "AS-FEB": "Annual, year Starts end of FEBruary",
-    "AS-MAR": "Annual, year Starts end of MARch",
-    "AS-APR": "Annual, year Starts end of APRil",
-    "AS-MAY": "Annual, year Starts end of MAY",
-    "AS-JUN": "Annual, year Starts end of JUNe",
-    "AS-JUL": "Annual, year Starts end of JULy",
-    "AS-AUG": "Annual, year Starts end of AUGust",
-    "AS-SEP": "Annual, year Starts end of SEPtember",
-    "AS-OCT": "Annual, year Starts end of OCTober",
-    "AS-NOV": "Annual, year Starts end of NOVember",
-    "AS-DEC": "Annual, year Starts end of DECember",
-    "BA": "Business Annual end",
-    "BA-JAN": "Business Annual, business year ends end of JANuary",
-    "BA-FEB": "Business Annual, business year ends end of FEBruary",
-    "BA-MAR": "Business Annual, business year ends end of MARch",
-    "BA-APR": "Business Annual, business year ends end of APRil",
-    "BA-MAY": "Business Annual, business year ends end of MAY",
-    "BA-JUN": "Business Annual, business year ends end of JUNe",
-    "BA-JUL": "Business Annual, business year ends end of JULy",
-    "BA-AUG": "Business Annual, business year ends end of AUGust",
-    "BA-SEP": "Business Annual, business year ends end of SEPtember",
-    "BA-OCT": "Business Annual, business year ends end of OCTober",
-    "BA-NOV": "Business Annual, business year ends end of NOVember",
-    "BA-DEC": "Business Annual, business year ends end of DECember",
-    "BAS": "Business Annual Start",
-    "BS-JAN": "Business Annual Start, business year starts end of JANuary",
-    "BS-FEB": "Business Annual Start, business year starts end of FEBruary",
-    "BS-MAR": "Business Annual Start, business year starts end of MARch",
-    "BS-APR": "Business Annual Start, business year starts end of APRil",
-    "BS-MAY": "Business Annual Start, business year starts end of MAY",
-    "BS-JUN": "Business Annual Start, business year starts end of JUNe",
-    "BS-JUL": "Business Annual Start, business year starts end of JULy",
-    "BS-AUG": "Business Annual Start, business year starts end of AUGust",
-    "BS-SEP": "Business Annual Start, business year starts end of SEPtember",
-    "BS-OCT": "Business Annual Start, business year starts end of OCTober",
-    "BS-NOV": "Business Annual Start, business year starts end of NOVember",
-    "BS-DEC": "Business Annual Start, business year starts end of DECember",
+_CODES = {
+    "SUB_D": {
+        "N": "Nanoseconds",
+        "U": "microseconds",
+        "L": "miLliseconds",
+        "S": "Secondly",
+        "T": "minuTely",
+        "H": "Hourly",
+    },
+    "DAILY": {
+        "D": "calendar Day",
+        "B": "Business day",
+        "C": "Custom business day (experimental)",
+    },
+    "WEEKLY": {
+        "W": "Weekly",
+        "W-SUN": "Weekly frequency (SUNdays)",
+        "W-MON": "Weekly frequency (MONdays)",
+        "W-TUE": "Weekly frequency (TUEsdays)",
+        "W-WED": "Weekly frequency (WEDnesdays)",
+        "W-THU": "Weekly frequency (THUrsdays)",
+        "W-FRI": "Weekly frequency (FRIdays)",
+        "W-SAT": "Weekly frequency (SATurdays)",
+    },
+    "MONTH": {
+        "M": "Month end",
+        "MS": "Month Start",
+        "BM": "Business Month end",
+        "BMS": "Business Month Start",
+        "CBM": "Custom Business Month end",
+        "CBMS": "Custom Business Month Start",
+    },
+    "QUARTERLY": {
+        "Q": "Quarter end",
+        "Q-JAN": "Quarterly, quarter ends end of JANuary",
+        "Q-FEB": "Quarterly, quarter ends end of FEBruary",
+        "Q-MAR": "Quarterly, quarter ends end of MARch",
+        "Q-APR": "Quarterly, quarter ends end of APRil",
+        "Q-MAY": "Quarterly, quarter ends end of MAY",
+        "Q-JUN": "Quarterly, quarter ends end of JUNe",
+        "Q-JUL": "Quarterly, quarter ends end of JULy",
+        "Q-AUG": "Quarterly, quarter ends end of AUGust",
+        "Q-SEP": "Quarterly, quarter ends end of SEPtember",
+        "Q-OCT": "Quarterly, quarter ends end of OCTober",
+        "Q-NOV": "Quarterly, quarter ends end of NOVember",
+        "Q-DEC": "Quarterly, quarter ends end of DECember",
+        "QS": "Quarter Start",
+        "QS-JAN": "Quarterly, quarter Starts end of JANuary",
+        "QS-FEB": "Quarterly, quarter Starts end of FEBruary",
+        "QS-MAR": "Quarterly, quarter Starts end of MARch",
+        "QS-APR": "Quarterly, quarter Starts end of APRil",
+        "QS-MAY": "Quarterly, quarter Starts end of MAY",
+        "QS-JUN": "Quarterly, quarter Starts end of JUNe",
+        "QS-JUL": "Quarterly, quarter Starts end of JULy",
+        "QS-AUG": "Quarterly, quarter Starts end of AUGust",
+        "QS-SEP": "Quarterly, quarter Starts end of SEPtember",
+        "QS-OCT": "Quarterly, quarter Starts end of OCTober",
+        "QS-NOV": "Quarterly, quarter Starts end of NOVember",
+        "QS-DEC": "Quarterly, quarter Starts end of DECember",
+        "BQ": "Business Quarter end",
+        "BQS": "Business Quarter Start",
+    },
+    "ANNUAL": {
+        "A": "Annual end",
+        "A-JAN": "Annual, year ends end of JANuary",
+        "A-FEB": "Annual, year ends end of FEBruary",
+        "A-MAR": "Annual, year ends end of MARch",
+        "A-APR": "Annual, year ends end of APRil",
+        "A-MAY": "Annual, year ends end of MAY",
+        "A-JUN": "Annual, year ends end of JUNe",
+        "A-JUL": "Annual, year ends end of JULy",
+        "A-AUG": "Annual, year ends end of AUGust",
+        "A-SEP": "Annual, year ends end of SEPtember",
+        "A-OCT": "Annual, year ends end of OCTober",
+        "A-NOV": "Annual, year ends end of NOVember",
+        "A-DEC": "Annual, year ends end of DECember",
+        "AS": "Annual Start",
+        "AS-JAN": "Annual, year Starts end of JANuary",
+        "AS-FEB": "Annual, year Starts end of FEBruary",
+        "AS-MAR": "Annual, year Starts end of MARch",
+        "AS-APR": "Annual, year Starts end of APRil",
+        "AS-MAY": "Annual, year Starts end of MAY",
+        "AS-JUN": "Annual, year Starts end of JUNe",
+        "AS-JUL": "Annual, year Starts end of JULy",
+        "AS-AUG": "Annual, year Starts end of AUGust",
+        "AS-SEP": "Annual, year Starts end of SEPtember",
+        "AS-OCT": "Annual, year Starts end of OCTober",
+        "AS-NOV": "Annual, year Starts end of NOVember",
+        "AS-DEC": "Annual, year Starts end of DECember",
+        "BA": "Business Annual end",
+        "BA-JAN": "Business Annual, business year ends end of JANuary",
+        "BA-FEB": "Business Annual, business year ends end of FEBruary",
+        "BA-MAR": "Business Annual, business year ends end of MARch",
+        "BA-APR": "Business Annual, business year ends end of APRil",
+        "BA-MAY": "Business Annual, business year ends end of MAY",
+        "BA-JUN": "Business Annual, business year ends end of JUNe",
+        "BA-JUL": "Business Annual, business year ends end of JULy",
+        "BA-AUG": "Business Annual, business year ends end of AUGust",
+        "BA-SEP": "Business Annual, business year ends end of SEPtember",
+        "BA-OCT": "Business Annual, business year ends end of OCTober",
+        "BA-NOV": "Business Annual, business year ends end of NOVember",
+        "BA-DEC": "Business Annual, business year ends end of DECember",
+        "BAS": "Business Annual Start",
+        "BS-JAN": "Business Annual Start, business year starts end of JANuary",
+        "BS-FEB": "Business Annual Start, business year starts end of FEBruary",
+        "BS-MAR": "Business Annual Start, business year starts end of MARch",
+        "BS-APR": "Business Annual Start, business year starts end of APRil",
+        "BS-MAY": "Business Annual Start, business year starts end of MAY",
+        "BS-JUN": "Business Annual Start, business year starts end of JUNe",
+        "BS-JUL": "Business Annual Start, business year starts end of JULy",
+        "BS-AUG": "Business Annual Start, business year starts end of AUGust",
+        "BS-SEP": "Business Annual Start, business year starts end of SEPtember",
+        "BS-OCT": "Business Annual Start, business year starts end of OCTober",
+        "BS-NOV": "Business Annual Start, business year starts end of NOVember",
+        "BS-DEC": "Business Annual Start, business year starts end of DECember",
+    },
 }
 
-docstrings = {
-    "por": r"""por
-        [optional, default is False]
+ndocstrings = {
+    "por": """[optional, default is False]
 
         The `por` keyword adjusts the operation of `start_date` and `end_date`
 
@@ -261,15 +266,12 @@ docstrings = {
         `end_date` is outside of the existing time-series will fill the time-
         series with missing values to include the exterior `start_date` or
         `end_date`.""",
-    "lat": r"""lat
-        The latitude of the point. North hemisphere is positive from 0 to 90.
+    "lat": """The latitude of the point. North hemisphere is positive from 0 to 90.
         South hemisphere is negative from 0 to -90.""",
-    "lon": r"""lon
-        The longitude of the point.  Western hemisphere (west of Greenwich
+    "lon": """The longitude of the point.  Western hemisphere (west of Greenwich
         Prime Meridian) is negative 0 to -180.  The eastern hemisphere (east of
         the Greenwich Prime Meridian) is positive 0 to 180.""",
-    "target_units": r"""target_units: str
-        [optional, default is None, transformation]
+    "target_units": """[optional, default is None, transformation]
 
         The purpose of this option is to specify target units for unit
         conversion.  The source units are specified in the header line of the
@@ -283,29 +285,25 @@ docstrings = {
 
         This option will also add the 'target_units' string to the
         column names.""",
-    "source_units": r"""source_units: str
-        [optional, default is None, transformation]
+    "source_units": """[optional, default is None, transformation]
 
         If unit is specified for the column as the second field of a ':'
         delimited column name, then the specified units and the 'source_units'
         must match exactly.
 
         Any unit string compatible with the 'pint' library can be used.""",
-    "names": r"""names: str
-        [optional, default is None, transformation]
+    "names": """[optional, default is None, transformation]
 
         If None, the column names are taken from the first row after 'skiprows'
         from the input dataset.
 
         MUST include a name for all columns in the input dataset, including the
         index column.""",
-    "index_type": r"""index_type : str
-        [optional, default is 'datetime', output format]
+    "index_type": """[optional, default is 'datetime', output format]
 
         Can be either 'number' or 'datetime'.  Use 'number' with index values
         that are Julian dates, or other epoch reference.""",
-    "input_ts": r"""input_ts : str
-        [optional though required if using within Python, default is '-'
+    "input_ts": """[optional though required if using within Python, default is '-'
         (stdin)]
 
         Whether from a file or standard input, data requires a single line
@@ -377,8 +375,7 @@ docstrings = {
             You must use the `input_ts=...` option where `input_ts` can
             be one of a [pandas DataFrame, pandas Series, dict, tuple,
             list, StringIO, or file name].""",
-    "columns": r"""columns
-        [optional, defaults to all columns, input filter]
+    "columns": """[optional, defaults to all columns, input filter]
 
         Columns to select out of input.  Can use column names from the first
         line header or column numbers.  If using numbers, column number 1 is
@@ -388,29 +385,24 @@ docstrings = {
         This solves a big problem so that you don't have to create a data set
         with a certain column order, you can rearrange columns when data is
         read in.""",
-    "start_date": r"""start_date : str
-        [optional, defaults to first date in time-series, input filter]
+    "start_date": """[optional, defaults to first date in time-series, input filter]
 
         The start_date of the series in ISOdatetime format, or 'None' for
         beginning.""",
-    "end_date": r"""end_date : str
-        [optional, defaults to last date in time-series, input filter]
+    "end_date": """[optional, defaults to last date in time-series, input filter]
 
         The end_date of the series in ISOdatetime format, or 'None' for
         end.""",
-    "dropna": r"""dropna : str
-        [optional, defauls it 'no', input filter]
+    "dropna": """[optional, defauls it 'no', input filter]
 
         Set `dropna` to 'any' to have records dropped that have NA value in any
         column, or 'all' to have records dropped that have NA in all columns.
         Set to 'no' to not drop any records.  The default is 'no'.""",
-    "print_input": r"""print_input
-        [optional, default is False, output format]
+    "print_input": """[optional, default is False, output format]
 
         If set to 'True' will include the input columns in the output
         table.""",
-    "round_index": r"""round_index
-        [optional, default is None which will do nothing to the index,
+    "round_index": """[optional, default is None which will do nothing to the index,
         output format]
 
         Round the index to the nearest time point.  Can significantly improve
@@ -418,23 +410,22 @@ docstrings = {
         requirements, however be cautious about rounding to a very course
         interval from a small one.  This could lead to duplicate values in the
         index.""",
-    "float_format": r"""float_format
-        [optional, output format]
+    "float_format": """[optional, output format]
 
         Format for float numbers.""",
-    "tablefmt": r"""tablefmt : str
-        [optional, default is 'csv', output format]
+    "tablefmt": """[optional, default is 'csv', output format]
 
         The table format.  Can be one of 'csv', 'tsv', 'plain', 'simple',
         'grid', 'pipe', 'orgtbl', 'rst', 'mediawiki', 'latex', 'latex_raw' and
         'latex_booktabs'.""",
-    "header": r"""header : str
-        [optional, default is 'default', output format]
+    "header": """[optional, default is 'default', output format]
 
         This is if you want a different header than is the default for this
         output table.  Pass a list with string column names for each column in
         the table.""",
-    "pandas_offset_codes": r"""+-------+---------------+
+    "pandas_offset_codes": """
+
+        +-------+---------------+
         | Alias | Description   |
         +=======+===============+
         | N     | Nanoseconds   |
@@ -546,7 +537,9 @@ docstrings = {
         +-------+----------+-------------+----------------------------+
         | x-NOV |          |             | year ends end of NOVember  |
         +-------+----------+-------------+----------------------------+""",
-    "plotting_position_table": r"""+------------+--------+----------------------+-----------------------+
+    "plotting_position_table": """
+
+        +------------+--------+----------------------+-----------------------+
         | Name       | a      | Equation             | Description           |
         |            |        | (i-a)/(n+1-2*a)      |                       |
         +============+========+======================+=======================+
@@ -584,12 +577,383 @@ docstrings = {
 
         The 'blom' plotting position is also known as the 'Sevruk and
         Geiger'.""",
-    "clean": r"""clean
+    "clean": """[optional, default is False, input filter]
+
+        The 'clean' command will repair a input index, removing duplicate index
+        values and sorting.""",
+    "skiprows": """[optional, default is None which will infer header from first line,
+        input filter]
+
+        Line numbers to skip (0-indexed) if a list or number of lines to skip
+        at the start of the file if an integer.
+
+        If used in Python can be a callable, the callable function will be
+        evaluated against the row indices, returning True if the row should be
+        skipped and False otherwise.  An example of a valid callable argument
+        would be
+
+        ``lambda x: x in [0, 2]``.""",
+    "groupby": """[optional, default is None, transformation]
+
+        The pandas offset code to group the time-series data into. A special
+        code is also available to group 'months_across_years' that will group
+        into twelve monthly categories across the entire time-series.""",
+    "force_freq": """[optional, output format]
+
+        Force this frequency for the output.  Typically you will only want to
+        enforce a smaller interval where toolbox_utils will insert missing
+        values as needed.  WARNING: you may lose data if not careful with this
+        option.  In general, letting the algorithm determine the frequency
+        should always work, but this option will override.  Use PANDAS offset
+        codes.""",
+    "output_names": """[optional, output_format]
+
+        The toolbox_utils will change the names of the output columns to
+        include some record of the operations used on each column.  The
+        `output_names` will override that feature.  Must be a list or tuple
+        equal to the number of columns in the output data.""",
+}
+
+docstrings = {
+    "por": """por
+        [optional, default is False]
+
+        The `por` keyword adjusts the operation of `start_date` and `end_date`
+
+        If "False" (the default) choose the indices in the time-series between
+        `start_date` and `end_date`.  If "True" and if `start_date` or
+        `end_date` is outside of the existing time-series will fill the time-
+        series with missing values to include the exterior `start_date` or
+        `end_date`.""",
+    "lat": """lat
+        The latitude of the point. North hemisphere is positive from 0 to 90.
+        South hemisphere is negative from 0 to -90.""",
+    "lon": """lon
+        The longitude of the point.  Western hemisphere (west of Greenwich
+        Prime Meridian) is negative 0 to -180.  The eastern hemisphere (east of
+        the Greenwich Prime Meridian) is positive 0 to 180.""",
+    "target_units": """target_units: str
+        [optional, default is None, transformation]
+
+        The purpose of this option is to specify target units for unit
+        conversion.  The source units are specified in the header line of the
+        input or using the 'source_units' keyword.
+
+        The units of the input time-series or values are specified as the
+        second field of a ':' delimited name in the header line of the input or
+        in the 'source_units' keyword.
+
+        Any unit string compatible with the 'pint' library can be used.
+
+        This option will also add the 'target_units' string to the
+        column names.""",
+    "source_units": """source_units: str
+        [optional, default is None, transformation]
+
+        If unit is specified for the column as the second field of a ':'
+        delimited column name, then the specified units and the 'source_units'
+        must match exactly.
+
+        Any unit string compatible with the 'pint' library can be used.""",
+    "names": """names: str
+        [optional, default is None, transformation]
+
+        If None, the column names are taken from the first row after 'skiprows'
+        from the input dataset.
+
+        MUST include a name for all columns in the input dataset, including the
+        index column.""",
+    "index_type": """index_type : str
+        [optional, default is 'datetime', output format]
+
+        Can be either 'number' or 'datetime'.  Use 'number' with index values
+        that are Julian dates, or other epoch reference.""",
+    "input_ts": """input_ts : str
+        [optional though required if using within Python, default is '-'
+        (stdin)]
+
+        Whether from a file or standard input, data requires a single line
+        header of column names.  The default header is the first line of the
+        input, but this can be changed for CSV files using the 'skiprows'
+        option.
+
+        Most common date formats can be used, but the closer to ISO 8601
+        date/time standard the better.
+
+        Comma-separated values (CSV) files or tab-separated values (TSV)::
+
+            File separators will be automatically detected.  Columns can be
+            selected by name or index, where the index for data columns starts
+            at 1.
+
+        Command line examples:
+
+            +-----------------------------------+-----------------------------+
+            | Keyword Example                   | Description                 |
+            +===================================+=============================+
+            | --input_ts=fname.csv              | read all columns from       |
+            |                                   | 'fname.csv'                 |
+            +-----------------------------------+-----------------------------+
+            | --input_ts=fname.csv,2,1          | read data columns 2 and 1   |
+            |                                   | from 'fname.csv'            |
+            +-----------------------------------+-----------------------------+
+            | --input_ts=fname.csv,2,skiprows=2 | read data column 2 from     |
+            |                                   | 'fname.csv', skipping first |
+            |                                   | 2 rows so header is read    |
+            |                                   | from third row              |
+            +-----------------------------------+-----------------------------+
+            | --input_ts=fname.xlsx,2,Sheet21   | read all data from 2nd      |
+            |                                   | sheet all data from         |
+            |                                   | "Sheet21" of 'fname.xlsx'   |
+            +-----------------------------------+-----------------------------+
+            | --input_ts=fname.hdf5,Table12,T2  | read all data from table    |
+            |                                   | "Table12" then all data     |
+            |                                   | from table "T2" of          |
+            |                                   | 'fname.hdf5'                |
+            +-----------------------------------+-----------------------------+
+            | --input_ts=fname.wdm,210,110      | read DSNs 210, then 110     |
+            |                                   | from 'fname.wdm'            |
+            +-----------------------------------+-----------------------------+
+            | --input_ts='-'                    | read all columns from       |
+            |                                   | standard input (stdin)      |
+            +-----------------------------------+-----------------------------+
+            | --input_ts='-' --columns=4,1      | read column 4 and 1 from    |
+            |                                   | standard input (stdin)      |
+            +-----------------------------------+-----------------------------+
+
+        If working with CSV or TSV files you can use redirection rather than
+        use `--input_ts=fname.csv`.  The following are identical:
+
+        From a file:
+
+            command subcmd --input_ts=fname.csv
+
+        From standard input (since '--input_ts=-' is the default:
+
+            command subcmd < fname.csv
+
+        Can also combine commands by piping:
+
+            command subcmd < filein.csv | command subcmd1 > fileout.csv
+
+        Python library examples::
+
+            You must use the `input_ts=...` option where `input_ts` can
+            be one of a [pandas DataFrame, pandas Series, dict, tuple,
+            list, StringIO, or file name].""",
+    "columns": """columns
+        [optional, defaults to all columns, input filter]
+
+        Columns to select out of input.  Can use column names from the first
+        line header or column numbers.  If using numbers, column number 1 is
+        the first data column.  To pick multiple columns; separate by commas
+        with no spaces. As used in `toolbox_utils pick` command.
+
+        This solves a big problem so that you don't have to create a data set
+        with a certain column order, you can rearrange columns when data is
+        read in.""",
+    "start_date": """start_date : str
+        [optional, defaults to first date in time-series, input filter]
+
+        The start_date of the series in ISOdatetime format, or 'None' for
+        beginning.""",
+    "end_date": """end_date : str
+        [optional, defaults to last date in time-series, input filter]
+
+        The end_date of the series in ISOdatetime format, or 'None' for
+        end.""",
+    "dropna": """dropna : str
+        [optional, defauls it 'no', input filter]
+
+        Set `dropna` to 'any' to have records dropped that have NA value in any
+        column, or 'all' to have records dropped that have NA in all columns.
+        Set to 'no' to not drop any records.  The default is 'no'.""",
+    "print_input": """print_input
+        [optional, default is False, output format]
+
+        If set to 'True' will include the input columns in the output
+        table.""",
+    "round_index": """round_index
+        [optional, default is None which will do nothing to the index,
+        output format]
+
+        Round the index to the nearest time point.  Can significantly improve
+        the performance since can cut down on memory and processing
+        requirements, however be cautious about rounding to a very course
+        interval from a small one.  This could lead to duplicate values in the
+        index.""",
+    "float_format": """float_format
+        [optional, output format]
+
+        Format for float numbers.""",
+    "tablefmt": """tablefmt : str
+        [optional, default is 'csv', output format]
+
+        The table format.  Can be one of 'csv', 'tsv', 'plain', 'simple',
+        'grid', 'pipe', 'orgtbl', 'rst', 'mediawiki', 'latex', 'latex_raw' and
+        'latex_booktabs'.""",
+    "header": """header : str
+        [optional, default is 'default', output format]
+
+        This is if you want a different header than is the default for this
+        output table.  Pass a list with string column names for each column in
+        the table.""",
+    "pandas_offset_codes": """+-------+---------------+
+        | Alias | Description   |
+        +=======+===============+
+        | N     | Nanoseconds   |
+        +-------+---------------+
+        | U     | microseconds  |
+        +-------+---------------+
+        | L     | milliseconds  |
+        +-------+---------------+
+        | S     | Secondly      |
+        +-------+---------------+
+        | T     | Minutely      |
+        +-------+---------------+
+        | H     | Hourly        |
+        +-------+---------------+
+        | D     | calendar Day  |
+        +-------+---------------+
+        | W     | Weekly        |
+        +-------+---------------+
+        | M     | Month end     |
+        +-------+---------------+
+        | MS    | Month Start   |
+        +-------+---------------+
+        | Q     | Quarter end   |
+        +-------+---------------+
+        | QS    | Quarter Start |
+        +-------+---------------+
+        | A     | Annual end    |
+        +-------+---------------+
+        | AS    | Annual Start  |
+        +-------+---------------+
+
+        Business offset codes.
+
+        +-------+------------------------------------+
+        | Alias | Description                        |
+        +=======+====================================+
+        | B     | Business day                       |
+        +-------+------------------------------------+
+        | BM    | Business Month end                 |
+        +-------+------------------------------------+
+        | BMS   | Business Month Start               |
+        +-------+------------------------------------+
+        | BQ    | Business Quarter end               |
+        +-------+------------------------------------+
+        | BQS   | Business Quarter Start             |
+        +-------+------------------------------------+
+        | BA    | Business Annual end                |
+        +-------+------------------------------------+
+        | BAS   | Business Annual Start              |
+        +-------+------------------------------------+
+        | C     | Custom business day (experimental) |
+        +-------+------------------------------------+
+        | CBM   | Custom Business Month end          |
+        +-------+------------------------------------+
+        | CBMS  | Custom Business Month Start        |
+        +-------+------------------------------------+
+
+        Weekly has the following anchored frequencies:
+
+        +-------+-------------+-------------------------------+
+        | Alias | Equivalents | Description                   |
+        +=======+=============+===============================+
+        | W-SUN | W           | Weekly frequency (SUNdays)    |
+        +-------+-------------+-------------------------------+
+        | W-MON |             | Weekly frequency (MONdays)    |
+        +-------+-------------+-------------------------------+
+        | W-TUE |             | Weekly frequency (TUEsdays)   |
+        +-------+-------------+-------------------------------+
+        | W-WED |             | Weekly frequency (WEDnesdays) |
+        +-------+-------------+-------------------------------+
+        | W-THU |             | Weekly frequency (THUrsdays)  |
+        +-------+-------------+-------------------------------+
+        | W-FRI |             | Weekly frequency (FRIdays)    |
+        +-------+-------------+-------------------------------+
+        | W-SAT |             | Weekly frequency (SATurdays)  |
+        +-------+-------------+-------------------------------+
+
+        Quarterly frequencies (Q, BQ, QS, BQS) and annual frequencies
+        (A, BA, AS, BAS) replace the "x" in the "Alias" column to have
+        the following anchoring suffixes:
+
+        +-------+----------+-------------+----------------------------+
+        | Alias | Examples | Equivalents | Description                |
+        +=======+==========+=============+============================+
+        | x-DEC | A-DEC    | A           | year ends end of DECember  |
+        |       | Q-DEC    | Q           |                            |
+        |       | AS-DEC   | AS          |                            |
+        |       | QS-DEC   | QS          |                            |
+        +-------+----------+-------------+----------------------------+
+        | x-JAN |          |             | year ends end of JANuary   |
+        +-------+----------+-------------+----------------------------+
+        | x-FEB |          |             | year ends end of FEBruary  |
+        +-------+----------+-------------+----------------------------+
+        | x-MAR |          |             | year ends end of MARch     |
+        +-------+----------+-------------+----------------------------+
+        | x-APR |          |             | year ends end of APRil     |
+        +-------+----------+-------------+----------------------------+
+        | x-MAY |          |             | year ends end of MAY       |
+        +-------+----------+-------------+----------------------------+
+        | x-JUN |          |             | year ends end of JUNe      |
+        +-------+----------+-------------+----------------------------+
+        | x-JUL |          |             | year ends end of JULy      |
+        +-------+----------+-------------+----------------------------+
+        | x-AUG |          |             | year ends end of AUGust    |
+        +-------+----------+-------------+----------------------------+
+        | x-SEP |          |             | year ends end of SEPtember |
+        +-------+----------+-------------+----------------------------+
+        | x-OCT |          |             | year ends end of OCTober   |
+        +-------+----------+-------------+----------------------------+
+        | x-NOV |          |             | year ends end of NOVember  |
+        +-------+----------+-------------+----------------------------+""",
+    "plotting_position_table": """+------------+--------+----------------------+-----------------------+
+        | Name       | a      | Equation             | Description           |
+        |            |        | (i-a)/(n+1-2*a)      |                       |
+        +============+========+======================+=======================+
+        | weibull    | 0      | i/(n+1)              | mean of sampling      |
+        | (default)  |        |                      | distribution          |
+        +------------+--------+----------------------+-----------------------+
+        |            |        |                      | sampling distribution |
+        +------------+--------+----------------------+-----------------------+
+        | filliben   | 0.3175 | (i-0.3175)/(n+0.365) |                       |
+        +------------+--------+----------------------+-----------------------+
+        | yu         | 0.326  | (i-0.326)/(n+0.348)  |                       |
+        +------------+--------+----------------------+-----------------------+
+        | tukey      | 1/3    | (i-1/3)/(n+1/3)      | approx. median of     |
+        |            |        |                      | sampling distribution |
+        +------------+--------+----------------------+-----------------------+
+        | blom       | 0.375  | (i-0.375)/(n+0.25)   |                       |
+        +------------+--------+----------------------+-----------------------+
+        | cunnane    | 2/5    | (i-2/5)/(n+1/5)      | subjective            |
+        +------------+--------+----------------------+-----------------------+
+        | gringorton | 0.44   | (1-0.44)/(n+0.12)    |                       |
+        +------------+--------+----------------------+-----------------------+
+        | hazen      | 1/2    | (i-1/2)/n            | midpoints of n equal  |
+        |            |        |                      | intervals             |
+        +------------+--------+----------------------+-----------------------+
+        | larsen     | 0.567  | (i-0.567)/(n-0.134)  |                       |
+        +------------+--------+----------------------+-----------------------+
+        | gumbel     | 1      | (i-1)/(n-1)          | mode of sampling      |
+        |            |        |                      | distribution          |
+        +------------+--------+----------------------+-----------------------+
+        | california | NA     | i/n                  |                       |
+        +------------+--------+----------------------+-----------------------+
+
+        Where 'i' is the sorted rank of the y value, and 'n' is the total
+        number of values to be plotted.
+
+        The 'blom' plotting position is also known as the 'Sevruk and
+        Geiger'.""",
+    "clean": """clean
         [optional, default is False, input filter]
 
         The 'clean' command will repair a input index, removing duplicate index
         values and sorting.""",
-    "skiprows": r"""skiprows: list-like or integer or callable
+    "skiprows": """skiprows: list-like or integer or callable
         [optional, default is None which will infer header from first line,
         input filter]
 
@@ -602,13 +966,13 @@ docstrings = {
         would be
 
         ``lambda x: x in [0, 2]``.""",
-    "groupby": r"""groupby: str
+    "groupby": """groupby: str
         [optional, default is None, transformation]
 
         The pandas offset code to group the time-series data into. A special
         code is also available to group 'months_across_years' that will group
         into twelve monthly categories across the entire time-series.""",
-    "force_freq": r"""force_freq: str
+    "force_freq": """force_freq: str
         [optional, output format]
 
         Force this frequency for the output.  Typically you will only want to
@@ -617,7 +981,7 @@ docstrings = {
         option.  In general, letting the algorithm determine the frequency
         should always work, but this option will override.  Use PANDAS offset
         codes.""",
-    "output_names": r"""output_names: str
+    "output_names": """output_names: str
         [optional, output_format]
 
         The toolbox_utils will change the names of the output columns to
@@ -631,7 +995,7 @@ def flatten(list_of_lists) -> List:
     """Recursively flatten a list of lists or tuples into a single list."""
 
     if isinstance(list_of_lists, (list, tuple)):
-        if len(list_of_lists) == 0:
+        if not list_of_lists:
             return list_of_lists
 
         if isinstance(list_of_lists[0], (list, tuple)):
@@ -746,9 +1110,13 @@ def copy_doc(source: Callable) -> Callable:
     ----------
     source : Callable
         Function to take doc string from.
+
+    Returns
+    -------
+    copy_doc: Callable
+        Wrapped function the has new docstring.
     """
 
-    @wraps(source)
     def wrapper_copy_doc(func: Callable) -> Callable:
         if source.__doc__:
             func.__doc__ = source.__doc__  # noqa: WPS125
@@ -759,17 +1127,20 @@ def copy_doc(source: Callable) -> Callable:
 
 
 @validate_arguments
-def doc(fdict: dict, **kwargs) -> Callable:
-    """Return a decorator that formats a docstring."""
+def doc(fdict: dict) -> Callable:
+    """Return a decorator that formats a docstring.
+
+    Uses a template docstring replacing ${key} with fdict[key] from passed in
+    dictionary.
+
+    Parameters
+    ----------
+    fdict : dict
+        Dictionary of strings keyed to names
+    """
 
     def outer_func(inner_func):
         inner_func.__doc__ = Template(inner_func.__doc__).safe_substitute(**fdict)
-
-        # kwargs is currently always empty.
-        # Could remove, but keeping in case useful in future.
-
-        for key, value in kwargs.items():
-            setattr(inner_func, key, value)
 
         return inner_func
 
@@ -796,12 +1167,7 @@ def parsedate(
         pdate = dateparser.parse(dstr, settings=settings)
 
     if pdate is None:
-        raise ValueError(
-            error_wrapper(
-                f"""
-                Could not parse date string '{dstr}'. """
-            )
-        )
+        raise ValueError(error_wrapper(f"""Could not parse date string '{dstr}'. """))
 
     if strftime is None:
         return pdate
@@ -1018,17 +1384,17 @@ def _normalize_units(
     | INPUT        | INPUT        | INPUT        | RETURN       | RETURN       |
     | ntsd.columns | source_units | target_units | source_units | target_units |
     +==============+==============+==============+==============+==============+
-    | ["col1:cm",  | ["ft",       | ["m",        | ValueError   |              |
-    |  "col2:cm"]  |  "cm"]       |  "cm"]       |              |              |
+    | ["col1:cm",  | ["ft", "cm"] | ["m", "cm"]  | ValueError   |              |
+    | "col2:cm"]   |              |              |              |              |
     +--------------+--------------+--------------+--------------+--------------+
     | ["col1:cm",  | ["cm"]       | ["ft"]       | ValueError   |              |
-    |  "col2:cm"]  |              |              |              |              |
+    | "col2:cm"]   |              |              |              |              |
     +--------------+--------------+--------------+--------------+--------------+
-    | ["col1:cm",  | ["cm"]       | ["ft"]       | ["cm",       | ["ft",       |
-    |  "col2"]     |              |              |  ""]         |  ""]         |
+    | ["col1:cm",  | ["cm"]       | ["ft"]       | ["cm", ""]   | ["ft", ""]   |
+    | "col2"]      |              |              |              |              |
     +--------------+--------------+--------------+--------------+--------------+
-    | ["col1",     | ["", "cm"]   | ["", "ft"]   | ["",          | ["",         |
-    |  "col2:cm"]  |              |              |  "cm"]       |  "ft"]       |
+    | ["col1",     | ["", "cm"]   | ["", "ft"]   | ["", "cm"]   | ["", "ft"]   |
+    | "col2:cm"]   |              |              |              |              |
     +--------------+--------------+--------------+--------------+--------------+
     |              | ["cm"]       | ["ft"]       | ["cm"]       | ["ft"]       |
     +--------------+--------------+--------------+--------------+--------------+
@@ -1051,16 +1417,16 @@ def _normalize_units(
     # Create completely filled list of units from the column names.
     tsource_units = []
 
-    for inx in list(range(len(ntsd.columns))):
-        if isinstance(ntsd.columns[inx], (str, bytes)):
-            words = ntsd.columns[inx].split(":")
+    for column_name in ntsd.columns:
+        if isinstance(column_name, (str, bytes)):
+            words = column_name.split(":")
 
             if len(words) >= 2:
                 tsource_units.append(words[1])
             else:
                 tsource_units.append("")
         else:
-            tsource_units.append(ntsd.columns[inx])
+            tsource_units.append(column_name)
 
     # Combine isource_units and tsource_units into stu.
     stu = []
@@ -1084,7 +1450,7 @@ def _normalize_units(
                 )
             stu.append(tsource)
     else:
-        stu = [""] * len(ntsd.columns)
+        stu = ["" for icols in ntsd.columns]
 
     if source_units_required and "" in stu:
         raise ValueError(
@@ -1211,6 +1577,7 @@ def transform_args(**trans_func_for_arg):
     pick=make_list, names=make_list, source_units=make_list, target_units=make_list
 )
 @validate_arguments
+@doc(ndocstrings)
 def common_kwds(
     input_tsd=None,
     start_date=None,
@@ -1237,12 +1604,52 @@ def common_kwds(
 
     Parameters
     ----------
-    input_tsd: DataFrame
-        Input data which should be a DataFrame.
+    input_tsd
+        ${input_ts}
+    start_date
+        ${start_date}
+    end_date
+        ${end_date}
+    pick
+        ${columns}
+    force_freq
+        ${force_freq}
+    groupby
+        ${groupby}
+    dropna
+        ${dropna}
+    round_index
+        ${round_index}
+    clean
+        ${clean}
+    target_units
+        ${target_units}
+    source_units
+        ${source_units}
+    source_units_required : bool
+        If the source_units are required, either in the DataFrame column name
+        or the source_units keyword.
+    bestfreq : bool
+        Analyze the frequency of the data and return the best
+        frequency.
+    parse_dates : bool
+        Whether to detect and parse dates in the index column.
+    extended_columns : bool
+        Whether to create extended column names.
+    skiprows
+        ${skiprows}
+    index_type
+        ${index_type}
+    names
+        ${names}
+    usecols
+        ${usecols}
+    por
+        ${por}
 
     Returns
     -------
-    df: DataFrame
+    df : pandas.DataFrame
         DataFrame altered according to options.
 
     """
@@ -1568,12 +1975,12 @@ def dedup_index(
 
     Parameters
     ----------
-    idx: List[str]
+    idx : List[str]
         List of strings.
-    fmt:
+    fmt
         A string format that receives two arguments: name and a counter. By
         default: fmt='%s.%03d'
-    ignore_first: bool
+    ignore_first : bool
         Disable/enable postfixing of first element.
     """
     idx = pd.Series(idx)
@@ -1851,7 +2258,7 @@ def read_iso_ts(
 
     Parameters
     ----------
-    inindat: str, bytes, StringIO, file pointer, file name, DataFrame,
+    *inindat : str, bytes, StringIO, file pointer, file name, DataFrame,
            Series, tuple, list, dict
 
         The input data.
@@ -1933,7 +2340,7 @@ def read_iso_ts(
         res = pd.DataFrame()
         parameters = make_list(source)
 
-        if isinstance(parameters, list) and len(parameters) > 0:
+        if isinstance(parameters, list) and parameters:
             fname = parameters.pop(0)
         else:
             fname = parameters
@@ -1941,7 +2348,7 @@ def read_iso_ts(
         # Python API
 
         if isinstance(fname, pd.DataFrame):
-            if len(parameters) > 0:
+            if parameters:
                 res = fname[parameters]
             else:
                 res = fname
@@ -1952,7 +2359,7 @@ def read_iso_ts(
         elif isinstance(fname, (tuple, list, float)):
             res = pd.DataFrame({f"values{source_index}": fname}, index=[0])
 
-        if len(res) == 0:
+        if res.empty:
             # Store keywords for each source.
             newkwds = {}
 
@@ -1976,7 +2383,7 @@ def read_iso_ts(
             newkwds = [i.split("=") for i in newkwds]
 
             if newkwds[0][0]:
-                newkwds = {k: eval(v) for k, v in newkwds}
+                newkwds = {k: literal_eval(v) for k, v in newkwds}
             else:
                 newkwds = {}
 
@@ -2020,15 +2427,15 @@ def read_iso_ts(
                 elif ext.lower() == ".plt":
                     res = plotgen(fname)
                 elif ext.lower() == ".hdf5":
-                    if not args:
-                        res = pd.read_hdf(fpi, **newkwds)
-                    else:
+                    if args:
                         res = pd.DataFrame()
 
                         for i in args:
                             res = res.join(
                                 pd.read_hdf(fname, key=i, **newkwds), how="outer"
                             )
+                    else:
+                        res = pd.read_hdf(fpi, **newkwds)
                 elif ext.lower() in (
                     ".xls",
                     ".xlsx",
@@ -2043,10 +2450,10 @@ def read_iso_ts(
                     # use the first row as the header.
                     header = 0
 
-                    if not args:
-                        sheet = 0
-                    else:
+                    if args:
                         sheet = make_list(args)
+                    else:
+                        sheet = 0
 
                     try:
                         res = pd.read_excel(
@@ -2124,7 +2531,7 @@ def read_iso_ts(
                 header = 0
                 fpi = sys.stdin
 
-            if len(res) == 0:
+            if res.empty:
                 if fname == "-" and not stdin_df.empty:
                     res = stdin_df
                 else:
@@ -2174,10 +2581,7 @@ def read_iso_ts(
 
     res = memory_optimize(res)
 
-    if res.index.inferred_type != "datetime64":
-        with suppress(KeyError):
-            res.set_index(0, inplace=True)
-    else:
+    if res.index.inferred_type == "datetime64":
         try:
             words = res.index.name.split(":")
         except AttributeError:
@@ -2189,6 +2593,9 @@ def read_iso_ts(
             res.index.name = f"Datetime:{words[1]}"
         else:
             res.index.name = "Datetime"
+    else:
+        with suppress(KeyError):
+            res.set_index(0, inplace=True)
 
     if dropna in ("any", "all"):
         res.dropna(how=dropna, inplace=True)

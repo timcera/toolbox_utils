@@ -1,6 +1,4 @@
-"""
-hspfbintoolbox to read HSPF binary files.
-"""
+"""hspfbintoolbox to read HSPF binary files."""
 
 import datetime
 import struct
@@ -9,11 +7,11 @@ import sys
 try:
     from typing import Literal
 except ImportError:
-    from typing_extensions import Literal
+    from typing import Literal
 
 import pandas as pd
 
-from .. import tsutils
+from toolbox_utils import tsutils
 
 code2intervalmap = {5: "yearly", 4: "monthly", 3: "daily", 2: "bivl"}
 
@@ -23,7 +21,7 @@ code2freqmap = {5: "A", 4: "M", 3: "D", 2: None}
 
 
 _LOCAL_DOCSTRINGS = {
-    "hbnfilename": r"""hbnfilename: str
+    "hbnfilename": """hbnfilename: str
         The HSPF binary output file.  This file must have been created from
         a completed model run."""
 }
@@ -33,7 +31,6 @@ def tuple_match(findme, hay):
     """Part of partial ordered matching.
     See http://stackoverflow.com/a/4559604
     """
-
     return len(findme) == len(hay) and all(
         i is None or j is None or i == j for i, j in zip(findme, hay)
     )
@@ -43,7 +40,6 @@ def tuple_combine(findme, hay):
     """Part of partial ordered matching.
     See http://stackoverflow.com/a/4559604
     """
-
     return tuple(i is None and j or i for i, j in zip(findme, hay))
 
 
@@ -51,7 +47,6 @@ def tuple_search(findme, haystack):
     """Partial ordered matching with 'None' as wildcard
     See http://stackoverflow.com/a/4559604
     """
-
     return [
         (index, tuple_combine(findme, hay))
         for index, hay in enumerate(haystack)
@@ -167,6 +162,7 @@ def _get_data(binfilename, interval="daily", labels=None, catalog_only=True):
             )
 
         # replace empty fields with None
+        # operation,lue_number,group,variable
         words = [None if (i in ("", "None")) else i for i in label]
 
         # first word must be a valid operation type or None
@@ -229,7 +225,6 @@ def _get_data(binfilename, interval="daily", labels=None, catalog_only=True):
 
     # Now read through the binary file and collect the data matching the labels
     with open(binfilename, "rb") as binfp:
-
         labeltest = set()
         vnames = {}
         ndates = set()
@@ -401,7 +396,7 @@ def hbn_extract(
     *labels,
     sort_columns: bool = False,
 ):
-    r"""Returns a DataFrame from a HSPF binary output file."""
+    """Returns a DataFrame from a HSPF binary output file."""
     interval = interval.lower()
 
     if interval not in ("bivl", "daily", "monthly", "yearly"):

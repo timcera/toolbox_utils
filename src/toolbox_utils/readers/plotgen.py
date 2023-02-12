@@ -4,6 +4,8 @@ import datetime
 
 import pandas as pd
 
+_END_OF_HEADER = 25
+
 
 def plotgen_extract(filename):
     """Reads HSPF PLTGEN files and creates a DataFrame."""
@@ -12,19 +14,19 @@ def plotgen_extract(filename):
     lst = []
     with open(filename, encoding="ascii") as fpointer:
         for i, line in enumerate(fpointer):
-            if i < 25 and "LINTYP" in line:
+            if i < _END_OF_HEADER and "LINTYP" in line:
                 foundcols = True
-            elif i < 25 and line[5:].startswith("Time series"):
+            elif i < _END_OF_HEADER and line[5:].startswith("Time series"):
                 foundcols = False
-            elif i < 25 and foundcols:
+            elif i < _END_OF_HEADER and foundcols:
                 header = line[4:30].strip()
 
-                if not header:
-                    foundcols = False
-                else:
+                if header:
                     cols.append(header)
+                else:
+                    foundcols = False
 
-            if i > 25:
+            if i > _END_OF_HEADER:
                 year, month, day, hour, minute = line[4:22].split()
 
                 if int(hour) == 24:
