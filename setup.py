@@ -1,3 +1,4 @@
+import shlex
 import subprocess
 import sys
 
@@ -5,14 +6,14 @@ from setuptools import setup
 
 pkg_name = "toolbox_utils"
 
-version = open("VERSION").readline().strip()
+with open("VERSION", encoding="ascii") as version_file:
+    version = version_file.readline().strip()
 
 if sys.argv[-1] == "publish":
-    subprocess.check_output("cleanpy .", shell=False)
-    subprocess.check_output("python setup.py sdist", shell=False)
-    subprocess.check_output(
-        f"twine upload dist/{pkg_name}-{version}.tar.gz",
-        shell=False,
+    subprocess.run(shlex.split("cleanpy ."), check=True)
+    subprocess.run(shlex.split("python setup.py sdist"), check=True)
+    subprocess.run(
+        shlex.split(f"twine upload dist/{pkg_name}-{version}.tar.gz"), check=True
     )
     sys.exit()
 
