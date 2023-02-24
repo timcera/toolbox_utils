@@ -1,3 +1,9 @@
+## v3.0.3 (2023-02-24)
+
+### Refactor
+
+- small security refactor in setup.py
+
 ## v3.0.2 (2023-02-20)
 
 ## v3.0.1 (2023-02-12)
