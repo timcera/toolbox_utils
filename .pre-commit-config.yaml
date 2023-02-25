@@ -90,7 +90,7 @@ repos:
           - id: pyupgrade
 
     - repo: https://github.com/commitizen-tools/commitizen
-      rev: v2.41.0
+      rev: v2.42.0
       hooks:
           - id: commitizen
             stages: [commit-msg]

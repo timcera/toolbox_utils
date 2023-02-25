@@ -35,6 +35,7 @@ from tabulate import tabulate as tb
 from .readers.hbn import hbn_extract as hbn
 from .readers.plotgen import plotgen_extract as plotgen
 from .readers.wdm import wdm_extract as wdm
+from .tssplit.tssplit import tssplit
 
 # This is here so that linters don't remove the pint_pandas import which is
 # needed to use pint in pandas
@@ -75,67 +76,6 @@ def error_wrapper(estr: str) -> str:
     nestr.append("")
 
     return "\n".join(nestr)
-
-
-def tssplit(
-    input_str, quote="\"'", quote_keep=False, delimiter=":;,", escape="/^", trim=""
-):
-    """Split a string by delimiters with quotes and escaped characters.
-
-    Can use multiple delimiters, multiple quotes, and optionally trim each
-    returned word.
-
-    Parameters
-    ----------
-    input_str : str
-        A string to split into chunks
-    quote : str
-        Quote chars to protect a part of s from parsing
-    quote_keep : bool
-        Preserve quote characters in the output or not
-    delimiter : str
-        A chunk separator character
-    escape : str
-        An escape character
-    trim : str
-        Trim characters from chunks
-
-    Returns
-    -------
-    result: list of str
-        A list of chunks
-    """
-    in_quotes = in_escape = False
-    token = ""
-    result = []
-
-    for letter in input_str:
-        if in_escape:
-            token += letter
-            in_escape = False
-        elif letter in escape:
-            in_escape = True
-
-            if in_quotes:
-                token += letter
-        elif letter in quote and not in_escape:
-            in_quotes = not in_quotes
-
-            if quote_keep:
-                token += letter
-        elif letter in delimiter and not in_quotes:
-            if trim:
-                token = token.strip(trim)
-            result.append(token)
-            token = ""
-        else:
-            token += letter
-
-    if trim:
-        token = token.strip(trim)
-    result.append(token)
-
-    return result
 
 
 _CODES = {
