@@ -1,3 +1,0 @@
-[submodule "src/toolbox_utils/tssplit"]
-	path = src/toolbox_utils/tssplit
-	url = git@github.com:mezantrop/tssplit.git
