@@ -1,3 +1,15 @@
+## v3.0.4 (2023-03-01)
+
+### Fix
+
+- commit change in submodule
+- added tssplit submodule but now pointing at my fork so I can make a small change to work with toolbox_utils
+- removed tssplit git submodule
+
+### Refactor
+
+- **tssplit**: explicitly including tssplit as a git submodule
+
 ## v3.0.3 (2023-02-24)
 
 ### Refactor
