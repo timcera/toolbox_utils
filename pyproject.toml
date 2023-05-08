@@ -18,7 +18,7 @@ dependencies = [
     "scipy",
     "pandas",
     "pint-pandas",
-    "pint",
+    "pint!=0.21",
     "pydantic",
     "typing-extensions",
     "odfpy>=1.4.1",

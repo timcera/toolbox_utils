@@ -196,364 +196,6 @@ _CODES = {
     },
 }
 
-ndocstrings = {
-    "por": """[optional, default is False]
-
-        The `por` keyword adjusts the operation of `start_date` and `end_date`
-
-        If "False" (the default) choose the indices in the time-series between
-        `start_date` and `end_date`.  If "True" and if `start_date` or
-        `end_date` is outside of the existing time-series will fill the time-
-        series with missing values to include the exterior `start_date` or
-        `end_date`.""",
-    "lat": """The latitude of the point. North hemisphere is positive from 0 to 90.
-        South hemisphere is negative from 0 to -90.""",
-    "lon": """The longitude of the point.  Western hemisphere (west of Greenwich
-        Prime Meridian) is negative 0 to -180.  The eastern hemisphere (east of
-        the Greenwich Prime Meridian) is positive 0 to 180.""",
-    "target_units": """[optional, default is None, transformation]
-
-        The purpose of this option is to specify target units for unit
-        conversion.  The source units are specified in the header line of the
-        input or using the 'source_units' keyword.
-
-        The units of the input time-series or values are specified as the
-        second field of a ':' delimited name in the header line of the input or
-        in the 'source_units' keyword.
-
-        Any unit string compatible with the 'pint' library can be used.
-
-        This option will also add the 'target_units' string to the
-        column names.""",
-    "source_units": """[optional, default is None, transformation]
-
-        If unit is specified for the column as the second field of a ':'
-        delimited column name, then the specified units and the 'source_units'
-        must match exactly.
-
-        Any unit string compatible with the 'pint' library can be used.""",
-    "names": """[optional, default is None, transformation]
-
-        If None, the column names are taken from the first row after 'skiprows'
-        from the input dataset.
-
-        MUST include a name for all columns in the input dataset, including the
-        index column.""",
-    "index_type": """[optional, default is 'datetime', output format]
-
-        Can be either 'number' or 'datetime'.  Use 'number' with index values
-        that are Julian dates, or other epoch reference.""",
-    "input_ts": """[optional though required if using within Python, default is '-'
-        (stdin)]
-
-        Whether from a file or standard input, data requires a single line
-        header of column names.  The default header is the first line of the
-        input, but this can be changed for CSV files using the 'skiprows'
-        option.
-
-        Most common date formats can be used, but the closer to ISO 8601
-        date/time standard the better.
-
-        Comma-separated values (CSV) files or tab-separated values (TSV)::
-
-            File separators will be automatically detected.  Columns can be
-            selected by name or index, where the index for data columns starts
-            at 1.
-
-        Command line examples:
-
-            +-----------------------------------+-----------------------------+
-            | Keyword Example                   | Description                 |
-            +===================================+=============================+
-            | --input_ts=fname.csv              | read all columns from       |
-            |                                   | 'fname.csv'                 |
-            +-----------------------------------+-----------------------------+
-            | --input_ts=fname.csv,2,1          | read data columns 2 and 1   |
-            |                                   | from 'fname.csv'            |
-            +-----------------------------------+-----------------------------+
-            | --input_ts=fname.csv,2,skiprows=2 | read data column 2 from     |
-            |                                   | 'fname.csv', skipping first |
-            |                                   | 2 rows so header is read    |
-            |                                   | from third row              |
-            +-----------------------------------+-----------------------------+
-            | --input_ts=fname.xlsx,2,Sheet21   | read all data from 2nd      |
-            |                                   | sheet all data from         |
-            |                                   | "Sheet21" of 'fname.xlsx'   |
-            +-----------------------------------+-----------------------------+
-            | --input_ts=fname.hdf5,Table12,T2  | read all data from table    |
-            |                                   | "Table12" then all data     |
-            |                                   | from table "T2" of          |
-            |                                   | 'fname.hdf5'                |
-            +-----------------------------------+-----------------------------+
-            | --input_ts=fname.wdm,210,110      | read DSNs 210, then 110     |
-            |                                   | from 'fname.wdm'            |
-            +-----------------------------------+-----------------------------+
-            | --input_ts='-'                    | read all columns from       |
-            |                                   | standard input (stdin)      |
-            +-----------------------------------+-----------------------------+
-            | --input_ts='-' --columns=4,1      | read column 4 and 1 from    |
-            |                                   | standard input (stdin)      |
-            +-----------------------------------+-----------------------------+
-
-        If working with CSV or TSV files you can use redirection rather than
-        use `--input_ts=fname.csv`.  The following are identical:
-
-        From a file:
-
-            command subcmd --input_ts=fname.csv
-
-        From standard input (since '--input_ts=-' is the default:
-
-            command subcmd < fname.csv
-
-        Can also combine commands by piping:
-
-            command subcmd < filein.csv | command subcmd1 > fileout.csv
-
-        Python library examples::
-
-            You must use the `input_ts=...` option where `input_ts` can
-            be one of a [pandas DataFrame, pandas Series, dict, tuple,
-            list, StringIO, or file name].""",
-    "columns": """[optional, defaults to all columns, input filter]
-
-        Columns to select out of input.  Can use column names from the first
-        line header or column numbers.  If using numbers, column number 1 is
-        the first data column.  To pick multiple columns; separate by commas
-        with no spaces. As used in `toolbox_utils pick` command.
-
-        This solves a big problem so that you don't have to create a data set
-        with a certain column order, you can rearrange columns when data is
-        read in.""",
-    "start_date": """[optional, defaults to first date in time-series, input filter]
-
-        The start_date of the series in ISOdatetime format, or 'None' for
-        beginning.""",
-    "end_date": """[optional, defaults to last date in time-series, input filter]
-
-        The end_date of the series in ISOdatetime format, or 'None' for
-        end.""",
-    "dropna": """[optional, defauls it 'no', input filter]
-
-        Set `dropna` to 'any' to have records dropped that have NA value in any
-        column, or 'all' to have records dropped that have NA in all columns.
-        Set to 'no' to not drop any records.  The default is 'no'.""",
-    "print_input": """[optional, default is False, output format]
-
-        If set to 'True' will include the input columns in the output
-        table.""",
-    "round_index": """[optional, default is None which will do nothing to the index,
-        output format]
-
-        Round the index to the nearest time point.  Can significantly improve
-        the performance since can cut down on memory and processing
-        requirements, however be cautious about rounding to a very course
-        interval from a small one.  This could lead to duplicate values in the
-        index.""",
-    "float_format": """[optional, output format]
-
-        Format for float numbers.""",
-    "tablefmt": """[optional, default is 'csv', output format]
-
-        The table format.  Can be one of 'csv', 'tsv', 'plain', 'simple',
-        'grid', 'pipe', 'orgtbl', 'rst', 'mediawiki', 'latex', 'latex_raw' and
-        'latex_booktabs'.""",
-    "header": """[optional, default is 'default', output format]
-
-        This is if you want a different header than is the default for this
-        output table.  Pass a list with string column names for each column in
-        the table.""",
-    "pandas_offset_codes": """
-
-        +-------+---------------+
-        | Alias | Description   |
-        +=======+===============+
-        | N     | Nanoseconds   |
-        +-------+---------------+
-        | U     | microseconds  |
-        +-------+---------------+
-        | L     | milliseconds  |
-        +-------+---------------+
-        | S     | Secondly      |
-        +-------+---------------+
-        | T     | Minutely      |
-        +-------+---------------+
-        | H     | Hourly        |
-        +-------+---------------+
-        | D     | calendar Day  |
-        +-------+---------------+
-        | W     | Weekly        |
-        +-------+---------------+
-        | M     | Month end     |
-        +-------+---------------+
-        | MS    | Month Start   |
-        +-------+---------------+
-        | Q     | Quarter end   |
-        +-------+---------------+
-        | QS    | Quarter Start |
-        +-------+---------------+
-        | A     | Annual end    |
-        +-------+---------------+
-        | AS    | Annual Start  |
-        +-------+---------------+
-
-        Business offset codes.
-
-        +-------+------------------------------------+
-        | Alias | Description                        |
-        +=======+====================================+
-        | B     | Business day                       |
-        +-------+------------------------------------+
-        | BM    | Business Month end                 |
-        +-------+------------------------------------+
-        | BMS   | Business Month Start               |
-        +-------+------------------------------------+
-        | BQ    | Business Quarter end               |
-        +-------+------------------------------------+
-        | BQS   | Business Quarter Start             |
-        +-------+------------------------------------+
-        | BA    | Business Annual end                |
-        +-------+------------------------------------+
-        | BAS   | Business Annual Start              |
-        +-------+------------------------------------+
-        | C     | Custom business day (experimental) |
-        +-------+------------------------------------+
-        | CBM   | Custom Business Month end          |
-        +-------+------------------------------------+
-        | CBMS  | Custom Business Month Start        |
-        +-------+------------------------------------+
-
-        Weekly has the following anchored frequencies:
-
-        +-------+-------------+-------------------------------+
-        | Alias | Equivalents | Description                   |
-        +=======+=============+===============================+
-        | W-SUN | W           | Weekly frequency (SUNdays)    |
-        +-------+-------------+-------------------------------+
-        | W-MON |             | Weekly frequency (MONdays)    |
-        +-------+-------------+-------------------------------+
-        | W-TUE |             | Weekly frequency (TUEsdays)   |
-        +-------+-------------+-------------------------------+
-        | W-WED |             | Weekly frequency (WEDnesdays) |
-        +-------+-------------+-------------------------------+
-        | W-THU |             | Weekly frequency (THUrsdays)  |
-        +-------+-------------+-------------------------------+
-        | W-FRI |             | Weekly frequency (FRIdays)    |
-        +-------+-------------+-------------------------------+
-        | W-SAT |             | Weekly frequency (SATurdays)  |
-        +-------+-------------+-------------------------------+
-
-        Quarterly frequencies (Q, BQ, QS, BQS) and annual frequencies
-        (A, BA, AS, BAS) replace the "x" in the "Alias" column to have
-        the following anchoring suffixes:
-
-        +-------+----------+-------------+----------------------------+
-        | Alias | Examples | Equivalents | Description                |
-        +=======+==========+=============+============================+
-        | x-DEC | A-DEC    | A           | year ends end of DECember  |
-        |       | Q-DEC    | Q           |                            |
-        |       | AS-DEC   | AS          |                            |
-        |       | QS-DEC   | QS          |                            |
-        +-------+----------+-------------+----------------------------+
-        | x-JAN |          |             | year ends end of JANuary   |
-        +-------+----------+-------------+----------------------------+
-        | x-FEB |          |             | year ends end of FEBruary  |
-        +-------+----------+-------------+----------------------------+
-        | x-MAR |          |             | year ends end of MARch     |
-        +-------+----------+-------------+----------------------------+
-        | x-APR |          |             | year ends end of APRil     |
-        +-------+----------+-------------+----------------------------+
-        | x-MAY |          |             | year ends end of MAY       |
-        +-------+----------+-------------+----------------------------+
-        | x-JUN |          |             | year ends end of JUNe      |
-        +-------+----------+-------------+----------------------------+
-        | x-JUL |          |             | year ends end of JULy      |
-        +-------+----------+-------------+----------------------------+
-        | x-AUG |          |             | year ends end of AUGust    |
-        +-------+----------+-------------+----------------------------+
-        | x-SEP |          |             | year ends end of SEPtember |
-        +-------+----------+-------------+----------------------------+
-        | x-OCT |          |             | year ends end of OCTober   |
-        +-------+----------+-------------+----------------------------+
-        | x-NOV |          |             | year ends end of NOVember  |
-        +-------+----------+-------------+----------------------------+""",
-    "plotting_position_table": """
-
-        +------------+--------+----------------------+-----------------------+
-        | Name       | a      | Equation             | Description           |
-        |            |        | (i-a)/(n+1-2*a)      |                       |
-        +============+========+======================+=======================+
-        | weibull    | 0      | i/(n+1)              | mean of sampling      |
-        | (default)  |        |                      | distribution          |
-        +------------+--------+----------------------+-----------------------+
-        |            |        |                      | sampling distribution |
-        +------------+--------+----------------------+-----------------------+
-        | filliben   | 0.3175 | (i-0.3175)/(n+0.365) |                       |
-        +------------+--------+----------------------+-----------------------+
-        | yu         | 0.326  | (i-0.326)/(n+0.348)  |                       |
-        +------------+--------+----------------------+-----------------------+
-        | tukey      | 1/3    | (i-1/3)/(n+1/3)      | approx. median of     |
-        |            |        |                      | sampling distribution |
-        +------------+--------+----------------------+-----------------------+
-        | blom       | 0.375  | (i-0.375)/(n+0.25)   |                       |
-        +------------+--------+----------------------+-----------------------+
-        | cunnane    | 2/5    | (i-2/5)/(n+1/5)      | subjective            |
-        +------------+--------+----------------------+-----------------------+
-        | gringorton | 0.44   | (1-0.44)/(n+0.12)    |                       |
-        +------------+--------+----------------------+-----------------------+
-        | hazen      | 1/2    | (i-1/2)/n            | midpoints of n equal  |
-        |            |        |                      | intervals             |
-        +------------+--------+----------------------+-----------------------+
-        | larsen     | 0.567  | (i-0.567)/(n-0.134)  |                       |
-        +------------+--------+----------------------+-----------------------+
-        | gumbel     | 1      | (i-1)/(n-1)          | mode of sampling      |
-        |            |        |                      | distribution          |
-        +------------+--------+----------------------+-----------------------+
-        | california | NA     | i/n                  |                       |
-        +------------+--------+----------------------+-----------------------+
-
-        Where 'i' is the sorted rank of the y value, and 'n' is the total
-        number of values to be plotted.
-
-        The 'blom' plotting position is also known as the 'Sevruk and
-        Geiger'.""",
-    "clean": """[optional, default is False, input filter]
-
-        The 'clean' command will repair a input index, removing duplicate index
-        values and sorting.""",
-    "skiprows": """[optional, default is None which will infer header from first line,
-        input filter]
-
-        Line numbers to skip (0-indexed) if a list or number of lines to skip
-        at the start of the file if an integer.
-
-        If used in Python can be a callable, the callable function will be
-        evaluated against the row indices, returning True if the row should be
-        skipped and False otherwise.  An example of a valid callable argument
-        would be
-
-        ``lambda x: x in [0, 2]``.""",
-    "groupby": """[optional, default is None, transformation]
-
-        The pandas offset code to group the time-series data into. A special
-        code is also available to group 'months_across_years' that will group
-        into twelve monthly categories across the entire time-series.""",
-    "force_freq": """[optional, output format]
-
-        Force this frequency for the output.  Typically you will only want to
-        enforce a smaller interval where toolbox_utils will insert missing
-        values as needed.  WARNING: you may lose data if not careful with this
-        option.  In general, letting the algorithm determine the frequency
-        should always work, but this option will override.  Use PANDAS offset
-        codes.""",
-    "output_names": """[optional, output_format]
-
-        The toolbox_utils will change the names of the output columns to
-        include some record of the operations used on each column.  The
-        `output_names` will override that feature.  Must be a list or tuple
-        equal to the number of columns in the output data.""",
-}
-
 docstrings = {
     "por": """por
         [optional, default is False]
@@ -738,7 +380,9 @@ docstrings = {
         This is if you want a different header than is the default for this
         output table.  Pass a list with string column names for each column in
         the table.""",
-    "pandas_offset_codes": """+-------+---------------+
+    "pandas_offset_codes": """
+
+        +-------+---------------+
         | Alias | Description   |
         +=======+===============+
         | N     | Nanoseconds   |
@@ -849,8 +493,12 @@ docstrings = {
         | x-OCT |          |             | year ends end of OCTober   |
         +-------+----------+-------------+----------------------------+
         | x-NOV |          |             | year ends end of NOVember  |
-        +-------+----------+-------------+----------------------------+""",
-    "plotting_position_table": """+------------+--------+----------------------+-----------------------+
+        +-------+----------+-------------+----------------------------+
+
+        """,
+    "plotting_position_table": """
+
+        +------------+--------+----------------------+-----------------------+
         | Name       | a      | Equation             | Description           |
         |            |        | (i-a)/(n+1-2*a)      |                       |
         +============+========+======================+=======================+
@@ -1517,7 +1165,7 @@ def transform_args(**trans_func_for_arg):
     pick=make_list, names=make_list, source_units=make_list, target_units=make_list
 )
 @validate_arguments
-@doc(ndocstrings)
+@doc(docstrings)
 def common_kwds(
     input_tsd=None,
     start_date=None,
@@ -1544,28 +1192,17 @@ def common_kwds(
 
     Parameters
     ----------
-    input_tsd
-        ${input_ts}
-    start_date
-        ${start_date}
-    end_date
-        ${end_date}
-    pick
-        ${columns}
-    force_freq
-        ${force_freq}
-    groupby
-        ${groupby}
-    dropna
-        ${dropna}
-    round_index
-        ${round_index}
-    clean
-        ${clean}
-    target_units
-        ${target_units}
-    source_units
-        ${source_units}
+    ${input_ts}
+    ${start_date}
+    ${end_date}
+    ${columns}
+    ${force_freq}
+    ${groupby}
+    ${dropna}
+    ${round_index}
+    ${clean}
+    ${target_units}
+    ${source_units}
     source_units_required : bool
         If the source_units are required, either in the DataFrame column name
         or the source_units keyword.
@@ -1576,16 +1213,11 @@ def common_kwds(
         Whether to detect and parse dates in the index column.
     extended_columns : bool
         Whether to create extended column names.
-    skiprows
-        ${skiprows}
-    index_type
-        ${index_type}
-    names
-        ${names}
-    usecols
-        ${usecols}
-    por
-        ${por}
+    ${skiprows}
+    ${index_type}
+    ${names}
+    ${usecols}
+    ${por}
 
     Returns
     -------
