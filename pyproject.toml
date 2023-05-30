@@ -19,6 +19,7 @@ dependencies = [
     "pandas",
     "pint-pandas",
     "pint!=0.21",
+    "pint<0.22; python_version < '3.9'",
     "pydantic",
     "typing-extensions",
     "odfpy>=1.4.1",
