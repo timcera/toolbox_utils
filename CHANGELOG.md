@@ -1,3 +1,14 @@
+## v3.0.6 (2023-05-29)
+
+### Fix
+
+- still didn't get the versions right
+- need the correct version of pint for python 3.8
+
+### Refactor
+
+- now expose range_to_numlist for other toolboxes to use
+
 ## v3.0.5 (2023-05-07)
 
 ## v3.0.4 (2023-03-01)
