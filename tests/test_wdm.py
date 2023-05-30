@@ -28,6 +28,32 @@ class TestWDM(TestCase):
         ret2 = tsutils.asbestfreq(
             pd.read_csv("tests/data_wdm_2.csv", index_col=0, parse_dates=True)
         )
-        print(ret1)
-        print(ret2)
+        assert_frame_equal(ret1, ret2, check_dtype=False)
+
+    def test_extract_range(self):
+        ret1 = tsutils.common_kwds("tests/data.wdm,1:2")
+        ret1.columns = ["data.wdm_1", "data.wdm_2"]
+        ret2 = tsutils.asbestfreq(
+            pd.read_csv("tests/data_wdm_1.csv", index_col=0, parse_dates=True)
+        )
+        ret2 = ret2.join(
+            tsutils.asbestfreq(
+                pd.read_csv("tests/data_wdm_2.csv", index_col=0, parse_dates=True)
+            ),
+            how="outer",
+        )
+        assert_frame_equal(ret1, ret2, check_dtype=False)
+
+    def test_extract_range_plus(self):
+        ret1 = tsutils.common_kwds("tests/data.wdm,1+2")
+        ret1.columns = ["data.wdm_1", "data.wdm_2"]
+        ret2 = tsutils.asbestfreq(
+            pd.read_csv("tests/data_wdm_1.csv", index_col=0, parse_dates=True)
+        )
+        ret2 = ret2.join(
+            tsutils.asbestfreq(
+                pd.read_csv("tests/data_wdm_2.csv", index_col=0, parse_dates=True)
+            ),
+            how="outer",
+        )
         assert_frame_equal(ret1, ret2, check_dtype=False)

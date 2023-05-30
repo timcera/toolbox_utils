@@ -185,7 +185,7 @@ def _get_data(binfilename, interval="daily", labels=None, catalog_only=True):
                 words[1] = int(words[1])
                 luelist = [words[1]]
             except ValueError:
-                luelist = _range_to_numlist(words[1])
+                luelist = tsutils.range_to_numlist(words[1])
             for luenum in luelist:
                 if luenum < 1 or luenum > 999:
                     raise ValueError(
