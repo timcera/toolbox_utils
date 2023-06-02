@@ -1,3 +1,9 @@
+## v3.0.7 (2023-06-02)
+
+### Refactor
+
+- addressed pandas FutureWarning about infer_datetime_format in read_csv
+
 ## v3.0.6 (2023-05-29)
 
 ### Fix
