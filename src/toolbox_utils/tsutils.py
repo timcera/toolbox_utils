@@ -2457,7 +2457,6 @@ def read_iso_ts(
                     res = pd.read_csv(
                         fpi,
                         engine="python",
-                        infer_datetime_format=True,
                         keep_default_na=True,
                         skipinitialspace=True,
                         header=header,
@@ -2569,7 +2568,8 @@ def read_iso_ts(
     return result.convert_dtypes()
 
 
-def range_to_numlist(rangestr):
+@validate_arguments
+def range_to_numlist(rangestr: str):
     """Convert a range string to a list of numbers.
 
     Parameters
