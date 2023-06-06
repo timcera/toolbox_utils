@@ -291,38 +291,37 @@ docstrings = {
 
         Command line examples:
 
-            +-----------------------------------+-----------------------------+
-            | Keyword Example                   | Description                 |
-            +===================================+=============================+
-            | --input_ts=fname.csv              | read all columns from       |
-            |                                   | 'fname.csv'                 |
-            +-----------------------------------+-----------------------------+
-            | --input_ts=fname.csv,2,1          | read data columns 2 and 1   |
-            |                                   | from 'fname.csv'            |
-            +-----------------------------------+-----------------------------+
-            | --input_ts=fname.csv,2,skiprows=2 | read data column 2 from     |
-            |                                   | 'fname.csv', skipping first |
-            |                                   | 2 rows so header is read    |
-            |                                   | from third row              |
-            +-----------------------------------+-----------------------------+
-            | --input_ts=fname.xlsx,2,Sheet21   | read all data from 2nd      |
-            |                                   | sheet all data from         |
-            |                                   | "Sheet21" of 'fname.xlsx'   |
-            +-----------------------------------+-----------------------------+
-            | --input_ts=fname.hdf5,Table12,T2  | read all data from table    |
-            |                                   | "Table12" then all data     |
-            |                                   | from table "T2" of          |
-            |                                   | 'fname.hdf5'                |
-            +-----------------------------------+-----------------------------+
-            | --input_ts=fname.wdm,210,110      | read DSNs 210, then 110     |
-            |                                   | from 'fname.wdm'            |
-            +-----------------------------------+-----------------------------+
-            | --input_ts='-'                    | read all columns from       |
-            |                                   | standard input (stdin)      |
-            +-----------------------------------+-----------------------------+
-            | --input_ts='-' --columns=4,1      | read column 4 and 1 from    |
-            |                                   | standard input (stdin)      |
-            +-----------------------------------+-----------------------------+
+            +---------------------------------+-------------------------------+
+            | Keyword Example                 | Description                   |
+            +=================================+===============================+
+            | --input_ts=fn.csv               | read all columns from         |
+            |                                 | 'fn.csv'                      |
+            +---------------------------------+-------------------------------+
+            | --input_ts=fn.csv,2,1           | read data columns 2 and 1     |
+            |                                 | from 'fn.csv'                 |
+            +---------------------------------+-------------------------------+
+            | --input_ts=fn.csv,2,skiprows=2  | read data column 2 from       |
+            |                                 | 'fn.csv', skipping first 2    |
+            |                                 | rows so header is read from   |
+            |                                 | third row                     |
+            +---------------------------------+-------------------------------+
+            | --input_ts=fn.xlsx,2,Sheet21    | read all data from 2nd sheet  |
+            |                                 | all data from "Sheet21" of    |
+            |                                 | 'fn.xlsx'                     |
+            +---------------------------------+-------------------------------+
+            | --input_ts=fn.hdf5,Table12,T2   | read all data from table      |
+            |                                 | "Table12" then all data from  |
+            |                                 | table "T2" of 'fn.hdf5'       |
+            +---------------------------------+-------------------------------+
+            | --input_ts=fn.wdm,210,110       | read DSNs 210, then 110 from  |
+            |                                 | 'fn.wdm'                      |
+            +---------------------------------+-------------------------------+
+            | --input_ts='-'                  | read all columns from         |
+            |                                 | standard input (stdin)        |
+            +---------------------------------+-------------------------------+
+            | --input_ts='-' --columns=4,1    | read column 4 and 1 from      |
+            |                                 | standard input (stdin)        |
+            +---------------------------------+-------------------------------+
 
         If working with CSV or TSV files you can use redirection rather than
         use `--input_ts=fname.csv`.  The following are identical:
