@@ -2576,7 +2576,7 @@ def read_iso_ts(
 
 
 @validate_arguments
-def range_to_numlist(rangestr: str):
+def range_to_numlist(rangestr: Union[str, int, list]) -> list:
     """Convert a range string to a list of numbers.
 
     Parameters
@@ -2593,43 +2593,42 @@ def range_to_numlist(rangestr: str):
         A list of numbers.
     """
     numlist = []
-    subranges = rangestr.split("+")
+    subranges = make_list(rangestr, sep="+")
 
     for sub in subranges:
-        try:
-            if ":" not in sub:
-                num = int(sub)
-                numlist.append(num)
+        slices = make_list(sub, sep=":")
+        for tst in slices:
+            if isinstance(tst, float):
+                raise ValueError(
+                    error_wrapper(
+                        f"""Invalid range specification in '{sub}' of the
+                        '{rangestr}'.  The value {tst} is not an integer.
+                        """
+                    )
+                )
+        if len(slices) == 1:
+            num = int(sub)
+            numlist.append(num)
+        elif len(slices) in [2, 3]:
+            rstart = int(slices[0])
+            rend = int(slices[1]) + 1
+            if rstart >= rend:
+                raise ValueError(
+                    error_wrapper(
+                        f"""Invalid range specification in '{sub}' of the
+                        '{rangestr}'.  The start value of {rstart} is
+                        greater than or equal to the end value of {rend - 1}.
+                        """
+                    )
+                )
+            if len(slices) == 2:
+                step = 1
             else:
-                ends = sub.split(":")
-
-                if len(ends) != 2:
-                    raise ValueError(
-                        tsutils.error_wrapper(
-                            f"""Invalid range specification in '{sub}' of the
-                            '{rangestr}'. The correct syntax is one or more
-                            integers or colon-delimited range groups such as
-                            "99", "1:2", or "101:120", with multiple groups
-                            connected by "+" signs.  Example: "1:4+16:22+30"
-                            """
-                        )
-                    )
-                rstart = int(ends[0])
-                rend = int(ends[1]) + 1
-
-                if rstart > rend:
-                    raise ValueError(
-                        tsutils.error_wrapper(
-                            f"""Invalid range specification in '{sub}' of the
-                            '{rangestr}'.  The start value of {rstart} is
-                            greater than the end value of {rend - 1}.
-                            """
-                        )
-                    )
-                numlist.extend(iter(range(rstart, rend)))
-        except ValueError as exc:
+                step = int(slices[2])
+            numlist.extend(range(rstart, rend, step))
+        else:
             raise ValueError(
-                tsutils.error_wrapper(
+                error_wrapper(
                     f"""Invalid range specification in '{sub}' of the
                     '{rangestr}'. The correct syntax is one or more integers or
                     colon-delimited range groups such as "99", "1:2", or
@@ -2637,5 +2636,6 @@ def range_to_numlist(rangestr: str):
                     Example: "1:4+16:22+30"
                     """
                 )
-            ) from exc
+            )
+
     return numlist
