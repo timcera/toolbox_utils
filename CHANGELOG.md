@@ -1,3 +1,13 @@
+## v4.0.0 (2023-07-16)
+
+### Fix
+
+- **range_to_numlist**: fixed argument validation of range_to_numlist function that is triggered in wdmtoolbox tests
+
+### BREAKING CHANGE
+
+- a breaking change to make sure wdmtoolbox brings in the correct version
+
 ## v3.0.7 (2023-06-02)
 
 ### Refactor
