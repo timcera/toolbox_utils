@@ -13,23 +13,15 @@ dynamic = ["readme", "version"]
 description = "Python toolbox for common utilities"
 dependencies = [
     "dateparser",
-    "tabulate",
     "numpy",
-    "scipy",
     "pandas",
     "pint-pandas",
-    "pint!=0.21.*",
-    "pint<0.22; python_version < '3.9'",
     "pydantic",
-    "typing-extensions",
-    "odfpy>=1.4.1",
-    "xlrd>=2.0.1",
-    "openpyxl>=3.0.7",
-    "pyxlsb>=1.0.8",
-    "tables>=3.6.1",
-    "matplotlib>=3.3.2",
-    "xlsxwriter"
+    "scipy",
+    "tabulate"
 ]
+# Unused dependencies found: matplotlib, odfpy, openpyxl, pint, pyxlsb, tables, typing-extensions, xlrd, xlsxwriter
+# that should be added to the projects that depend on this toolbox_utils.
 authors = [
     {name = "Tim Cera", email = "tim@cerazone.net"}
 ]
