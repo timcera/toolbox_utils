@@ -10,6 +10,7 @@ import sys
 from ast import literal_eval
 from contextlib import suppress
 from functools import reduce, wraps
+from importlib.metadata import distribution
 from io import BytesIO, StringIO
 from math import gcd
 from string import Template
@@ -21,7 +22,6 @@ import dateparser
 import numpy as np
 import pandas as pd
 import pint_pandas  # not used directly, but required to use pint in pandas
-import pkg_resources
 from _io import TextIOWrapper
 from numpy import int64, ndarray
 from pandas.core.frame import DataFrame
@@ -221,30 +221,31 @@ docstrings = {
     "por": """por
         [optional, default is False]
 
-        The `por` keyword adjusts the operation of `start_date` and `end_date`
+        The `por` keyword adjusts the operation of `start_date` and
+        `end_date`
 
-        If "False" (the default) choose the indices in the time-series between
-        `start_date` and `end_date`.  If "True" and if `start_date` or
-        `end_date` is outside of the existing time-series will fill the time-
-        series with missing values to include the exterior `start_date` or
-        `end_date`.""",
+        If "False" (the default) choose the indices in the time-series
+        between `start_date` and `end_date`.  If "True" and if `start_date`
+        or `end_date` is outside of the existing time-series will fill the
+        time- series with missing values to include the exterior
+        `start_date` or `end_date`.""",
     "lat": """lat
-        The latitude of the point. North hemisphere is positive from 0 to 90.
-        South hemisphere is negative from 0 to -90.""",
+        The latitude of the point. North hemisphere is positive from 0 to
+        90. South hemisphere is negative from 0 to -90.""",
     "lon": """lon
         The longitude of the point.  Western hemisphere (west of Greenwich
-        Prime Meridian) is negative 0 to -180.  The eastern hemisphere (east of
-        the Greenwich Prime Meridian) is positive 0 to 180.""",
+        Prime Meridian) is negative 0 to -180.  The eastern hemisphere
+        (east of the Greenwich Prime Meridian) is positive 0 to 180.""",
     "target_units": """target_units: str
         [optional, default is None, transformation]
 
         The purpose of this option is to specify target units for unit
-        conversion.  The source units are specified in the header line of the
-        input or using the 'source_units' keyword.
+        conversion.  The source units are specified in the header line of
+        the input or using the 'source_units' keyword.
 
         The units of the input time-series or values are specified as the
-        second field of a ':' delimited name in the header line of the input or
-        in the 'source_units' keyword.
+        second field of a ':' delimited name in the header line of the
+        input or in the 'source_units' keyword.
 
         Any unit string compatible with the 'pint' library can be used.
 
@@ -254,77 +255,79 @@ docstrings = {
         [optional, default is None, transformation]
 
         If unit is specified for the column as the second field of a ':'
-        delimited column name, then the specified units and the 'source_units'
-        must match exactly.
+        delimited column name, then the specified units and the
+        'source_units' must match exactly.
 
         Any unit string compatible with the 'pint' library can be used.""",
     "names": """names: str
         [optional, default is None, transformation]
 
-        If None, the column names are taken from the first row after 'skiprows'
-        from the input dataset.
+        If None, the column names are taken from the first row after
+        'skiprows' from the input dataset.
 
-        MUST include a name for all columns in the input dataset, including the
-        index column.""",
+        MUST include a name for all columns in the input dataset, including
+        the index column.""",
     "index_type": """index_type : str
         [optional, default is 'datetime', output format]
 
-        Can be either 'number' or 'datetime'.  Use 'number' with index values
-        that are Julian dates, or other epoch reference.""",
+        Can be either 'number' or 'datetime'.  Use 'number' with index
+        values that are Julian dates, or other epoch reference.""",
     "input_ts": """input_ts : str
         [optional though required if using within Python, default is '-'
         (stdin)]
 
         Whether from a file or standard input, data requires a single line
-        header of column names.  The default header is the first line of the
-        input, but this can be changed for CSV files using the 'skiprows'
-        option.
+        header of column names.  The default header is the first line of
+        the input, but this can be changed for CSV files using the
+        'skiprows' option.
 
         Most common date formats can be used, but the closer to ISO 8601
         date/time standard the better.
 
         Comma-separated values (CSV) files or tab-separated values (TSV)::
 
-            File separators will be automatically detected.  Columns can be
-            selected by name or index, where the index for data columns starts
-            at 1.
+            File separators will be automatically detected.
+
+            Columns can be selected by name or index, where the index for
+            data columns starts at 1.
 
         Command line examples:
 
-            +---------------------------------+-------------------------------+
-            | Keyword Example                 | Description                   |
-            +=================================+===============================+
-            | --input_ts=fn.csv               | read all columns from         |
-            |                                 | 'fn.csv'                      |
-            +---------------------------------+-------------------------------+
-            | --input_ts=fn.csv,2,1           | read data columns 2 and 1     |
-            |                                 | from 'fn.csv'                 |
-            +---------------------------------+-------------------------------+
-            | --input_ts=fn.csv,2,skiprows=2  | read data column 2 from       |
-            |                                 | 'fn.csv', skipping first 2    |
-            |                                 | rows so header is read from   |
-            |                                 | third row                     |
-            +---------------------------------+-------------------------------+
-            | --input_ts=fn.xlsx,2,Sheet21    | read all data from 2nd sheet  |
-            |                                 | all data from "Sheet21" of    |
-            |                                 | 'fn.xlsx'                     |
-            +---------------------------------+-------------------------------+
-            | --input_ts=fn.hdf5,Table12,T2   | read all data from table      |
-            |                                 | "Table12" then all data from  |
-            |                                 | table "T2" of 'fn.hdf5'       |
-            +---------------------------------+-------------------------------+
-            | --input_ts=fn.wdm,210,110       | read DSNs 210, then 110 from  |
-            |                                 | 'fn.wdm'                      |
-            +---------------------------------+-------------------------------+
-            | --input_ts='-'                  | read all columns from         |
-            |                                 | standard input (stdin)        |
-            +---------------------------------+-------------------------------+
-            | --input_ts='-' --columns=4,1    | read column 4 and 1 from      |
-            |                                 | standard input (stdin)        |
-            +---------------------------------+-------------------------------+
+            +---------------------------------+---------------------------+
+            | Keyword Example                 | Description               |
+            +=================================+===========================+
+            | --input_ts=fn.csv               | read all columns from     |
+            |                                 | 'fn.csv'                  |
+            +---------------------------------+---------------------------+
+            | --input_ts=fn.csv,2,1           | read data columns 2 and 1 |
+            |                                 | from 'fn.csv'             |
+            +---------------------------------+---------------------------+
+            | --input_ts=fn.csv,2,skiprows=2  | read data column 2 from   |
+            |                                 | 'fn.csv', skipping first  |
+            |                                 | 2 rows so header is read  |
+            |                                 | from third row            |
+            +---------------------------------+---------------------------+
+            | --input_ts=fn.xlsx,2,Sheet21    | read all data from 2nd    |
+            |                                 | sheet all data from       |
+            |                                 | "Sheet21" of 'fn.xlsx'    |
+            +---------------------------------+---------------------------+
+            | --input_ts=fn.hdf5,Table12,T2   | read all data from table  |
+            |                                 | "Table12" then all data   |
+            |                                 | from table "T2" of        |
+            |                                 | 'fn.hdf5'                 |
+            +---------------------------------+---------------------------+
+            | --input_ts=fn.wdm,210,110       | read DSNs 210, then 110   |
+            |                                 | from 'fn.wdm'             |
+            +---------------------------------+---------------------------+
+            | --input_ts='-'                  | read all columns from     |
+            |                                 | standard input (stdin)    |
+            +---------------------------------+---------------------------+
+            | --input_ts='-' --columns=4,1    | read column 4 and 1 from  |
+            |                                 | standard input (stdin)    |
+            +---------------------------------+---------------------------+
 
-        If working with CSV or TSV files you can use redirection rather than
-        use `--input_ts=fname.csv`.  The following are identical:
+        If working with CSV or TSV files you can use redirection rather
+        than use `--input_ts=fname.csv`.  The following are identical:
 
         From a file:
 
@@ -340,20 +343,21 @@ docstrings = {
 
         Python library examples::
 
-            You must use the `input_ts=...` option where `input_ts` can
-            be one of a [pandas DataFrame, pandas Series, dict, tuple,
-            list, StringIO, or file name].""",
+            You must use the `input_ts=...` option where `input_ts` can be
+            one of a [pandas DataFrame, pandas Series, dict, tuple, list,
+            StringIO, or file name].""",
     "columns": """columns
         [optional, defaults to all columns, input filter]
 
-        Columns to select out of input.  Can use column names from the first
-        line header or column numbers.  If using numbers, column number 1 is
-        the first data column.  To pick multiple columns; separate by commas
-        with no spaces. As used in `toolbox_utils pick` command.
+        Columns to select out of input.  Can use column names from the
+        first line header or column numbers.  If using numbers, column
+        number 1 is the first data column.  To pick multiple columns;
+        separate by commas with no spaces. As used in `toolbox_utils pick`
+        command.
 
-        This solves a big problem so that you don't have to create a data set
-        with a certain column order, you can rearrange columns when data is
-        read in.""",
+        This solves a big problem so that you don't have to create a data
+        set with a certain column order, you can rearrange columns when
+        data is read in.""",
     "start_date": """start_date : str
         [optional, defaults to first date in time-series, input filter]
 
@@ -367,9 +371,9 @@ docstrings = {
     "dropna": """dropna : str
         [optional, defauls it 'no', input filter]
 
-        Set `dropna` to 'any' to have records dropped that have NA value in any
-        column, or 'all' to have records dropped that have NA in all columns.
-        Set to 'no' to not drop any records.  The default is 'no'.""",
+        Set `dropna` to 'any' to have records dropped that have NA value in
+        any column, or 'all' to have records dropped that have NA in all
+        columns. Set to 'no' to not drop any records.  The default is 'no'.""",
     "print_input": """print_input
         [optional, default is False, output format]
 
@@ -379,11 +383,11 @@ docstrings = {
         [optional, default is None which will do nothing to the index,
         output format]
 
-        Round the index to the nearest time point.  Can significantly improve
-        the performance since can cut down on memory and processing
+        Round the index to the nearest time point.  Can significantly
+        improve the performance since can cut down on memory and processing
         requirements, however be cautious about rounding to a very course
-        interval from a small one.  This could lead to duplicate values in the
-        index.""",
+        interval from a small one.  This could lead to duplicate values in
+        the index.""",
     "float_format": """float_format
         [optional, output format]
 
@@ -392,14 +396,14 @@ docstrings = {
         [optional, default is 'csv', output format]
 
         The table format.  Can be one of 'csv', 'tsv', 'plain', 'simple',
-        'grid', 'pipe', 'orgtbl', 'rst', 'mediawiki', 'latex', 'latex_raw' and
-        'latex_booktabs'.""",
+        'grid', 'pipe', 'orgtbl', 'rst', 'mediawiki', 'latex', 'latex_raw'
+        and 'latex_booktabs'.""",
     "header": """header : str
         [optional, default is 'default', output format]
 
         This is if you want a different header than is the default for this
-        output table.  Pass a list with string column names for each column in
-        the table.""",
+        output table.  Pass a list with string column names for each column
+        in the table.""",
     "pandas_offset_codes": """
 
         +-------+---------------+
@@ -480,9 +484,9 @@ docstrings = {
         | W-SAT |             | Weekly frequency (SATurdays)  |
         +-------+-------------+-------------------------------+
 
-        Quarterly frequencies (Q, BQ, QS, BQS) and annual frequencies
-        (A, BA, AS, BAS) replace the "x" in the "Alias" column to have
-        the following anchoring suffixes:
+        Quarterly frequencies (Q, BQ, QS, BQS) and annual frequencies (A,
+        BA, AS, BAS) replace the "x" in the "Alias" column to have the
+        following anchoring suffixes:
 
         +-------+----------+-------------+----------------------------+
         | Alias | Examples | Equivalents | Description                |
@@ -518,38 +522,37 @@ docstrings = {
         """,
     "plotting_position_table": """
 
-        +------------+--------+----------------------+-----------------------+
-        | Name       | a      | Equation             | Description           |
-        |            |        | (i-a)/(n+1-2*a)      |                       |
-        +============+========+======================+=======================+
-        | weibull    | 0      | i/(n+1)              | mean of sampling      |
-        | (default)  |        |                      | distribution          |
-        +------------+--------+----------------------+-----------------------+
-        |            |        |                      | sampling distribution |
-        +------------+--------+----------------------+-----------------------+
-        | filliben   | 0.3175 | (i-0.3175)/(n+0.365) |                       |
-        +------------+--------+----------------------+-----------------------+
-        | yu         | 0.326  | (i-0.326)/(n+0.348)  |                       |
-        +------------+--------+----------------------+-----------------------+
-        | tukey      | 1/3    | (i-1/3)/(n+1/3)      | approx. median of     |
-        |            |        |                      | sampling distribution |
-        +------------+--------+----------------------+-----------------------+
-        | blom       | 0.375  | (i-0.375)/(n+0.25)   |                       |
-        +------------+--------+----------------------+-----------------------+
-        | cunnane    | 2/5    | (i-2/5)/(n+1/5)      | subjective            |
-        +------------+--------+----------------------+-----------------------+
-        | gringorton | 0.44   | (1-0.44)/(n+0.12)    |                       |
-        +------------+--------+----------------------+-----------------------+
-        | hazen      | 1/2    | (i-1/2)/n            | midpoints of n equal  |
-        |            |        |                      | intervals             |
-        +------------+--------+----------------------+-----------------------+
-        | larsen     | 0.567  | (i-0.567)/(n-0.134)  |                       |
-        +------------+--------+----------------------+-----------------------+
-        | gumbel     | 1      | (i-1)/(n-1)          | mode of sampling      |
-        |            |        |                      | distribution          |
-        +------------+--------+----------------------+-----------------------+
-        | california | NA     | i/n                  |                       |
-        +------------+--------+----------------------+-----------------------+
+        +------------+--------+----------------------+--------------------+
+        | Name       | a      | Equation             | Description        |
+        |            |        | (i-a)/(n+1-2*a)      |                    |
+        +============+========+======================+====================+
+        | weibull    | 0      | i/(n+1)              | mean of sampling   |
+        | (default)  |        |                      | distribution       |
+        +------------+--------+----------------------+--------------------+
+        | filliben   | 0.3175 | (i-0.3175)/(n+0.365) |                    |
+        +------------+--------+----------------------+--------------------+
+        | yu         | 0.326  | (i-0.326)/(n+0.348)  |                    |
+        +------------+--------+----------------------+--------------------+
+        | tukey      | 1/3    | (i-1/3)/(n+1/3)      | approx. median of  |
+        |            |        |                      | sampling           |
+        |            |        |                      | distribution       |
+        +------------+--------+----------------------+--------------------+
+        | blom       | 0.375  | (i-0.375)/(n+0.25)   |                    |
+        +------------+--------+----------------------+--------------------+
+        | cunnane    | 2/5    | (i-2/5)/(n+1/5)      | subjective         |
+        +------------+--------+----------------------+--------------------+
+        | gringorton | 0.44   | (1-0.44)/(n+0.12)    |                    |
+        +------------+--------+----------------------+--------------------+
+        | hazen      | 1/2    | (i-1/2)/n            | midpoints of n     |
+        |            |        |                      | equal intervals    |
+        +------------+--------+----------------------+--------------------+
+        | larsen     | 0.567  | (i-0.567)/(n-0.134)  |                    |
+        +------------+--------+----------------------+--------------------+
+        | gumbel     | 1      | (i-1)/(n-1)          | mode of sampling   |
+        |            |        |                      | distribution       |
+        +------------+--------+----------------------+--------------------+
+        | california | NA     | i/n                  |                    |
+        +------------+--------+----------------------+--------------------+
 
         Where 'i' is the sorted rank of the y value, and 'n' is the total
         number of values to be plotted.
@@ -559,36 +562,37 @@ docstrings = {
     "clean": """clean
         [optional, default is False, input filter]
 
-        The 'clean' command will repair a input index, removing duplicate index
-        values and sorting.""",
+        The 'clean' command will repair a input index, removing duplicate
+        index values and sorting.""",
     "skiprows": """skiprows: list-like or integer or callable
         [optional, default is None which will infer header from first line,
         input filter]
 
-        Line numbers to skip (0-indexed) if a list or number of lines to skip
-        at the start of the file if an integer.
+        Line numbers to skip (0-indexed) if a list or number of lines to
+        skip at the start of the file if an integer.
 
         If used in Python can be a callable, the callable function will be
-        evaluated against the row indices, returning True if the row should be
-        skipped and False otherwise.  An example of a valid callable argument
-        would be
+        evaluated against the row indices, returning True if the row should
+        be skipped and False otherwise.  An example of a valid callable
+        argument would be
 
         ``lambda x: x in [0, 2]``.""",
     "groupby": """groupby: str
         [optional, default is None, transformation]
 
-        The pandas offset code to group the time-series data into. A special
-        code is also available to group 'months_across_years' that will group
-        into twelve monthly categories across the entire time-series.""",
+        The pandas offset code to group the time-series data into.
+        A special code is also available to group 'months_across_years'
+        that will group into twelve monthly categories across the entire
+        time-series.""",
     "force_freq": """force_freq: str
         [optional, output format]
 
-        Force this frequency for the output.  Typically you will only want to
-        enforce a smaller interval where toolbox_utils will insert missing
-        values as needed.  WARNING: you may lose data if not careful with this
-        option.  In general, letting the algorithm determine the frequency
-        should always work, but this option will override.  Use PANDAS offset
-        codes.""",
+        Force this frequency for the output.  Typically you will only want
+        to enforce a smaller interval where toolbox_utils will insert
+        missing values as needed.  WARNING: you may lose data if not
+        careful with this option.  In general, letting the algorithm
+        determine the frequency should always work, but this option will
+        override.  Use PANDAS offset codes.""",
     "output_names": """output_names: str
         [optional, output_format]
 
@@ -722,8 +726,8 @@ def copy_doc(source: Callable) -> Callable:
 def doc(fdict: dict) -> Callable:
     """Return a decorator that formats a docstring.
 
-    Uses a template docstring replacing ${key} with fdict[key] from passed in
-    dictionary.
+    Uses a template docstring replacing ${key} with fdict[key] from passed
+    in dictionary.
 
     Parameters
     ----------
@@ -776,9 +780,9 @@ def set_plotting_position(
     cnt : int
         The number of values to create plotting positions for.
     plotting_position : float or str
-        The plotting position to use.  If a float, the plotting position will
-        be used as is.  If a string, the plotting position will be looked up
-        in the plotting position dictionary.
+        The plotting position to use.  If a float, the plotting position
+        will be used as is.  If a string, the plotting position will be
+        looked up in the plotting position dictionary.
 
     Returns
     -------
@@ -862,9 +866,9 @@ def about(name):
     about : None
         Prints information to stdout.
     """
-    nme, ver = str(pkg_resources.get_distribution(name.split(".")[0])).split()
-    print(f"package name = {nme}")
-    print(f"package version = {ver}")
+    dist = distribution(name.split(".")[0])
+    print(f"package name = {dist.name}")
+    print(f"package version = {dist.version}")
     print(f"platform architecture = {platform.architecture()}")
     print(f"platform machine = {platform.machine()}")
     print(f"platform = {platform.platform()}")
@@ -908,8 +912,8 @@ def _pick_column_or_value(tsd, var):
     Parameters
     ----------
     tsd : DataFrame
-        The time-series dataframe that contains the column `var`.  If `var` is
-        not a column in `tsd`, then it is assumed to be a value.
+        The time-series dataframe that contains the column `var`.  If `var`
+        is not a column in `tsd`, then it is assumed to be a value.
     var : str
         The column name to return from `tsd`.
 
@@ -936,7 +940,8 @@ def make_list(
     strorlist : str or list
         The string or list to normalize.
     n : int
-        The number of elements to return.  If None, then return all elements.
+        The number of elements to return.  If None, then return all
+        elements.
     sep : str
         The separator to use when splitting a string.
     flat : bool
@@ -1309,7 +1314,7 @@ def get_default_args(func):
 
 
 def transform_args(**trans_func_for_arg):
-    """Decorator that transforms function arguments before calling the function.
+    """Transforms function arguments before calling the function.
 
     Works with plain functions and bounded methods.
 
@@ -1321,7 +1326,8 @@ def transform_args(**trans_func_for_arg):
     Returns
     -------
     transform_args_decorator : callable
-        Decorator that transforms function arguments before calling the function.
+        Decorator that transforms function arguments before calling the
+        function.
     """
 
     def transform_args_decorator(func):
@@ -1396,11 +1402,10 @@ def common_kwds(
     ${target_units}
     ${source_units}
     source_units_required : bool
-        If the source_units are required, either in the DataFrame column name
-        or the source_units keyword.
+        If the source_units are required, either in the DataFrame column
+        name or the source_units keyword.
     bestfreq : bool
-        Analyze the frequency of the data and return the best
-        frequency.
+        Analyze the frequency of the data and return the best frequency.
     parse_dates : bool
         Whether to detect and parse dates in the index column.
     extended_columns : bool
@@ -1480,7 +1485,8 @@ def _pick(tsd: DataFrame, columns: Any) -> DataFrame:
     tsd : pandas.DataFrame
         DataFrame to pick columns from.
     columns : list of str or int
-        Columns to pick.  Very important - I set the first data column number to 1!
+        Columns to pick.  Very important - I set the first data column
+        number to 1!
 
     Returns
     -------
@@ -1577,7 +1583,8 @@ def _date_slice(
     end_date : str or pandas.Timestamp, optional
         End date of slice.  If None, use last date in input_tsd.
     por : bool, optional
-        If True, set start_date to first day of year and end_date to last day of year.
+        If True, set start_date to first day of year and end_date to last
+        day of year.
 
     Returns
     -------
@@ -1648,7 +1655,8 @@ def asbestfreq(data: DataFrame, force_freq: Optional[str] = None) -> DataFrame:
     3. If data.index.inferred_freq is set use .asfreq.
     4. Use pd.infer_freq - fails if any missing
     5. Use .is_* functions to establish A, AS, A-*, AS-*, Q, QS, M, MS
-    6. Use minimum interval to establish the fixed time periods up to weekly
+    6. Use minimum interval to establish the fixed time periods up to
+       weekly
     7. Gives up returning None for PANDAS offset string
 
     Parameters
@@ -2076,9 +2084,9 @@ def reduce_mem_usage(props):
 def memory_optimize(tsd: DataFrame) -> DataFrame:
     """Convert all columns to known types.
 
-    "convert_dtypes" replaced some code here such that the "memory_optimize"
-    function might go away.  Kept in case want to add additional
-    optimizations.
+    "convert_dtypes" replaced some code here such that the
+    "memory_optimize" function might go away.  Kept in case want to add
+    additional optimizations.
     """
     tsd.index = pd.Index(tsd.index, dtype=None)
     tsd = tsd.convert_dtypes()
@@ -2575,8 +2583,9 @@ def range_to_numlist(rangestr: str):
     ----------
     rangestr : str
         A string containing a range of numbers.  The range can be a single
-        number, a range of numbers separated by a colon, or a list of ranges
-        separated by a plus sign.  Examples: "1", "1:4", "1:4+16:22".
+        number, a range of numbers separated by a colon, or a list of
+        ranges separated by a plus sign.  Examples: "1", "1:4",
+        "1:4+16:22".
 
     Returns
     -------

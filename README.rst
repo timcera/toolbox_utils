@@ -35,7 +35,15 @@ throughout my other projects.  You are welcome to use it in your own projects.
 
 Installation
 ------------
-Should be as easy as running ``pip install toolbox_utils`` at any command line.
+pip
+~~~
+
+   pip install toolbox_utils
+
+conda
+~~~~~
+
+   conda install -c conda-forge toolbox_utils
 
 Usage - API
 -----------
