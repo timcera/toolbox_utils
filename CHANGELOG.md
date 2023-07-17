@@ -1,3 +1,9 @@
+## v5.0.1 (2023-07-17)
+
+### Fix
+
+- fix to not use broken versions of pint
+
 ## v5.0.0 (2023-07-17)
 
 ## v4.0.0 (2023-07-16)
