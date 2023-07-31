@@ -14,7 +14,7 @@ description = "Python toolbox for common utilities"
 dependencies = [
     "dateparser",
     "numpy",
-    "pandas",
+    "pandas[excel]",
     "pint!=0.21.*",
     "pint<0.22; python_version < '3.9'",
     "pint-pandas",
