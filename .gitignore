@@ -22,6 +22,7 @@ htmlcov
 .installed.cfg
 *.mo
 .mr.developer.cfg
+.mypy_cache
 parts
 *.pyc
 __pycache__

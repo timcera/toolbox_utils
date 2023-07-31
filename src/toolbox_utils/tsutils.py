@@ -11,7 +11,7 @@ from ast import literal_eval
 from contextlib import suppress
 from functools import reduce, wraps
 from importlib.metadata import distribution
-from io import BytesIO, StringIO
+from io import BytesIO, StringIO, TextIOWrapper
 from math import gcd
 from string import Template
 from textwrap import TextWrapper, dedent
@@ -22,12 +22,16 @@ import dateparser
 import numpy as np
 import pandas as pd
 import pint_pandas  # not used directly, but required to use pint in pandas
-from _io import TextIOWrapper
 from numpy import int64, ndarray
 from pandas.core.frame import DataFrame
 from pandas.core.indexes.base import Index
 from pandas.tseries.frequencies import to_offset
-from pydantic import validate_arguments
+
+try:
+    from pydantic import validate_call
+except ImportError:
+    from pydantic import validate_arguments as validate_call
+
 from scipy.stats.distributions import lognorm, norm
 from tabulate import simple_separated_format
 from tabulate import tabulate as tb
@@ -603,7 +607,7 @@ docstrings = {
 }
 
 
-def flatten(list_of_lists) -> List:
+def flatten(list_of_lists) -> Union[List, Tuple]:
     """Recursively flatten a list of lists or tuples into a single list.
 
     Parameters
@@ -628,7 +632,7 @@ def flatten(list_of_lists) -> List:
     return list_of_lists
 
 
-@validate_arguments
+@validate_call
 def stride_and_unit(sunit: str) -> Tuple[str, int]:
     """Split a stride/unit combination into component parts.
 
@@ -651,7 +655,7 @@ def stride_and_unit(sunit: str) -> Tuple[str, int]:
     return unit, stride
 
 
-@validate_arguments
+@validate_call
 def set_ppf(ptype: Optional[Literal["norm", "lognorm", "weibull"]]) -> Callable:
     """Return correct Percentage Point Function for `ptype`.
 
@@ -684,7 +688,7 @@ def set_ppf(ptype: Optional[Literal["norm", "lognorm", "weibull"]]) -> Callable:
     return ppf
 
 
-@validate_arguments
+@validate_call
 def _handle_curly_braces_in_docstring(input_str: str, **kwargs) -> str:
     """Replace missing keys with a pattern."""
     ret = "{{{}}}"
@@ -698,7 +702,7 @@ def _handle_curly_braces_in_docstring(input_str: str, **kwargs) -> str:
         )
 
 
-@validate_arguments
+@validate_call
 def copy_doc(source: Callable) -> Callable:
     """Copy docstring from source.
 
@@ -722,7 +726,7 @@ def copy_doc(source: Callable) -> Callable:
     return wrapper_copy_doc
 
 
-@validate_arguments
+@validate_call
 def doc(fdict: dict) -> Callable:
     """Return a decorator that formats a docstring.
 
@@ -748,7 +752,7 @@ def doc(fdict: dict) -> Callable:
     return outer_func
 
 
-@validate_arguments(config=dict(arbitrary_types_allowed=True))
+@validate_call(config=dict(arbitrary_types_allowed=True))
 @doc(docstrings)
 def set_plotting_position(
     cnt: Union[int, int64],
@@ -811,7 +815,7 @@ def set_plotting_position(
     return (index - coeff) / float(cnt + 1 - 2 * coeff)
 
 
-@validate_arguments
+@validate_call
 def parsedate(
     dstr: Optional[Any], strftime: Optional[Any] = None, settings: Optional[Any] = None
 ):
@@ -1362,7 +1366,7 @@ def transform_args(**trans_func_for_arg):
     target_units=make_list,
     usecols=make_list,
 )
-@validate_arguments
+@validate_call
 @doc(docstrings)
 def common_kwds(
     input_tsd=None,
@@ -1812,7 +1816,7 @@ def dedup_index(
     return pd.Index(idx)
 
 
-@validate_arguments
+@validate_call
 def renamer(column_names: str, suffix: Optional[str] = "") -> str:
     """Print the suffix into the third ":" separated field of the header.
 
@@ -2107,7 +2111,7 @@ def is_valid_url(url: Union[bytes, str], qualifying: Optional[Any] = None) -> bo
     return all(getattr(token, qualifying_attr) for qualifying_attr in qualifying)
 
 
-@validate_arguments
+@validate_call
 def read_iso_ts(
     *inindat,
     dropna: Literal["no", "any", "all"] = None,
@@ -2575,7 +2579,7 @@ def read_iso_ts(
     return result.convert_dtypes()
 
 
-@validate_arguments
+@validate_call
 def range_to_numlist(rangestr: Union[str, int, list]) -> list:
     """Convert a range string to a list of numbers.
 
