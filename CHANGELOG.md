@@ -1,3 +1,9 @@
+## v5.0.4 (2023-08-20)
+
+### Fix
+
+- fix in _normalize_units to be more robust
+
 ## v5.0.3 (2023-07-31)
 
 ## v5.0.2 (2023-07-30)
