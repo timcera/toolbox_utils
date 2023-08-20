@@ -15,7 +15,7 @@ from io import BytesIO, StringIO, TextIOWrapper
 from math import gcd
 from string import Template
 from textwrap import TextWrapper, dedent
-from typing import Any, Callable, List, Literal, Optional, Tuple, Union
+from typing import Any, Callable, Dict, List, Literal, Optional, Tuple, Union
 from urllib.parse import urlparse
 
 import dateparser
@@ -44,10 +44,6 @@ from .tssplit.tssplit import tssplit
 # This is here so that linters don't remove the pint_pandas import which is
 # needed to use pint in pandas
 _ = pint_pandas.version("pint")
-
-
-if __name__ == "__main__":
-    pass
 
 
 def normalize_command_line_args(args):
@@ -649,8 +645,8 @@ def stride_and_unit(sunit: str) -> Tuple[str, int]:
     if sunit is None:
         return sunit
     unit = sunit.lstrip("+-. 1234567890")
-    stride = sunit[: sunit.index(unit)]
-    stride = int(stride) if stride else 1
+    sunit = sunit[: sunit.index(unit)]
+    stride = int(sunit) if sunit else 1
 
     return unit, stride
 
@@ -793,7 +789,7 @@ def set_plotting_position(
     set_plotting_position : ndarray
         The plotting position array.
     """
-    ppdict = {
+    ppdict: Dict[str, float] = {
         "weibull": 0,
         "benard": 0.3,
         "filliben": 0.3175,
@@ -809,7 +805,7 @@ def set_plotting_position(
 
     if plotting_position == "california":
         return np.linspace(1.0 / cnt, 1.0, cnt)
-    coeff = ppdict.get(plotting_position, plotting_position)
+    coeff: float = ppdict.get(plotting_position, plotting_position)
     index = np.arange(1, cnt + 1)
 
     return (index - coeff) / float(cnt + 1 - 2 * coeff)
@@ -851,10 +847,7 @@ def parsedate(
     if pdate is None:
         raise ValueError(error_wrapper(f"""Could not parse date string '{dstr}'. """))
 
-    if strftime is None:
-        return pdate
-
-    return pdate.strftime(strftime)
+    return pdate if strftime is None else pdate.strftime(strftime)
 
 
 def about(name):
@@ -1214,7 +1207,7 @@ def _normalize_units(
                 )
             stu.append(tsource)
     else:
-        stu = ["" for icols in ntsd.columns]
+        stu = ["" for _ in ntsd.columns]
 
     if source_units_required and "" in stu:
         raise ValueError(
@@ -1263,33 +1256,36 @@ def _normalize_units(
         ncolumns = []
 
         for inx, colname in enumerate(ntsd.columns):
-            words = colname.split(":")
+            if isinstance(colname, (str, bytes)):
+                words = colname.split(":")
 
-            if words:
-                # convert words[1] to target_units[inx]
-                try:
-                    # Would be nice in the future to carry around units,
-                    # however at the moment most toolbox_utils functions will not
-                    # work right with units specified.
-                    # This single command uses pint to convert units and
-                    # the "np.array(..., dtype=float)" command removes pint
-                    # units from the converted pandas Series.
-                    ntsd[colname] = np.array(
-                        pd.Series(
-                            ntsd[colname].astype(float), dtype=f"pint[{words[1]}]"
-                        ).pint.to(target_units[inx]),
-                        dtype=float,
-                    )
-                    words[1] = target_units[inx]
-                except AttributeError as exc:
-                    raise ValueError(
-                        error_wrapper(
-                            f"""
-                            No conversion between {words[1]} and
-                            {target_units[inx]}."""
+                if words:
+                    # convert units in words[1] to units in target_units[inx]
+                    try:
+                        # Would be nice in the future to carry around units,
+                        # however at the moment most toolbox_utils functions will
+                        # not work right with units specified.
+                        # This single command uses pint to convert units and
+                        # the "np.array(..., dtype=float)" command removes pint
+                        # units from the converted pandas Series.
+                        ntsd[colname] = np.array(
+                            pd.Series(
+                                ntsd[colname].astype(float), dtype=f"pint[{words[1]}]"
+                            ).pint.to(target_units[inx]),
+                            dtype=float,
                         )
-                    ) from exc
-            ncolumns.append(":".join(words))
+                        words[1] = target_units[inx]
+                    except AttributeError as exc:
+                        raise ValueError(
+                            error_wrapper(
+                                f"""
+                                No conversion between {words[1]} and
+                                {target_units[inx]}."""
+                            )
+                        ) from exc
+                ncolumns.append(":".join(words))
+            else:
+                ncolumns.append(colname)
         ntsd.columns = ncolumns
 
     return memory_optimize(ntsd)
@@ -1630,7 +1626,7 @@ def _date_slice(
     return input_tsd
 
 
-_ANNUALS = {
+_ANNUALS: Dict[int, str] = {
     0: "DEC",
     1: "JAN",
     2: "FEB",
@@ -1741,7 +1737,7 @@ def asbestfreq(data: DataFrame, force_freq: Optional[str] = None) -> DataFrame:
     elif np.alltrue(data.index.is_month_start):
         if np.all(data.index.month == data.index[0].month):
             # Actually yearly with different start
-            infer_freq = f"A-{_ANNUALS[data.index[0].month] - 1}"
+            infer_freq = f"A-{_ANNUALS[data.index[0].month - 1]}"
         else:
             infer_freq = "MS"
 
@@ -1751,9 +1747,6 @@ def asbestfreq(data: DataFrame, force_freq: Optional[str] = None) -> DataFrame:
     # Use the minimum of the intervals to test a new interval.
     # Should work for fixed intervals.
     ndiff = sorted(set(ndiff))
-    mininterval = np.min(ndiff)
-    if mininterval <= 0:
-        raise ValueError
     ngcd = ndiff[0] if len(ndiff) == 1 else reduce(gcd, ndiff)
     if ngcd < 1000:
         infer_freq = f"{ngcd}N"
@@ -1776,11 +1769,7 @@ def asbestfreq(data: DataFrame, force_freq: Optional[str] = None) -> DataFrame:
         else:
             infer_freq = "D"
 
-    if infer_freq is not None:
-        return data.asfreq(infer_freq)
-
-    # Give up
-    return data
+    return data.asfreq(infer_freq) if infer_freq is not None else data
 
 
 def dedup_index(
@@ -1893,7 +1882,7 @@ def return_input(
     output: DataFrame,
     suffix: Optional[str] = "",
     reverse_index: bool = False,
-    output_names: List = None,
+    output_names: Optional[List] = None,
 ) -> DataFrame:
     """Return the input time series also with the output dataframe.
 
@@ -2114,7 +2103,7 @@ def is_valid_url(url: Union[bytes, str], qualifying: Optional[Any] = None) -> bo
 @validate_call
 def read_iso_ts(
     *inindat,
-    dropna: Literal["no", "any", "all"] = None,
+    dropna: Optional[Literal["no", "any", "all"]] = None,
     extended_columns: bool = False,
     parse_dates: bool = True,
     skiprows: Optional[Union[int, List[int]]] = None,
@@ -2225,7 +2214,6 @@ def read_iso_ts(
     #                                  dataframe                       dataframe
     #
     #                                  series                          dataframe
-    newkwds = {}
     clean = kwds.get("clean", False)
     names = kwds.get("names")
 
@@ -2288,10 +2276,9 @@ def read_iso_ts(
         elif isinstance(fname, (tuple, list, float)):
             res = pd.DataFrame({f"values{source_index}": fname}, index=[0])
 
+        newkwds: Dict[str, Union[str, bool]] = {}
         if res.empty:
             # Store keywords for each source.
-            newkwds = {}
-
             parameters = [str(p) for p in parameters]
 
             args = []
@@ -2303,16 +2290,16 @@ def read_iso_ts(
 
             parameters = parameters[len(args) :]
 
-            newkwds = tssplit(
+            newkwds_list = tssplit(
                 ",".join(parameters),
                 quote="[]",
                 quote_keep=True,
                 delimiter=",",
             )
-            newkwds = [i.split("=") for i in newkwds]
+            newkwds_list = [i.split("=") for i in newkwds_list]
 
-            if newkwds[0][0]:
-                newkwds = {k: literal_eval(v) for k, v in newkwds}
+            if newkwds_list[0][0]:
+                newkwds = {k: literal_eval(v) for k, v in newkwds_list}
             else:
                 newkwds = {}
 
@@ -2514,7 +2501,7 @@ def read_iso_ts(
         try:
             words = res.index.name.split(":")
         except AttributeError:
-            words = ""
+            words = []
 
         if len(words) > 1:
             with suppress(TypeError):
@@ -2613,7 +2600,7 @@ def range_to_numlist(rangestr: Union[str, int, list]) -> list:
         if len(slices) == 1:
             num = int(sub)
             numlist.append(num)
-        elif len(slices) in [2, 3]:
+        elif len(slices) in {2, 3}:
             rstart = int(slices[0])
             rend = int(slices[1]) + 1
             if rstart >= rend:
@@ -2625,10 +2612,7 @@ def range_to_numlist(rangestr: Union[str, int, list]) -> list:
                         """
                     )
                 )
-            if len(slices) == 2:
-                step = 1
-            else:
-                step = int(slices[2])
+            step = 1 if len(slices) == 2 else int(slices[2])
             numlist.extend(range(rstart, rend, step))
         else:
             raise ValueError(
