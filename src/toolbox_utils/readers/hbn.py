@@ -11,7 +11,7 @@ except ImportError:
 
 import pandas as pd
 
-from toolbox_utils import tsutils
+from .. import tsutils
 
 code2intervalmap = {5: "yearly", 4: "monthly", 3: "daily", 2: "bivl"}
 
