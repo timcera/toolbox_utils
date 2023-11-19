@@ -2227,11 +2227,7 @@ def read_iso_ts(
         spcs = " " * spc
         na_values.extend([spcs, f"{spcs}nan"])
 
-    fstr = "{1}"
-
-    if extended_columns is True:
-        fstr = "{0}.{1}"
-
+    fstr = "{0}.{1}" if extended_columns else "{1}"
     if names is not None:
         header = 0
         names = make_list(names)
@@ -2265,11 +2261,7 @@ def read_iso_ts(
         # Python API
 
         if isinstance(fname, pd.DataFrame):
-            if parameters:
-                res = fname[parameters]
-            else:
-                res = fname
-
+            res = fname[parameters] if parameters else fname
         elif isinstance(fname, (pd.Series, dict)):
             res = pd.DataFrame(inindat)
 
@@ -2331,8 +2323,9 @@ def read_iso_ts(
                     nres = []
 
                     for par in args:
-                        for npar in range_to_numlist(str(par)):
-                            nres.append(wdm(fname, npar))
+                        nres.extend(
+                            wdm(fname, npar) for npar in range_to_numlist(str(par))
+                        )
                     res = pd.concat(nres, axis="columns")
                 elif ext.lower() == ".hbn":
                     res = pd.DataFrame()
@@ -2367,11 +2360,7 @@ def read_iso_ts(
                     # use the first row as the header.
                     header = 0
 
-                    if args:
-                        sheet = make_list(args)
-                    else:
-                        sheet = 0
-
+                    sheet = make_list(args) if args else 0
                     try:
                         res = pd.read_excel(
                             fname,
@@ -2416,30 +2405,24 @@ def read_iso_ts(
                 # Python API
 
                 if b"\n" in fname or b"\r" in fname:
-                    # a string?
-                    header = 0
                     fpi = BytesIO(fname)
                 else:
                     args.insert(0, fname)
                     fname = "-"
-                    header = 0
                     fpi = sys.stdin
+                # a string?
+                header = 0
             elif isinstance(fname, str):
                 # Python API
 
                 if "\n" in fname or "\r" in fname:
-                    # a string?
-                    header = 0
                     fpi = StringIO(fname)
                 else:
                     args.insert(0, fname)
-                    header = 0
                     fpi = sys.stdin
                     fname = "-"
-            elif isinstance(fname, (StringIO, BytesIO)):
-                # Python API
-                header = "infer"
-                fpi = fname
+                # a string?
+                header = 0
             else:
                 # Maybe fname and args are actual column names of standard
                 # input.
@@ -2448,26 +2431,26 @@ def read_iso_ts(
                 header = 0
                 fpi = sys.stdin
 
-            if res.empty:
-                if fname == "-" and not stdin_df.empty:
-                    res = stdin_df
-                else:
-                    res = pd.read_csv(
-                        fpi,
-                        engine="python",
-                        keep_default_na=True,
-                        skipinitialspace=True,
-                        header=header,
-                        sep=sep,
-                        na_values=na_values,
-                        index_col=index_col,
-                        parse_dates=parse_dates,
-                        **newkwds,
-                    )
+        if res.empty:
+            if fname == "-" and not stdin_df.empty:
+                res = stdin_df
+            else:
+                res = pd.read_csv(
+                    fpi,
+                    engine="python",
+                    keep_default_na=True,
+                    skipinitialspace=True,
+                    header=header,
+                    sep=sep,
+                    na_values=na_values,
+                    index_col=index_col,
+                    parse_dates=parse_dates,
+                    **newkwds,
+                )
 
-                if fname == "-" and stdin_df.empty:
-                    stdin_df = res
-                res = _pick(res, args)
+            if fname == "-" and stdin_df.empty:
+                stdin_df = res
+            res = _pick(res, args)
 
         lresult_list.append(res)
         with suppress(AttributeError):

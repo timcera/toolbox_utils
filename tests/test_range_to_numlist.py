@@ -28,13 +28,13 @@ def test_range_to_numlist(test_input, expected, kwds):
     test_output = tsutils.range_to_numlist(test_input, **kwds)
 
     try:
-        if isinstance(test_output[0], StringIO) or isinstance(test_output[0], BytesIO):
+        if isinstance(test_output[0], (StringIO, BytesIO)):
             test_output = test_output[0].read()
             expected = expected[0].read()
     except TypeError:
         pass
 
-    if isinstance(test_output, StringIO) or isinstance(test_output, BytesIO):
+    if isinstance(test_output, (StringIO, BytesIO)):
         test_output = test_output.read()
         expected = expected.read()
 

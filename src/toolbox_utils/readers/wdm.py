@@ -60,18 +60,17 @@ def wdm_extract(wdmfile, *idsn):
     nrecords = iarray[28]  # first record is File Definition Record
     ntimeseries = iarray[31]
 
-    dsnlist = []
-
-    for index in range(512, nrecords * 512, 512):
+    dsnlist = [
+        index
+        for index in range(512, nrecords * 512, 512)
         if (
             not (
                 iarray[index] == iarray[index + 1] == iarray[index + 2] == 0
                 and iarray[index + 3]
             )
             and iarray[index + 5] == 1
-        ):
-            dsnlist.append(index)
-
+        )
+    ]
     if len(dsnlist) != ntimeseries:
         print("PROGRAM ERROR, wrong number of DSN records found")
 
@@ -128,12 +127,10 @@ def wdm_extract(wdmfile, *idsn):
         records = []
 
         for i in range(pdat + 1, pdatv - 1):
-            a_record = iarray[index + i]
-
-            if a_record:
+            if a_record := iarray[index + i]:
                 records.append(splitposition(a_record))
 
-        if len(records) == 0:
+        if not records:
             continue  # WDM preallocated, but nothing saved here yet
 
         srec, soffset = records[0]
@@ -218,7 +215,7 @@ def getfloats(iarray, farray, floats, findex, rec, offset, count):
         index += 1
 
         if control_word >> 5 & 0x3:  # comp from control word, x
-            for k in range(nval):
+            for _ in range(nval):
                 if findex >= len(floats):
                     return findex
                 floats[findex] = farray[index]
