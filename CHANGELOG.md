@@ -1,3 +1,11 @@
+## v5.0.6 (2023-12-16)
+
+### Refactor
+
+- refactors
+- sourcery refactor
+- refactor with sourcery
+
 ## v5.0.5 (2023-10-13)
 
 ## v5.0.4 (2023-08-20)
