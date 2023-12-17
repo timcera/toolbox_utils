@@ -949,39 +949,36 @@ def make_list(
     make_list : list
         The normalized list.
     """
-    if isinstance(strorlist, (list, tuple)):
-        # The following will fix ((tuples, in, a, tuple, problem),)
+    if isinstance(strorlist, (list, tuple)) and flat:
+        strorlist = flatten(strorlist)
 
-        if flat:
-            strorlist = flatten(strorlist)
+    if isinstance(strorlist, (list, tuple)) and len(strorlist) == 1:
+        # Normalize lists and tuples of length 1 to scalar for
+        # further processing.
+        strorlist = strorlist[0]
 
-        if len(strorlist) == 1:
-            # Normalize lists and tuples of length 1 to scalar for
-            # further processing.
-            strorlist = strorlist[0]
-
-    if isinstance(strorlist, pd.DataFrame):
-        return [strorlist]
-
-    if isinstance(strorlist, pd.Series):
+    if isinstance(strorlist, (pd.DataFrame, pd.Series)):
         return [pd.DataFrame(strorlist)]
 
-    if strorlist is None or isinstance(strorlist, (type(None))):
+    if (
+        strorlist is None
+        or isinstance(strorlist, (type(None)))
+        or strorlist in ("None", "", b"None", b"")
+    ):
         # None -> None
+        # 'None' -> None
+        # ''     -> None
         return None
 
     if isinstance(strorlist, (int, float)):
         # 1      -> [1]
         # 1.2    -> [1.2]
-
         strorlist = [strorlist]
 
-    if isinstance(strorlist, (str, bytes)):
-        if strorlist in ("None", "", b"None", b""):
-            # 'None' -> None
-            # ''     -> None
-            return None
+    if isinstance(strorlist, (StringIO, BytesIO)):
+        return strorlist
 
+    if isinstance(strorlist, (str, bytes)):
         # Anything other than a scalar int or float continues.
         # '1'   -> [1]
         # '5.7' -> [5.7]
@@ -997,15 +994,14 @@ def make_list(
         if isinstance(strorlist, str):
             if "\r" in strorlist or "\n" in strorlist:
                 return [StringIO(strorlist)]
-            strorlist = strorlist.split(sep)
 
         if isinstance(strorlist, bytes):
             if b"\r" in strorlist or b"\n" in strorlist:
                 return [BytesIO(strorlist)]
-            strorlist = strorlist.split(bytes(sep, encoding="utf8"))
 
-    if isinstance(strorlist, (StringIO, BytesIO)):
-        return strorlist
+        strorlist = strorlist.split(
+            sep if isinstance(strorlist, str) else bytes(sep, encoding="utf8")
+        )
 
     # At this point 'strorlist' variable should be a list or tuple.
 
@@ -1163,11 +1159,12 @@ def _normalize_units(
     ntsd = pd.DataFrame(ntsd)
 
     target_units = make_list(target_units, n=len(ntsd.columns))
-
-    if target_units is not None:
+    if target_units is None:
+        return ntsd
+    else:
         target_units = ["" if i is None else i for i in target_units]
-    isource_units = make_list(source_units, n=len(ntsd.columns))
 
+    isource_units = make_list(source_units, n=len(ntsd.columns))
     if isource_units is not None:
         isource_units = ["" if i is None else i for i in isource_units]
 
@@ -1187,7 +1184,6 @@ def _normalize_units(
 
     # Combine isource_units and tsource_units into stu.
     stu = []
-
     if isource_units is not None:
         for isource, tsource in zip(isource_units, tsource_units):
             if not tsource:
@@ -1592,28 +1588,18 @@ def _date_slice(
         Sliced DataFrame.
     """
     if input_tsd.index.inferred_type == "datetime64":
-        if start_date is None:
-            start_date = input_tsd.index[0]
+        start_date = pd.Timestamp(start_date or input_tsd.index[0])
+        end_date = pd.Timestamp(end_date or input_tsd.index[-1])
 
-        if end_date is None:
-            end_date = input_tsd.index[-1]
+        if input_tsd.index.tz is not None:
+            start_date = start_date.tz_localize(
+                input_tsd.index.tz, ambiguous="infer", nonexistent="shift_forward"
+            )
+            end_date = end_date.tz_localize(
+                input_tsd.index.tz, ambiguous="infer", nonexistent="shift_forward"
+            )
 
-        if input_tsd.index.tz is None:
-            start_date = pd.Timestamp(start_date)
-            end_date = pd.Timestamp(end_date)
-        else:
-            try:
-                start_date = pd.Timestamp(start_date).tz_convert(input_tsd.index.tz)
-            except TypeError:
-                start_date = pd.Timestamp(start_date).tz_localize(input_tsd.index.tz)
-            try:
-                end_date = pd.Timestamp(end_date).tz_convert(input_tsd.index.tz)
-            except TypeError:
-                end_date = pd.Timestamp(end_date).tz_localize(input_tsd.index.tz)
-
-        input_tsd = input_tsd.loc[
-            (input_tsd.index >= start_date) & (input_tsd.index <= end_date), :
-        ]
+        input_tsd = input_tsd.loc[start_date:end_date]
 
         if por is True:
             if start_date < input_tsd.index[0]:
@@ -1671,30 +1657,11 @@ def asbestfreq(data: DataFrame, force_freq: Optional[str] = None) -> DataFrame:
     asbestfreq : pandas.DataFrame
         DataFrame with index set to best frequency.
     """
-
     if not isinstance(data.index, pd.DatetimeIndex):
         return data
 
     if force_freq is not None:
         return data.asfreq(force_freq)
-
-    ndiff = (
-        data.index.values.astype("int64")[1:] - data.index.values.astype("int64")[:-1]
-    )
-
-    if np.any(ndiff <= 0):
-        raise ValueError(
-            error_wrapper(
-                f"""
-                Duplicate or time reversal index entry at record
-                {np.where(ndiff <= 0)[0][0] + 1} (start count at 0):
-                "{data.index[:-1][ndiff <= 0][0]}".
-
-                Perhaps use the "--clean" keyword on the CLI or "clean=True" if
-                using Python or edit the input data..
-                """
-            )
-        )
 
     if data.index.freq is not None:
         return data
@@ -1740,9 +1707,26 @@ def asbestfreq(data: DataFrame, force_freq: Optional[str] = None) -> DataFrame:
             infer_freq = f"A-{_ANNUALS[data.index[0].month - 1]}"
         else:
             infer_freq = "MS"
-
     if infer_freq is not None:
         return data.asfreq(infer_freq)
+
+    ndiff = (
+        data.index.values.astype("int64")[1:] - data.index.values.astype("int64")[:-1]
+    )
+
+    if np.any(ndiff <= 0):
+        raise ValueError(
+            error_wrapper(
+                f"""
+                Duplicate or time reversal index entry at record
+                {np.where(ndiff <= 0)[0][0] + 1} (start count at 0):
+                "{data.index[:-1][ndiff <= 0][0]}".
+
+                Perhaps use the "--clean" keyword on the CLI or "clean=True" if
+                using Python or edit the input data..
+                """
+            )
+        )
 
     # Use the minimum of the intervals to test a new interval.
     # Should work for fixed intervals.
@@ -2566,13 +2550,16 @@ def range_to_numlist(rangestr: Union[str, int, list]) -> list:
     range_to_numlist : list
         A list of numbers.
     """
+    if isinstance(rangestr, int):
+        return [rangestr]
+
     numlist = []
     subranges = make_list(rangestr, sep="+")
 
     for sub in subranges:
         slices = make_list(sub, sep=":")
         for tst in slices:
-            if isinstance(tst, float):
+            if not isinstance(tst, int):
                 raise ValueError(
                     error_wrapper(
                         f"""Invalid range specification in '{sub}' of the
@@ -2581,11 +2568,11 @@ def range_to_numlist(rangestr: Union[str, int, list]) -> list:
                     )
                 )
         if len(slices) == 1:
-            num = int(sub)
+            num = slices[0]
             numlist.append(num)
         elif len(slices) in {2, 3}:
-            rstart = int(slices[0])
-            rend = int(slices[1]) + 1
+            rstart = slices[0]
+            rend = slices[1] + 1
             if rstart >= rend:
                 raise ValueError(
                     error_wrapper(
@@ -2595,7 +2582,7 @@ def range_to_numlist(rangestr: Union[str, int, list]) -> list:
                         """
                     )
                 )
-            step = 1 if len(slices) == 2 else int(slices[2])
+            step = 1 if len(slices) == 2 else slices[2]
             numlist.extend(range(rstart, rend, step))
         else:
             raise ValueError(
