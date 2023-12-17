@@ -1593,10 +1593,10 @@ def _date_slice(
 
         if input_tsd.index.tz is not None:
             start_date = start_date.tz_localize(
-                input_tsd.index.tz, ambiguous="infer", nonexistent="shift_forward"
+                input_tsd.index.tz, ambiguous=True, nonexistent="shift_forward"
             )
             end_date = end_date.tz_localize(
-                input_tsd.index.tz, ambiguous="infer", nonexistent="shift_forward"
+                input_tsd.index.tz, ambiguous=True, nonexistent="shift_forward"
             )
 
         input_tsd = input_tsd.loc[start_date:end_date]
