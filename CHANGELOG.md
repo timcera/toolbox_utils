@@ -1,3 +1,9 @@
+## v5.0.8 (2023-12-17)
+
+### Fix
+
+- another go at localizing TimeStamp whether naive of set time zone
+
 ## v5.0.7 (2023-12-16)
 
 ### Fix
