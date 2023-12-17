@@ -1592,12 +1592,18 @@ def _date_slice(
         end_date = pd.Timestamp(end_date or input_tsd.index[-1])
 
         if input_tsd.index.tz is not None:
-            start_date = start_date.tz_localize(
-                input_tsd.index.tz, ambiguous=True, nonexistent="shift_forward"
-            )
-            end_date = end_date.tz_localize(
-                input_tsd.index.tz, ambiguous=True, nonexistent="shift_forward"
-            )
+            try:
+                start_date = start_date.tz_convert(input_tsd.index.tz)
+            except TypeError:
+                start_date = start_date.tz_localize(
+                    input_tsd.index.tz, ambiguous=True, nonexistent="shift_forward"
+                )
+            try:
+                end_date = end_date.tz_convert(input_tsd.index.tz)
+            except TypeError:
+                end_date = end_date.tz_localize(
+                    input_tsd.index.tz, ambiguous=True, nonexistent="shift_forward"
+                )
 
         input_tsd = input_tsd.loc[start_date:end_date]
 
