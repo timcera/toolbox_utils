@@ -1,3 +1,9 @@
+## v5.0.7 (2023-12-16)
+
+### Fix
+
+- ambiguous="infer" is no longer available working with a TimeStamp
+
 ## v5.0.6 (2023-12-16)
 
 ### Refactor
