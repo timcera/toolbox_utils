@@ -13,6 +13,7 @@ from functools import reduce, wraps
 from importlib.metadata import distribution
 from io import BytesIO, StringIO, TextIOWrapper
 from math import gcd
+from pathlib import Path
 from string import Template
 from textwrap import TextWrapper, dedent
 from typing import Any, Callable, Dict, List, Literal, Optional, Tuple, Union
@@ -46,17 +47,18 @@ from .tssplit.tssplit import tssplit
 _ = pint_pandas.version("pint")
 
 
-def normalize_command_line_args(args):
-    """Normalize command line arguments.
+def normalize_command_line_args(args: List) -> List:
+    """
+    Normalize command line arguments.
 
     Parameters
     ----------
-    args : list
+    args
         The command line arguments.
 
     Returns
     -------
-    normalize_command_line_args : list
+    normalize_command_line_args
         The normalized command line arguments.
     """
     nargs = ",".join(args)
@@ -74,16 +76,17 @@ def normalize_command_line_args(args):
 
 
 def error_wrapper(estr: str) -> str:
-    """Wrap estr into error format used by toolboxes.
+    """
+    Wrap estr into error format used by toolboxes.
 
     Parameters
     ----------
-    estr : str
+    estr
         The error message to wrap.
 
     Returns
     -------
-    error_wrapper : str
+    error_wrapper
         The wrapped error message.
     """
     wrapper = TextWrapper(initial_indent="*   ", subsequent_indent="*   ")
@@ -603,17 +606,18 @@ docstrings = {
 }
 
 
-def flatten(list_of_lists) -> Union[List, Tuple]:
-    """Recursively flatten a list of lists or tuples into a single list.
+def flatten(list_of_lists: Union[List, Tuple]) -> List:
+    """
+    Recursively flatten a list of lists or tuples into a single list.
 
     Parameters
     ----------
-    list_of_lists : list or tuple
+    list_of_lists
         A list of lists or tuples to flatten.
 
     Returns
     -------
-    flatten : list
+    flatten
         A single list of all the values in the input list.
     """
     if isinstance(list_of_lists, (list, tuple)):
@@ -630,16 +634,17 @@ def flatten(list_of_lists) -> Union[List, Tuple]:
 
 @validate_call
 def stride_and_unit(sunit: str) -> Tuple[str, int]:
-    """Split a stride/unit combination into component parts.
+    """
+    Split a stride/unit combination into component parts.
 
     Parameters
     ----------
-    sunit : str
+    sunit
         A stride/unit combination.
 
     Returns
     -------
-    stride_and_unit : tuple
+    stride_and_unit
         A tuple of the stride and unit.
     """
     if sunit is None:
@@ -653,16 +658,17 @@ def stride_and_unit(sunit: str) -> Tuple[str, int]:
 
 @validate_call
 def set_ppf(ptype: Optional[Literal["norm", "lognorm", "weibull"]]) -> Callable:
-    """Return correct Percentage Point Function for `ptype`.
+    """
+    Return correct Percentage Point Function for `ptype`.
 
     Parameters
     ----------
-    ptype : str
+    ptype
         The type of distribution to use.
 
     Returns
     -------
-    set_ppf : callable
+    set_ppf
         The Percentage Point Function for the specified distribution.
     """
     if ptype == "norm":
@@ -700,16 +706,17 @@ def _handle_curly_braces_in_docstring(input_str: str, **kwargs) -> str:
 
 @validate_call
 def copy_doc(source: Callable) -> Callable:
-    """Copy docstring from source.
+    """
+    Copy docstring from source.
 
     Parameters
     ----------
-    source : Callable
+    source
         Function to take doc string from.
 
     Returns
     -------
-    copy_doc: Callable
+    copy_doc
         Wrapped function that has docstring from `source`.
     """
 
@@ -724,19 +731,20 @@ def copy_doc(source: Callable) -> Callable:
 
 @validate_call
 def doc(fdict: dict) -> Callable:
-    """Return a decorator that formats a docstring.
+    """
+    Return a decorator that formats a docstring.
 
     Uses a template docstring replacing ${key} with fdict[key] from passed
     in dictionary.
 
     Parameters
     ----------
-    fdict : dict
+    fdict
         Dictionary of strings with values to replace {keys} in docstring.
 
     Returns
     -------
-    doc : callable
+    doc
         Function with docstring formatted with fdict.
     """
 
@@ -771,22 +779,23 @@ def set_plotting_position(
         ],
     ] = "weibull",
 ) -> ndarray:
-    """Create plotting position 1D array using linspace.
+    """
+    Create plotting position 1D array using linspace.
 
     {plotting_position_table}
 
     Parameters
     ----------
-    cnt : int
+    cnt
         The number of values to create plotting positions for.
-    plotting_position : float or str
+    plotting_position
         The plotting position to use.  If a float, the plotting position
         will be used as is.  If a string, the plotting position will be
         looked up in the plotting position dictionary.
 
     Returns
     -------
-    set_plotting_position : ndarray
+    set_plotting_position
         The plotting position array.
     """
     ppdict: Dict[str, float] = {
@@ -814,23 +823,24 @@ def set_plotting_position(
 @validate_call
 def parsedate(
     dstr: Optional[Any], strftime: Optional[Any] = None, settings: Optional[Any] = None
-):
-    """Use dateparser to parse a wide variety of dates.
+) -> datetime.datetime:
+    """
+    Use dateparser to parse a wide variety of dates.
 
     Used for start and end dates.
 
     Parameters
     ----------
-    dstr : str
+    dstr
         The date string to parse.
-    strftime : str
+    strftime
         The format to return the date string in.
-    settings : dict
+    settings
         The settings to use for dateparser.parse.
 
     Returns
     -------
-    parsedate : datetime.datetime
+    parsedate
         The parsed date.
     """
     # The API should boomerang a datetime.datetime instance and None.
@@ -850,17 +860,18 @@ def parsedate(
     return pdate if strftime is None else pdate.strftime(strftime)
 
 
-def about(name):
-    """Print generic 'about' information used across all toolboxes.
+def about(name: str):
+    """
+    Print generic 'about' information used across all toolboxes.
 
     Parameters
     ----------
-    name : str
+    name
         The name of the package to print information for.
 
     Returns
     -------
-    about : None
+    about
         Prints information to stdout.
     """
     dist = distribution(name.split(".")[0])
@@ -882,18 +893,19 @@ def about(name):
 
 
 def _round_index(ntsd: DataFrame, round_index: Optional[str] = None) -> DataFrame:
-    """Round the index, typically time, to the nearest interval.
+    """
+    Round the index, typically time, to the nearest interval.
 
     Parameters
     ----------
-    ntsd : DataFrame
+    ntsd
         The dataframe to round the index of.
-    round_index : str
+    round_index
         The interval to round the index to.
 
     Returns
     -------
-    _round_index : DataFrame
+    _round_index
         The dataframe with the rounded index.
     """
     if round_index is None:
@@ -903,20 +915,21 @@ def _round_index(ntsd: DataFrame, round_index: Optional[str] = None) -> DataFram
     return ntsd
 
 
-def _pick_column_or_value(tsd, var):
-    """Return a keyword value or a time-series.
+def _pick_column_or_value(tsd: DataFrame, var):
+    """
+    Return a keyword value or a time-series.
 
     Parameters
     ----------
-    tsd : DataFrame
+    tsd
         The time-series dataframe that contains the column `var`.  If `var`
         is not a column in `tsd`, then it is assumed to be a value.
-    var : str
+    var
         The column name to return from `tsd`.
 
     Returns
     -------
-    _pick_column_or_value : DataFrame or float
+    _pick_column_or_value
         The column from `tsd` or the value of `var`.
     """
     try:
@@ -928,27 +941,32 @@ def _pick_column_or_value(tsd, var):
 
 
 def make_list(
-    *strorlist, n: Optional[int] = None, sep: str = ",", flat: bool = True
+    *strorlist: Union[str, List],
+    n: Optional[int] = None,
+    sep: str = ",",
+    flat: bool = True,
 ) -> Any:
-    """Normalize strings, converting to numbers or lists.
+    """
+    Normalize strings, converting to numbers or lists.
 
     Parameters
     ----------
-    strorlist : str or list
+    strorlist
         The string or list to normalize.
-    n : int
+    n
         The number of elements to return.  If None, then return all
         elements.
-    sep : str
+    sep
         The separator to use when splitting a string.
-    flat : bool
+    flat
         Whether to flatten the list.
 
     Returns
     -------
-    make_list : list
+    make_list
         The normalized list.
     """
+    # Pre-process
     if isinstance(strorlist, (list, tuple)) and flat:
         strorlist = flatten(strorlist)
 
@@ -956,6 +974,15 @@ def make_list(
         # Normalize lists and tuples of length 1 to scalar for
         # further processing.
         strorlist = strorlist[0]
+
+    if isinstance(strorlist, (int, float)):
+        # 1      -> [1]
+        # 1.2    -> [1.2]
+        strorlist = [strorlist]
+
+    # Boomerang
+    if isinstance(strorlist, Path):
+        return [strorlist]
 
     if isinstance(strorlist, (pd.DataFrame, pd.Series)):
         return [pd.DataFrame(strorlist)]
@@ -969,11 +996,6 @@ def make_list(
         # 'None' -> None
         # ''     -> None
         return None
-
-    if isinstance(strorlist, (int, float)):
-        # 1      -> [1]
-        # 1.2    -> [1.2]
-        strorlist = [strorlist]
 
     if isinstance(strorlist, (StringIO, BytesIO)):
         return strorlist
@@ -991,13 +1013,11 @@ def make_list(
         # Deal with str or bytes.
         strorlist = strorlist.strip()
 
-        if isinstance(strorlist, str):
-            if "\r" in strorlist or "\n" in strorlist:
-                return [StringIO(strorlist)]
+        if isinstance(strorlist, str) and ("\r" in strorlist or "\n" in strorlist):
+            return [StringIO(strorlist)]
 
-        if isinstance(strorlist, bytes):
-            if b"\r" in strorlist or b"\n" in strorlist:
-                return [BytesIO(strorlist)]
+        if isinstance(strorlist, bytes) and (b"\r" in strorlist or b"\n" in strorlist):
+            return [BytesIO(strorlist)]
 
         strorlist = strorlist.split(
             sep if isinstance(strorlist, str) else bytes(sep, encoding="utf8")
@@ -1030,20 +1050,18 @@ def make_list(
     ret = []
 
     for each in strorlist:
-        if isinstance(each, (type(None), int, float, pd.DataFrame, pd.Series)):
+        if isinstance(each, (type(None), int, float, pd.DataFrame, pd.Series, Path)):
             ret.append(each)
-
             continue
 
         if not flat and isinstance(each, list):
             ret.append(each)
-
             continue
 
         if each is None or each.strip() == "" or each == "None":
             ret.append(None)
-
             continue
+
         try:
             ret.append(int(each))
         except ValueError:
@@ -1055,14 +1073,15 @@ def make_list(
     return ret
 
 
-def make_iloc(columns, col_list):
-    """Imitates the .ix option with subtracting 1 to convert.
+def make_iloc(columns: List, col_list: List):
+    """
+    Imitates the .ix option with subtracting 1 to convert.
 
     Parameters
     ----------
-    columns : list
+    columns
         The list of column names.
-    col_list : list
+    col_list
         The list of column names or indices.
 
     Returns
@@ -1287,17 +1306,18 @@ def _normalize_units(
     return memory_optimize(ntsd)
 
 
-def get_default_args(func):
-    """Get default arguments of the function through inspection.
+def get_default_args(func: Callable) -> Dict[str, Any]:
+    """
+    Get default arguments of the function through inspection.
 
     Parameters
     ----------
-    func : callable
+    func
         The function to inspect.
 
     Returns
     -------
-    get_default_args : dict
+    get_default_args
         A dictionary of the default arguments of the function.
     """
     signature = inspect.signature(func)
@@ -1309,19 +1329,20 @@ def get_default_args(func):
     }
 
 
-def transform_args(**trans_func_for_arg):
-    """Transforms function arguments before calling the function.
+def transform_args(**trans_func_for_arg: Dict) -> Callable:
+    """
+    Transforms function arguments before calling the function.
 
     Works with plain functions and bounded methods.
 
     Parameters
     ----------
-    trans_func_for_arg : dict
+    trans_func_for_arg
         Dictionary of functions keyed to argument names.
 
     Returns
     -------
-    transform_args_decorator : callable
+    transform_args_decorator
         Decorator that transforms function arguments before calling the
         function.
     """
@@ -1382,7 +1403,8 @@ def common_kwds(
     usecols: Optional[List[Union[int, str]]] = None,
     por: bool = False,
 ):
-    """Process all common_kwds across sub-commands into single function.
+    """
+    Process all common_kwds across sub-commands into single function.
 
     Parameters
     ----------
@@ -1473,20 +1495,21 @@ def common_kwds(
     return ntsd
 
 
-def _pick(tsd: DataFrame, columns: Any) -> DataFrame:
-    """Pick columns from a DataFrame.
+def _pick(tsd: DataFrame, columns: List[Union[str, int]]) -> DataFrame:
+    """
+    Pick columns from a DataFrame.
 
     Parameters
     ----------
     tsd : pandas.DataFrame
         DataFrame to pick columns from.
-    columns : list of str or int
+    columns
         Columns to pick.  Very important - I set the first data column
         number to 1!
 
     Returns
     -------
-    tsd : pandas.DataFrame
+    tsd
         DataFrame with only the columns specified.
     """
     columns = make_list(columns)
@@ -1568,23 +1591,24 @@ def _date_slice(
     end_date: Optional[str] = None,
     por=False,
 ) -> DataFrame:
-    """Private function to slice time series.
+    """
+    Private function to slice time series.
 
     Parameters
     ----------
-    input_tsd : pandas.DataFrame
+    input_tsd
         DataFrame to slice.
-    start_date : str or pandas.Timestamp, optional
+    start_date
         Start date of slice.  If None, use first date in input_tsd.
-    end_date : str or pandas.Timestamp, optional
+    end_date
         End date of slice.  If None, use last date in input_tsd.
-    por : bool, optional
+    por
         If True, set start_date to first day of year and end_date to last
         day of year.
 
     Returns
     -------
-    _data_slice : pandas.DataFrame
+    _data_slice
         Sliced DataFrame.
     """
     if input_tsd.index.inferred_type == "datetime64":
@@ -1638,7 +1662,8 @@ _WEEKLIES = {0: "MON", 1: "TUE", 2: "WED", 3: "THU", 4: "FRI", 5: "SAT", 6: "SUN
 
 
 def asbestfreq(data: DataFrame, force_freq: Optional[str] = None) -> DataFrame:
-    """Test to determine best frequency to represent data.
+    """
+    Test to determine best frequency to represent data.
 
     This uses several techniques.
     0.5.  If index is not DateTimeIndex, return
@@ -1653,14 +1678,14 @@ def asbestfreq(data: DataFrame, force_freq: Optional[str] = None) -> DataFrame:
 
     Parameters
     ----------
-    data : pandas.DataFrame
+    data
         DataFrame to test.
-    force_freq : str, optional
+    force_freq
         Force the frequency to this value.
 
     Returns
     -------
-    asbestfreq : pandas.DataFrame
+    asbestfreq
         DataFrame with index set to best frequency.
     """
     if not isinstance(data.index, pd.DatetimeIndex):
@@ -1765,11 +1790,12 @@ def asbestfreq(data: DataFrame, force_freq: Optional[str] = None) -> DataFrame:
 def dedup_index(
     idx: List[str], fmt: Optional[Any] = None, ignore_first: bool = True
 ) -> Index:
-    """Remove duplicate values in list.
+    """
+    Remove duplicate values in list.
 
     Parameters
     ----------
-    idx : List[str]
+    idx
         List of strings.
     fmt
         A string format that receives two arguments: name and a counter. By
@@ -1779,7 +1805,7 @@ def dedup_index(
 
     Returns
     -------
-    dedup_index : Index
+    dedup_index
         A pandas index with duplicate values removed.
     """
     idx = pd.Series(idx)
@@ -1797,18 +1823,19 @@ def dedup_index(
 
 @validate_call
 def renamer(column_names: str, suffix: Optional[str] = "") -> str:
-    """Print the suffix into the third ":" separated field of the header.
+    """
+    Print the suffix into the third ":" separated field of the header.
 
     Parameters
     ----------
-    column_names : str
+    column_names
         The location of the time series.
-    suffix : str, optional
+    suffix
         The suffix to be added to the location.
 
     Returns
     -------
-    renamer : str
+    renamer
         The new location with the suffix added.
     """
     if suffix is None:
@@ -1827,34 +1854,35 @@ def renamer(column_names: str, suffix: Optional[str] = "") -> str:
 
 # Utility
 def print_input(
-    iftrue,
-    intds,
-    output,
-    suffix="",
-    date_format=None,
-    float_format="g",
-    tablefmt="csv",
-    showindex="never",
+    iftrue: bool,
+    intds: DataFrame,
+    output: DataFrame,
+    suffix: str = "",
+    date_format: str = None,
+    float_format: str = "g",
+    tablefmt: str = "csv",
+    showindex: str = "never",
 ):
-    """Print the input time series also.
+    """
+    Print the input time series also.
 
     Parameters
     ----------
-    iftrue : bool
+    iftrue
         If true, print the input time series also.
-    intds : DataFrame
+    intds
         The input time series.
-    output : DataFrame
+    output
         The output time series.
-    suffix : str, optional
+    suffix
         The suffix to be added to the column names.
-    date_format : str, optional
+    date_format
         The date format to be used.
-    float_format : str, optional
+    float_format
         The float format to be used.
-    tablefmt : str, optional
+    tablefmt
         The table format to be used.
-    showindex : str, optional
+    showindex
         Include the index.
     """
     return printiso(
@@ -1874,26 +1902,27 @@ def return_input(
     reverse_index: bool = False,
     output_names: Optional[List] = None,
 ) -> DataFrame:
-    """Return the input time series also with the output dataframe.
+    """
+    Return the input time series also with the output dataframe.
 
     Parameters
     ----------
-    iftrue : bool
+    iftrue
         If true, print the input time series also.
-    intds : DataFrame
+    intds
         The input time series.
-    output : DataFrame
+    output
         The output time series.
-    suffix : str, optional
+    suffix
         The suffix to be added to the column names.
-    reverse_index : bool, optional
+    reverse_index
         Reverse the index.
-    output_names : List, optional
+    output_names
         The names of the output columns.
 
     Returns
     -------
-    return_input : DataFrame
+    return_input
         The input time series also with the output dataframe.
     """
 
@@ -2001,7 +2030,8 @@ printiso = _printiso
 
 
 def open_local(filein: str) -> TextIOWrapper:
-    """Open the given input file.
+    """
+    Open the given input file.
 
     It can decode various formats too, such as gzip and bz2.
     """
@@ -2017,7 +2047,8 @@ def open_local(filein: str) -> TextIOWrapper:
 
 
 def reduce_mem_usage(props):
-    """Kept here, but was too aggressive in terms of setting the dtype.
+    """
+    Kept here, but was too aggressive in terms of setting the dtype.
 
     Not used any longer.
     """
@@ -2065,7 +2096,8 @@ def reduce_mem_usage(props):
 
 
 def memory_optimize(tsd: DataFrame) -> DataFrame:
-    """Convert all columns to known types.
+    """
+    Convert all columns to known types.
 
     "convert_dtypes" replaced some code here such that the
     "memory_optimize" function might go away.  Kept in case want to add
@@ -2105,34 +2137,34 @@ def read_iso_ts(
     usecols=None,
     **kwds,
 ) -> pd.DataFrame:
-    """Read the format printed by 'printiso' and maybe other formats.
+    """
+    Read the format printed by 'printiso' and maybe other formats.
 
     Parameters
     ----------
-    *inindat : str, bytes, StringIO, file pointer, file name, DataFrame,
-           Series, tuple, list, dict
+    *inindat
         The input data.
-    dropna : {"no", "any", "all"}, default None
+    dropna
         If "no", do not drop any rows.  If "any", drop rows with any
         missing values.  If "all", drop rows with all missing values.
-    extended_columns : bool, default False
+    extended_columns
         If True, then the first row of the input data is a list of
         column names.  If False, then the first row of the input data
         is a list of column numbers.
-    parse_dates : bool, default True
+    parse_dates
         If True, then convert the index to a datetime index.
-    skiprows : int, list of int, or callable, optional
+    skiprows
         Line numbers to skip (0-indexed) or number of lines to skip
         (int) at the start of the file.  If callable, the callable
         function will be evaluated against the row indices, returning
         True if the row should be skipped and False otherwise.
-    index_type : {"datetime", "number"}, default "datetime"
+    index_type
         If "datetime", then the index is a datetime index.  If
         "number", then the index is a number index.
-    names : str, optional
+    names
         List of column names to use.  If file contains no header row,
         then you should explicitly pass header=None.
-    header : int, str, list of int, default "infer"
+    header
         Row number(s) to use as the column names, and the start of the
         data.  Default behavior is to infer the column names: if no
         names are passed the behavior is identical to header=0 and
@@ -2140,17 +2172,17 @@ def read_iso_ts(
         column names are passed explicitly then the behavior is
         identical to header=None. Explicitly pass header=0 to be able
         to replace existing names.
-    sep : str, default ","
+    sep
         Delimiter to use.  If sep is None, will try to automatically
         determine this.  Separators longer than 1 character and
         different from '\\s+' will be interpreted as regular
         expressions, will force use of the python parsing engine and
         will ignore quotes in the data.  Regex example: '\r\t'.
-    index_col : int, str, sequence of int / str, or False, default 0
+    index_col
         Column(s) to use as the row labels of the DataFrame, either
         given as string name or column index.  If a sequence of int /
         str is given, a MultiIndex is used.
-    usecols : list-like or callable, optional
+    usecols
         Return a subset of the columns.  If list-like, all elements
         must either be positional (i.e. integer indices into the
         document columns) or strings that correspond to column names
@@ -2168,7 +2200,7 @@ def read_iso_ts(
         example of a valid callable argument would be lambda x:
         x.upper() in ['AAA', 'BBB', 'DDD'].  Using this parameter
         results in much faster parsing time and lower memory usage.
-    **kwds : optional
+    **kwds
         Any additional keyword arguments are passed to
         pandas.read_csv().
 
@@ -2540,12 +2572,13 @@ def read_iso_ts(
 
 
 @validate_call
-def range_to_numlist(rangestr: Union[str, int, list]) -> list:
-    """Convert a range string to a list of numbers.
+def range_to_numlist(rangestr: Union[str, int, List]) -> List:
+    """
+    Convert a range string to a list of numbers.
 
     Parameters
     ----------
-    rangestr : str
+    rangestr
         A string containing a range of numbers.  The range can be a single
         number, a range of numbers separated by a colon, or a list of
         ranges separated by a plus sign.  Examples: "1", "1:4",
@@ -2553,7 +2586,7 @@ def range_to_numlist(rangestr: Union[str, int, list]) -> list:
 
     Returns
     -------
-    range_to_numlist : list
+    range_to_numlist
         A list of numbers.
     """
     if isinstance(rangestr, int):
