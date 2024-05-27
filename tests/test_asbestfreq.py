@@ -1,3 +1,5 @@
+import re
+
 import pandas as pd
 import pytest
 
@@ -32,14 +34,20 @@ def create_test_data(start, periods, freq, columns=["value"]):
     [
         # Happy path tests
         pytest.param(create_test_data("2021-01-01", 10, "D"), "D", id="daily_freq"),
-        pytest.param(create_test_data("2021-01-01", 10, "M"), "M", id="monthly_freq"),
         pytest.param(
-            create_test_data("2021-01-01", 10, "A"), "A-DEC", id="annual_freq"
+            create_test_data("2021-01-01", 10, "M"), "(ME|M)", id="monthly_freq"
+        ),
+        pytest.param(
+            create_test_data("2021-01-01", 10, "A"), "(YE-DEC|A-DEC)", id="annual_freq"
         ),
         # Edge cases
-        pytest.param(create_test_data("2021-01-01", 10, "5H"), "5H", id="5_hour_freq"),
         pytest.param(
-            create_test_data("2021-01-01", 10, "15T"), "15T", id="15_minute_freq"
+            create_test_data("2021-01-01", 10, "5H"), "(5h|5H)", id="5_hour_freq"
+        ),
+        pytest.param(
+            create_test_data("2021-01-01", 10, "15T"),
+            "(15min|15T)",
+            id="15_minute_freq",
         ),
         # Error cases
         pytest.param(
@@ -69,4 +77,4 @@ def test_asbestfreq(test_input, expected):
 
     # Assert
     if not isinstance(expected, type):
-        assert result.index.freqstr == expected
+        assert re.compile(expected).match(result.index.freqstr) is not None
