@@ -8,6 +8,7 @@ import os
 import platform
 import sys
 from ast import literal_eval
+from collections import OrderedDict
 from contextlib import suppress
 from functools import reduce, wraps
 from importlib.metadata import distribution
@@ -875,21 +876,23 @@ def about(name: str):
         Prints information to stdout.
     """
     dist = distribution(name.split(".")[0])
-    print(f"package name = {dist.name}")
-    print(f"package version = {dist.version}")
-    print(f"platform architecture = {platform.architecture()}")
-    print(f"platform machine = {platform.machine()}")
-    print(f"platform = {platform.platform()}")
-    print(f"platform processor = {platform.processor()}")
-    print(f"platform python_build = {platform.python_build()}")
-    print(f"platform python_compiler = {platform.python_compiler()}")
-    print(f"platform python branch = {platform.python_branch()}")
-    print(f"platform python implementation = {platform.python_implementation()}")
-    print(f"platform python revision = {platform.python_revision()}")
-    print(f"platform python version = {platform.python_version()}")
-    print(f"platform release = {platform.release()}")
-    print(f"platform system = {platform.system()}")
-    print(f"platform version = {platform.version()}")
+    about_dict = OrderedDict()
+    about_dict["package_name"] = dist.name
+    about_dict["package_version"] = dist.version
+    about_dict["platform_architecture"] = platform.architecture()
+    about_dict["platform_machine"] = platform.machine()
+    about_dict["platform"] = platform.platform()
+    about_dict["platform_processor"] = platform.processor()
+    about_dict["platform_python_build"] = platform.python_build()
+    about_dict["platform_python_compiler"] = platform.python_compiler()
+    about_dict["platform_python_branch"] = platform.python_branch()
+    about_dict["platform_python_implementation"] = platform.python_implementation()
+    about_dict["platform_python_revision"] = platform.python_revision()
+    about_dict["platform_python_version"] = platform.python_version()
+    about_dict["platform_release"] = platform.release()
+    about_dict["platform_system"] = platform.system()
+    about_dict["platform_version"] = platform.version()
+    return about_dict
 
 
 def _round_index(ntsd: DataFrame, round_index: Optional[str] = None) -> DataFrame:
