@@ -22,8 +22,9 @@ dependencies = [
     "scipy",
     "tabulate"
 ]
-# Unused dependencies found: matplotlib, odfpy, openpyxl, pint, pyxlsb, tables, typing-extensions, xlrd, xlsxwriter
-# that should be added to the projects that depend on this toolbox_utils.
+# Unused dependencies found: matplotlib, odfpy, openpyxl, pint, pyxlsb, tables,
+# typing-extensions, xlrd, xlsxwriter that should be added to the projects that
+# depend on this toolbox_utils.
 authors = [
     {name = "Tim Cera", email = "tim@cerazone.net"}
 ]
@@ -41,6 +42,7 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Topic :: Scientific/Engineering :: Information Analysis",
     "Topic :: Scientific/Engineering",
     "Topic :: Software Development :: Libraries :: Python Modules"
