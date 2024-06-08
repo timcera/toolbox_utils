@@ -6,6 +6,7 @@ import gzip
 import inspect
 import os
 import platform
+import shlex
 import sys
 from ast import literal_eval
 from collections import OrderedDict
@@ -41,7 +42,6 @@ from tabulate import tabulate as tb
 from .readers.hbn import hbn_extract as hbn
 from .readers.plotgen import plotgen_extract as plotgen
 from .readers.wdm import wdm_extract as wdm
-from .tssplit.tssplit import tssplit
 
 # This is here so that linters don't remove the pint_pandas import which is
 # needed to use pint in pandas
@@ -2125,6 +2125,18 @@ def is_valid_url(url: Union[bytes, str], qualifying: Optional[Any] = None) -> bo
     return all(getattr(token, qualifying_attr) for qualifying_attr in qualifying)
 
 
+def normalize_list(parameters: List[str]) -> List[str]:
+    if isinstance(parameters, str):
+        parameters = shlex.split(parameters)
+    nparams = []
+    for param in parameters:
+        if ":" in param:
+            nparams.extend(param.split(":"))
+        else:
+            nparams.append(param)
+    return [i.strip() for i in shlex.split(" ".join(nparams))]
+
+
 @validate_call
 def read_iso_ts(
     *inindat,
@@ -2267,13 +2279,10 @@ def read_iso_ts(
         inindat = inindat[0]
     sources = make_list(inindat, sep=" ", flat=False)
 
-    if not isinstance(sources, (list, tuple)):
-        sources = [sources]
     lresult_list = []
     zones = set()
     result = pd.DataFrame()
     stdin_df = pd.DataFrame()
-
     for source_index, source in enumerate(sources):
         res = pd.DataFrame()
         parameters = make_list(source)
@@ -2283,13 +2292,12 @@ def read_iso_ts(
         else:
             fname = parameters
             parameters = []
-        # Python API
 
+        # Python API
         if isinstance(fname, pd.DataFrame):
             res = fname[parameters] if parameters else fname
         elif isinstance(fname, (pd.Series, dict)):
             res = pd.DataFrame(inindat)
-
         elif isinstance(fname, (tuple, list, float)):
             res = pd.DataFrame({f"values{source_index}": fname}, index=[0])
 
@@ -2298,27 +2306,9 @@ def read_iso_ts(
             # Store keywords for each source.
             parameters = [str(p) for p in parameters]
 
-            args = []
+            args = [i for i in parameters if "=" not in i]
 
-            for prm in parameters:
-                if "=" in prm:
-                    break
-                args.append(prm)
-
-            parameters = parameters[len(args) :]
-
-            newkwds_list = tssplit(
-                ",".join(parameters),
-                quote="[]",
-                quote_keep=True,
-                delimiter=",",
-            )
-            newkwds_list = [i.split("=") for i in newkwds_list]
-
-            if newkwds_list[0][0]:
-                newkwds = {k: literal_eval(v) for k, v in newkwds_list}
-            else:
-                newkwds = {}
+            newkwds = {k: v for k, v in [i.split("=") for i in parameters if "=" in i]}
 
             # Command line API
             # Uses hspf_reader or pd.read_* functions.
