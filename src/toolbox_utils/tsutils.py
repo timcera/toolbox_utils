@@ -6,9 +6,7 @@ import gzip
 import inspect
 import os
 import platform
-import shlex
 import sys
-from ast import literal_eval
 from collections import OrderedDict
 from contextlib import suppress
 from functools import reduce, wraps
@@ -757,7 +755,7 @@ def doc(fdict: dict) -> Callable:
     return outer_func
 
 
-@validate_call(config=dict(arbitrary_types_allowed=True))
+@validate_call(config={"arbitrary_types_allowed": True})
 @doc(docstrings)
 def set_plotting_position(
     cnt: Union[int, int64],
@@ -1183,8 +1181,7 @@ def _normalize_units(
     target_units = make_list(target_units, n=len(ntsd.columns))
     if target_units is None:
         return ntsd
-    else:
-        target_units = ["" if i is None else i for i in target_units]
+    target_units = ["" if i is None else i for i in target_units]
 
     isource_units = make_list(source_units, n=len(ntsd.columns))
     if isource_units is not None:
@@ -2125,18 +2122,6 @@ def is_valid_url(url: Union[bytes, str], qualifying: Optional[Any] = None) -> bo
     return all(getattr(token, qualifying_attr) for qualifying_attr in qualifying)
 
 
-def normalize_list(parameters: List[str]) -> List[str]:
-    if isinstance(parameters, str):
-        parameters = shlex.split(parameters)
-    nparams = []
-    for param in parameters:
-        if ":" in param:
-            nparams.extend(param.split(":"))
-        else:
-            nparams.append(param)
-    return [i.strip() for i in shlex.split(" ".join(nparams))]
-
-
 @validate_call
 def read_iso_ts(
     *inindat,
@@ -2308,7 +2293,7 @@ def read_iso_ts(
 
             args = [i for i in parameters if "=" not in i]
 
-            newkwds = {k: v for k, v in [i.split("=") for i in parameters if "=" in i]}
+            newkwds = dict([i.split("=") for i in parameters if "=" in i])
 
             # Command line API
             # Uses hspf_reader or pd.read_* functions.
