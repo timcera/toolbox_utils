@@ -2244,7 +2244,6 @@ def read_iso_ts(
 
     # Would want this to be more generic...
     na_values = []
-
     for spc in range(20)[1:]:
         spcs = " " * spc
         na_values.extend([spcs, f"{spcs}nan"])
@@ -2270,7 +2269,13 @@ def read_iso_ts(
     stdin_df = pd.DataFrame()
     for source_index, source in enumerate(sources):
         res = pd.DataFrame()
-        parameters = make_list(source)
+
+        try:
+            source = source.replace("[", ";[").replace("]", "];").split(";")
+        except TypeError:
+            source = source.replace(b"[", b";[").replace(b"]", b"];").split(b";")
+
+        parameters = [make_list(i) for i in source][0]
 
         if isinstance(parameters, list) and parameters:
             fname = parameters.pop(0)
