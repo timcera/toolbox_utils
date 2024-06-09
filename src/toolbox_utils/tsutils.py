@@ -2270,10 +2270,13 @@ def read_iso_ts(
     for source_index, source in enumerate(sources):
         res = pd.DataFrame()
 
-        try:
-            source = source.replace("[", ";[").replace("]", "];").split(";")
-        except TypeError:
-            source = source.replace(b"[", b";[").replace(b"]", b"];").split(b";")
+        if isinstance(source, pd.DataFrame):
+            source = make_list(source)
+        else:
+            try:
+                source = source.replace("[", ";[").replace("]", "];").split(";")
+            except TypeError:
+                source = source.replace(b"[", b";[").replace(b"]", b"];").split(b";")
 
         parameters = [make_list(i) for i in source][0]
 
