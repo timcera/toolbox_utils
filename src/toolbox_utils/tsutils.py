@@ -2331,7 +2331,7 @@ def read_iso_ts(
                 parameters = re.split(rb",\s*(?![^\[\]]*\))", source)
         else:
             parameters = make_list(source)
-        print(parameters)
+
         if isinstance(parameters, list) and parameters:
             fname = parameters.pop(0)
         else:
