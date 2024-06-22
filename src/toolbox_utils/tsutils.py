@@ -2325,10 +2325,7 @@ def read_iso_ts(
     for source_index, source in enumerate(sources):
         res = pd.DataFrame()
         if isinstance(source, str):
-            try:
-                parameters = re.split(r",\s*(?![^\[\]]*\))", source)
-            except TypeError:
-                parameters = re.split(rb",\s*(?![^\[\]]*\))", source)
+            parameters = re.split(r",(?![^\[]*\])", source)
         else:
             parameters = make_list(source)
 
