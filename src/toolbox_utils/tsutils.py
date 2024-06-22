@@ -6,6 +6,7 @@ import gzip
 import inspect
 import os
 import platform
+import re
 import sys
 from ast import literal_eval
 from collections import OrderedDict
@@ -2323,8 +2324,14 @@ def read_iso_ts(
     stdin_df = pd.DataFrame()
     for source_index, source in enumerate(sources):
         res = pd.DataFrame()
-        parameters = make_list(source)
-
+        if isinstance(source, str):
+            try:
+                parameters = re.split(r",\s*(?![^\[\]]*\))", source)
+            except TypeError:
+                parameters = re.split(rb",\s*(?![^\[\]]*\))", source)
+        else:
+            parameters = make_list(source)
+        print(parameters)
         if isinstance(parameters, list) and parameters:
             fname = parameters.pop(0)
         else:
