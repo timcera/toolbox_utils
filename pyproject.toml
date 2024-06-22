@@ -3,8 +3,7 @@ build-backend = "setuptools.build_meta"
 requires = [
     "setuptools>=45",
     "setuptools_scm[toml]>=6.2",
-    "wheel",
-    "oldest-supported-numpy"
+    "wheel"
 ]
 
 [project]
@@ -13,10 +12,9 @@ dynamic = ["readme", "version"]
 description = "Python toolbox for common utilities"
 dependencies = [
     "dateparser",
-    "numpy",
+    "numpy >= 1.20, < 2.0 ; python_version <= '3.9'",
     "pandas[excel]",
-    "pint!=0.21.*",
-    "pint<0.22; python_version < '3.9'",
+    "pint != 0.21.*, < 0.22 ; python_version < '3.9'",
     "pint-pandas",
     "pydantic",
     "scipy",
@@ -57,34 +55,6 @@ keywords = [
 license = {text = "BSD-3-Clause"}
 requires-python = ">=3.8"
 
-[project.optional-dependencies]
-dev = [
-    "bandit",
-    "black",
-    "blacken-docs",
-    "black-nbconvert",
-    "cleanpy",
-    "commitizen",
-    "coverage[toml]",
-    "isort",
-    "mypy",
-    "pre-commit",
-    "pyflakes",
-    "pylama",
-    "pyle",
-    "pylint",
-    "pyre",
-    "pyroma",
-    "pytest",
-    "pytest-cov",
-    "pytest-mpl",
-    "pyupgrade",
-    "twine",
-    "unimport",
-    "velin",
-    "vulture"
-]
-
 [project.urls]
 documentation = "https://timcera.bitbucket.io/toolbox_utils/docs/index.html#toolbox_utils-documentation"
 github = "https://github.com/timcera/toolbox_utils"
@@ -108,6 +78,9 @@ version_files = ["VERSION"]
 [tool.isort]
 profile = "black"
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
 [tool.setuptools]
 license-files = ["LICENSE.txt"]
 include-package-data = true
@@ -117,7 +90,6 @@ readme = {file = "README.rst"}
 version = {file = "VERSION"}
 
 [tool.setuptools.packages.find]
-exclude = ["tests*", "examples*", "tools*", "docs*", "toolbox_utils.tests*"]
 where = ["src"]
 
 [tool.setuptools_scm]

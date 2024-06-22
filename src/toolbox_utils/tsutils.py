@@ -7,6 +7,7 @@ import inspect
 import os
 import platform
 import sys
+from ast import literal_eval
 from collections import OrderedDict
 from contextlib import suppress
 from functools import reduce, wraps
@@ -44,6 +45,59 @@ from .readers.wdm import wdm_extract as wdm
 # This is here so that linters don't remove the pint_pandas import which is
 # needed to use pint in pandas
 _ = pint_pandas.version("pint")
+
+new_to_old_freq = {}
+major, minor = pd.__version__.split(".")[:2]
+if (int(major) + int(minor) / 10) < 2.2:
+    #
+    # +--------------+--------------+
+    # | Old          | New          |
+    # +==============+==============+
+    # | A            | Y            |
+    # +--------------+--------------+
+    # | M            | ME           |
+    # +--------------+--------------+
+    # | H            | h            |
+    # +--------------+--------------+
+    # | BH           | bh           |
+    # +--------------+--------------+
+    # | CBH          | cbh          |
+    # +--------------+--------------+
+    # | T            | min          |
+    # +--------------+--------------+
+    # | S            | s            |
+    # +--------------+--------------+
+    # | L            | ms           |
+    # +--------------+--------------+
+    # | U            | us           |
+    # +--------------+--------------+
+    # | N            | ns           |
+    # +--------------+--------------+
+    #
+    new_to_old_freq = {
+        "Y": "A",
+        "ME": "M",
+        "h": "H",
+        "bh": "BH",
+        "cbh": "CBH",
+        "min": "T",
+        "s": "S",
+        "ms": "L",
+        "us": "U",
+        "ns": "N",
+        "YE-JAN": "A-JAN",
+        "YE-FEB": "A-FEB",
+        "YE-MAR": "A-MAR",
+        "YE-APR": "A-APR",
+        "YE-MAY": "A-MAY",
+        "YE-JUN": "A-JUN",
+        "YE-JUL": "A-JUL",
+        "YE-AUG": "A-AUG",
+        "YE-SEP": "A-SEP",
+        "YE-OCT": "A-OCT",
+        "YE-NOV": "A-NOV",
+        "YE-DEC": "A-DEC",
+    }
 
 
 def normalize_command_line_args(args: List) -> List:
@@ -1718,21 +1772,21 @@ def asbestfreq(data: DataFrame, force_freq: Optional[str] = None) -> DataFrame:
     # At this point pd.infer_freq failed probably because of missing values.
     # The following algorithm would not capture things like BQ, BQS
     # ...etc.
-    if np.alltrue(data.index.is_year_end):
+    if np.all(data.index.is_year_end):
         infer_freq = "A"
-    elif np.alltrue(data.index.is_year_start):
+    elif np.all(data.index.is_year_start):
         infer_freq = "AS"
-    elif np.alltrue(data.index.is_quarter_end):
+    elif np.all(data.index.is_quarter_end):
         infer_freq = "Q"
-    elif np.alltrue(data.index.is_quarter_start):
+    elif np.all(data.index.is_quarter_start):
         infer_freq = "QS"
-    elif np.alltrue(data.index.is_month_end):
+    elif np.all(data.index.is_month_end):
         if np.all(data.index.month == data.index[0].month):
             # Actually yearly with different ends
             infer_freq = f"A-{_ANNUALS[data.index[0].month]}"
         else:
             infer_freq = "M"
-    elif np.alltrue(data.index.is_month_start):
+    elif np.all(data.index.is_month_start):
         if np.all(data.index.month == data.index[0].month):
             # Actually yearly with different start
             infer_freq = f"A-{_ANNUALS[data.index[0].month - 1]}"
@@ -2269,16 +2323,7 @@ def read_iso_ts(
     stdin_df = pd.DataFrame()
     for source_index, source in enumerate(sources):
         res = pd.DataFrame()
-
-        if isinstance(source, pd.DataFrame):
-            source = make_list(source)
-        else:
-            try:
-                source = source.replace("[", ";[").replace("]", "];").split(";")
-            except TypeError:
-                source = source.replace(b"[", b";[").replace(b"]", b"];").split(b";")
-
-        parameters = [make_list(i) for i in source][0]
+        parameters = make_list(source)
 
         if isinstance(parameters, list) and parameters:
             fname = parameters.pop(0)
@@ -2302,6 +2347,7 @@ def read_iso_ts(
             args = [i for i in parameters if "=" not in i]
 
             newkwds = dict([i.split("=") for i in parameters if "=" in i])
+            newkwds = {k: literal_eval(v) for k, v in newkwds.items()}
 
             # Command line API
             # Uses hspf_reader or pd.read_* functions.

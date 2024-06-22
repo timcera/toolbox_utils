@@ -1,5 +1,5 @@
 """
-catalog
+hbn
 ----------------------------------
 
 Tests for `hspf_reader hbn` module.
@@ -11,7 +11,7 @@ from unittest import TestCase
 import pandas as pd
 from pandas.testing import assert_frame_equal
 
-from toolbox_utils import tsutils
+import toolbox_utils
 
 
 class TestDescribe(TestCase):
@@ -69,11 +69,19 @@ class TestDescribe(TestCase):
 1999,1.40244
 2000,0.0191165
 """
-        self.extract = tsutils.asbestfreq(
+        self.extract = toolbox_utils.tsutils.asbestfreq(
             pd.read_csv(BytesIO(self.extract), header=0, index_col=0, parse_dates=True)
         )
         self.extract.index = self.extract.index.to_period()
 
     def test_extract_one_label_labellist_api(self):
-        out = tsutils.common_kwds("tests/data_yearly.hbn,yearly,,905,,AGWS")
+        out = toolbox_utils.tsutils.common_kwds(
+            "tests/data_yearly.hbn,yearly,,905,,AGWS"
+        )
+        assert_frame_equal(out, self.extract, check_dtype=False)
+
+    def test_extract_one_label_labellist_api_2(self):
+        out = toolbox_utils.readers.hbn.hbn_extract(
+            "tests/data_yearly.hbn", "yearly", ["", 905, "", "AGWS"]
+        )
         assert_frame_equal(out, self.extract, check_dtype=False)
