@@ -60,14 +60,6 @@ documentation = "https://timcera.bitbucket.io/toolbox_utils/docs/index.html#tool
 github = "https://github.com/timcera/toolbox_utils"
 bitbucket = "https://bitbucket.org/timcera/toolbox_utils/src/main/"
 
-[tool.check-manifest]
-ignore = [
-    "docs/_function_autosummary/*",
-    ".coverage",
-    ".deepsource.toml",
-    ".ipynb_checkpoints/*"
-]
-
 [tool.commitizen]
 name = "cz_conventional_commits"
 tag_format = "v$version"
