@@ -1,3 +1,14 @@
+## v5.1.4 (2024-06-24)
+
+### Fix
+
+- finally a version of re.split that does what I want
+- remove debugging print function call
+- only use re.split on strings
+- fix issues from removing tssplit
+- fix representation of dataframes as input_ts
+- fix of parsing list in strings
+
 ## v5.1.3 (2024-06-08)
 
 ### Fix
