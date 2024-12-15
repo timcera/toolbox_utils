@@ -47,58 +47,55 @@ from .readers.wdm import wdm_extract as wdm
 # needed to use pint in pandas
 _ = pint_pandas.version("pint")
 
-new_to_old_freq = {}
-major, minor = pd.__version__.split(".")[:2]
-if (int(major) + int(minor) / 10) < 2.2:
-    #
-    # +--------------+--------------+
-    # | Old          | New          |
-    # +==============+==============+
-    # | A            | Y            |
-    # +--------------+--------------+
-    # | M            | ME           |
-    # +--------------+--------------+
-    # | H            | h            |
-    # +--------------+--------------+
-    # | BH           | bh           |
-    # +--------------+--------------+
-    # | CBH          | cbh          |
-    # +--------------+--------------+
-    # | T            | min          |
-    # +--------------+--------------+
-    # | S            | s            |
-    # +--------------+--------------+
-    # | L            | ms           |
-    # +--------------+--------------+
-    # | U            | us           |
-    # +--------------+--------------+
-    # | N            | ns           |
-    # +--------------+--------------+
-    #
-    new_to_old_freq = {
-        "Y": "A",
-        "ME": "M",
-        "h": "H",
-        "bh": "BH",
-        "cbh": "CBH",
-        "min": "T",
-        "s": "S",
-        "ms": "L",
-        "us": "U",
-        "ns": "N",
-        "YE-JAN": "A-JAN",
-        "YE-FEB": "A-FEB",
-        "YE-MAR": "A-MAR",
-        "YE-APR": "A-APR",
-        "YE-MAY": "A-MAY",
-        "YE-JUN": "A-JUN",
-        "YE-JUL": "A-JUL",
-        "YE-AUG": "A-AUG",
-        "YE-SEP": "A-SEP",
-        "YE-OCT": "A-OCT",
-        "YE-NOV": "A-NOV",
-        "YE-DEC": "A-DEC",
-    }
+
+def pandas_offset_by_version(new_offset: str) -> str:
+    """
+    Convert the time offset code to match the version of pandas.
+
+    Parameters
+    ----------
+    offset
+        The offset to convert.
+
+    Returns
+    -------
+    offset_by_version
+        The offset converted to the correct version of pandas.
+    """
+    new_to_old_freq = {}
+    major, minor = pd.__version__.split(".")[:2]
+    if (int(major) + int(minor) / 10) < 2.2:
+        new_to_old_freq = {
+            "Y": "A",
+            "ME": "M",
+            "BME": "BM",
+            "SME": "SM",
+            "CBME": "CBM",
+            "QE": "Q",
+            "BQE": "BQ",
+            "BYE": "BY",
+            "h": "H",
+            "bh": "BH",
+            "cbh": "CBH",
+            "min": "T",
+            "s": "S",
+            "ms": "L",
+            "us": "U",
+            "ns": "N",
+            "YE-JAN": "A-JAN",
+            "YE-FEB": "A-FEB",
+            "YE-MAR": "A-MAR",
+            "YE-APR": "A-APR",
+            "YE-MAY": "A-MAY",
+            "YE-JUN": "A-JUN",
+            "YE-JUL": "A-JUL",
+            "YE-AUG": "A-AUG",
+            "YE-SEP": "A-SEP",
+            "YE-OCT": "A-OCT",
+            "YE-NOV": "A-NOV",
+            "YE-DEC": "A-DEC",
+        }
+    return new_to_old_freq.get(new_offset, new_offset)
 
 
 def normalize_command_line_args(args: List) -> List:
