@@ -18,11 +18,6 @@
     :target: https://pypi.python.org/pypi/toolbox_utils/
     :height: 20
 
-.. image:: http://img.shields.io/pypi/dd/toolbox_utils.svg
-    :alt: toolbox_utils downloads
-    :target: https://pypi.python.org/pypi/toolbox_utils/
-    :height: 20
-
 .. image:: https://img.shields.io/pypi/pyversions/toolbox_utils
     :alt: PyPI - Python Version
     :target: https://pypi.org/project/toolbox_utils/
