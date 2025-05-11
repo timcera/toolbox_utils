@@ -1,3 +1,9 @@
+## v5.2.0 (2025-05-10)
+
+### Feat
+
+- added pandas_offset_by_version function
+
 ## v5.1.4 (2024-06-24)
 
 ### Fix

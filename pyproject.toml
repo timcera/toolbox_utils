@@ -65,7 +65,7 @@ bitbucket = "https://bitbucket.org/timcera/toolbox_utils/src/main/"
 name = "cz_conventional_commits"
 tag_format = "v$version"
 update_changelog_on_bump = true
-version = "5.1.4"
+version = "5.2.0"
 version_files = ["VERSION"]
 
 [tool.isort]
