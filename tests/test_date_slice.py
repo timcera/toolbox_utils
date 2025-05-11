@@ -89,7 +89,9 @@ def test_date_slice(input_tsd, start_date, end_date, por, expected):
     input_tsd = pd.DataFrame(index=pd.to_datetime(input_tsd.index))
 
     # Act
-    if isinstance(expected, type) and issubclass(expected, Exception):
+    if isinstance(expected, tuple) or (
+        isinstance(expected, type) and issubclass(expected, Exception)
+    ):
         with pytest.raises(expected):
             _date_slice(input_tsd, start_date, end_date, por)
     else:
