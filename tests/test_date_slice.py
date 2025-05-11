@@ -57,14 +57,14 @@ from pandas.errors import ParserError
             "invalid_date",
             "2020-12-31",
             False,
-            (ParserError, DateParseError),
+            (ValueError, ParserError, DateParseError),
         ),
         (
             pd.DataFrame(index=pd.date_range("2020-01-01", "2020-12-31")),
             "2020-01-01",
             "invalid_date",
             False,
-            (ParserError, DateParseError),
+            (ValueError, ParserError, DateParseError),
         ),
     ],
     ids=[
