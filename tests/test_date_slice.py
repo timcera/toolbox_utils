@@ -1,6 +1,7 @@
 import pandas as pd
 import pytest
 from pandas._libs.tslibs.parsing import DateParseError
+from pandas.errors import ParserError
 
 
 @pytest.mark.parametrize(
@@ -56,14 +57,14 @@ from pandas._libs.tslibs.parsing import DateParseError
             "invalid_date",
             "2020-12-31",
             False,
-            DateParseError,
+            (ParserError, DateParseError),
         ),
         (
             pd.DataFrame(index=pd.date_range("2020-01-01", "2020-12-31")),
             "2020-01-01",
             "invalid_date",
             False,
-            DateParseError,
+            (ParserError, DateParseError),
         ),
     ],
     ids=[
