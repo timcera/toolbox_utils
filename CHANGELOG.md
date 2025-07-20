@@ -1,3 +1,10 @@
+## v5.2.1 (2025-07-20)
+
+### Fix
+
+- fix entries in pandas_offset_by_version
+- use pandas_offset_by_version to set offsets within toolbox_utils
+
 ## v5.2.0 (2025-05-10)
 
 ### Feat
