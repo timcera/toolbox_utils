@@ -1816,17 +1816,17 @@ def asbestfreq(data: DataFrame, force_freq: Optional[str] = None) -> DataFrame:
     ndiff = sorted(set(ndiff))
     ngcd = ndiff[0] if len(ndiff) == 1 else reduce(gcd, ndiff)
     if ngcd < 1000:
-        infer_freq = f"{ngcd}N"
+        infer_freq = f"{ngcd}{pandas_offset_by_version('n')}"
     elif ngcd < 1000000:
-        infer_freq = f"{ngcd // 1000}U"
+        infer_freq = f"{ngcd // 1000}{pandas_offset_by_version('u')}"
     elif ngcd < 1000000000:
-        infer_freq = f"{ngcd // 1000000}L"
+        infer_freq = f"{ngcd // 1000000}{pandas_offset_by_version('l')}"
     elif ngcd < 60000000000:
-        infer_freq = f"{ngcd // 1000000000}S"
+        infer_freq = f"{ngcd // 1000000000}{pandas_offset_by_version('s')}"
     elif ngcd < 3600000000000:
-        infer_freq = f"{ngcd // 60000000000}T"
+        infer_freq = f"{ngcd // 60000000000}{pandas_offset_by_version('min')}"
     elif ngcd < 86400000000000:
-        infer_freq = f"{ngcd // 3600000000000}H"
+        infer_freq = f"{ngcd // 3600000000000}{pandas_offset_by_version('h')}"
     elif ngcd < 604800000000000:
         infer_freq = f"{ngcd // 86400000000000}D"
     elif ngcd < 2419200000000000:
@@ -2556,7 +2556,7 @@ def read_iso_ts(
 
     if len(lresult_list) > 1:
         epoch = pd.to_datetime("2000-01-01")
-        moffset = epoch + to_offset("A")
+        moffset = epoch + to_offset(pandas_offset_by_version("YE"))
         offset_set = set()
 
         for res in lresult_list:
