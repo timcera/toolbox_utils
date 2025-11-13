@@ -1,3 +1,10 @@
+## v5.2.2 (2025-11-13)
+
+### Fix
+
+- use .where instead of .replace to avoid RecursionError in pandas 1.5.x
+- fixed PLTGEN reader
+
 ## v5.2.1 (2025-07-20)
 
 ### Fix
