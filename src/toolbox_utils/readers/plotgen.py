@@ -27,12 +27,13 @@ def plotgen_extract(filename):
             names=["Year", "Month", "Day", "Hour", "Minute"] + column_names,
         )
 
-    pgdf = pgdf.replace(-1e30, pd.NA).dropna(how="all", subset=column_names)
+    # .replace causes RecursionError in 1.5.* versions of pandas and so use
+    # .where instead.
+    pgdf = pgdf.where(pgdf != -1e30, pd.NA).dropna(how="all", subset=column_names)
 
     # Can't let read_fwf parse dates because HSPF can use 24:00 for midnight of
-    # the following day, where pandas can't work with that.
-    # So we create manually here by creating an HH:MM delta and adding to the
-    # date.
+    # the following day, where pandas can't work with that. So we create
+    # manually here by creating an HH:MM delta and adding to the date.
     pgdf["delta"] = pd.to_timedelta(
         pgdf["Hour"].astype(int), unit="h"
     ) + pd.to_timedelta(pgdf["Minute"].astype(int), unit="m")
