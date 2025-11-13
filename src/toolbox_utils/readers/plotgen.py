@@ -1,55 +1,44 @@
 """For reading HSPF plotgen files."""
 
-import datetime
-
 import pandas as pd
-
-_END_OF_HEADER = 25
 
 
 def plotgen_extract(filename):
     """Reads HSPF PLTGEN files and creates a DataFrame."""
-    foundcols = False
-    cols = []
-    lst = []
+    found_column_names = False
+    column_names = []
     with open(filename, encoding="ascii") as fpointer:
         for i, line in enumerate(fpointer):
-            if i < _END_OF_HEADER:
-                if "LINTYP" in line:
-                    foundcols = True
-                elif line[5:].startswith("Time series"):
-                    foundcols = False
-                elif foundcols:
-                    if header := line[4:30].strip():
-                        cols.append(header)
-                    else:
-                        foundcols = False
+            if "LINTYP" in line:
+                found_column_names = True
+                continue
+            if line[5:].startswith("Time series"):
+                break
+            if found_column_names:
+                if column_name := line[4:30].strip():
+                    column_names.append(column_name)
+                    continue
 
-            if i > _END_OF_HEADER:
-                year, month, day, hour, minute = line[4:22].split()
+        pgdf = pd.read_fwf(
+            fpointer,
+            colspecs=[(5, 10), (10, 13), (13, 16), (16, 19), (19, 22)]
+            + [(22 + i * 14, 36 + i * 14) for i in range(len(column_names))],
+            skiprows=3,
+            names=["Year", "Month", "Day", "Hour", "Minute"] + column_names,
+        )
 
-                if int(hour) == 24:
-                    day = [
-                        datetime.datetime(int(year), int(month), int(day), tzinfo=None)
-                        + datetime.timedelta(days=1)
-                    ]
-                else:
-                    day = [
-                        datetime.datetime(
-                            int(year),
-                            int(month),
-                            int(day),
-                            int(hour),
-                            int(minute),
-                            tzinfo=None,
-                        )
-                    ]
-                data = [float(x) for x in line[23:].split()]
-                lst.append(day + data)
+    pgdf = pgdf.replace(-1e30, pd.NA).dropna(how="all", subset=column_names)
 
-    pgdf = pd.DataFrame(lst)
-    pgdf.columns = ["Datetime"] + cols
+    # Can't let read_fwf parse dates because HSPF can use 24:00 for midnight of
+    # the following day, where pandas can't work with that.
+    # So we create manually here by creating an HH:MM delta and adding to the
+    # date.
+    pgdf["delta"] = pd.to_timedelta(
+        pgdf["Hour"].astype(int), unit="h"
+    ) + pd.to_timedelta(pgdf["Minute"].astype(int), unit="m")
+    pgdf["Datetime"] = pd.to_datetime(pgdf[["Year", "Month", "Day"]]) + pgdf["delta"]
+
+    pgdf = pgdf.drop(columns=["Year", "Month", "Day", "Hour", "Minute", "delta"])
     pgdf = pgdf.set_index(["Datetime"])
-    pgdf.index = pd.DatetimeIndex(pgdf.index)
 
     return pgdf
