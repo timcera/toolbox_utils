@@ -17,8 +17,6 @@ def plotgen_extract(filename):
             if found_column_names:
                 if column_name := line[4:30].strip():
                     column_names.append(column_name)
-                    continue
-
         pgdf = pd.read_fwf(
             fpointer,
             colspecs=[(5, 10), (10, 13), (13, 16), (16, 19), (19, 22)]
