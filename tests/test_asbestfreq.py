@@ -3,6 +3,8 @@ import re
 import pandas as pd
 import pytest
 
+from toolbox_utils.utils import pandas_offset_by_version
+
 # Constants for testing
 _ANNUALS = {
     1: "JAN",
@@ -35,17 +37,23 @@ def create_test_data(start, periods, freq, columns=["value"]):
         # Happy path tests
         pytest.param(create_test_data("2021-01-01", 10, "D"), "D", id="daily_freq"),
         pytest.param(
-            create_test_data("2021-01-01", 10, "M"), "(ME|M)", id="monthly_freq"
+            create_test_data("2021-01-01", 10, pandas_offset_by_version("ME")),
+            "(ME|M)",
+            id="monthly_freq",
         ),
         pytest.param(
-            create_test_data("2021-01-01", 10, "A"), "(YE-DEC|A-DEC)", id="annual_freq"
+            create_test_data("2021-01-01", 10, pandas_offset_by_version("YE")),
+            "(YE-DEC|A-DEC)",
+            id="annual_freq",
         ),
         # Edge cases
         pytest.param(
-            create_test_data("2021-01-01", 10, "5H"), "(5h|5H)", id="5_hour_freq"
+            create_test_data("2021-01-01", 10, f"5{pandas_offset_by_version('h')}"),
+            "(5h|5H)",
+            id="5_hour_freq",
         ),
         pytest.param(
-            create_test_data("2021-01-01", 10, "15T"),
+            create_test_data("2021-01-01", 10, f"15{pandas_offset_by_version('min')}"),
             "(15min|15T)",
             id="15_minute_freq",
         ),
