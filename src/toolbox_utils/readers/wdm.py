@@ -7,6 +7,8 @@ from datetime import datetime
 import numpy as np
 import pandas as pd
 
+from ..utils import pandas_offset_by_version
+
 # look up attributes NAME, data type (Integer; Real; String) and data length by attribute number
 attrinfo = {
     1: ("TSTYPE", "S", 4),
@@ -37,13 +39,13 @@ attrinfo = {
 }
 
 freq = {
-    7: "100YS",
-    6: "YS",
-    5: "MS",
-    4: "D",
-    3: "H",
-    2: "min",
-    1: "S",
+    7: f"100{pandas_offset_by_version('YS')}",
+    6: pandas_offset_by_version("YS"),
+    5: pandas_offset_by_version("MS"),
+    4: pandas_offset_by_version("D"),
+    3: pandas_offset_by_version("h"),
+    2: pandas_offset_by_version("min"),
+    1: pandas_offset_by_version("s"),
 }  # pandas date_range() frequency by TCODE, TGROUP
 
 
