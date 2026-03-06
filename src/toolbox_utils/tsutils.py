@@ -1679,7 +1679,8 @@ def _replace_nan_with_na(data: DataFrame, freq="") -> DataFrame:
         DataFrame with NaN values replaced with NA values.
     """
     data = data.asfreq(freq) if freq else data
-    return data.replace(np.nan, pd.NA)
+    data = data.replace(np.nan, pd.NA)
+    return data
 
 
 def asbestfreq(data: DataFrame, force_freq: Optional[str] = None) -> DataFrame:
