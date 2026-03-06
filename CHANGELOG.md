@@ -1,3 +1,17 @@
+## v5.2.3 (2026-03-06)
+
+### Fix
+
+- additional checks for RecursionError
+- wrap the RecursionError in a try/except block
+- test to fix recursive error with older version of numpy/pandas
+- possible fix for recursion problem with older numpy/pandas
+- include support for pandas 3.0
+- another fix for time offset differences by pandas versions
+- fixed wdm pandas offsets
+- use .where instead of .replace to avoid RecursionError in pandas 1.5.x
+- fixed PLTGEN reader
+
 ## v5.2.2 (2025-11-13)
 
 ### Fix
