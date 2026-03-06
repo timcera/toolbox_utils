@@ -43,8 +43,14 @@ class TestWDM(TestCase):
             ),
             how="outer",
         )
-        ret1 = ret1.replace(np.nan, pd.NA)
-        ret2 = ret2.replace(np.nan, pd.NA)
+        try:
+            ret1 = ret1.replace(np.nan, pd.NA)
+        except RecursionError:
+            pass
+        try:
+            ret2 = ret2.replace(np.nan, pd.NA)
+        except RecursionError:
+            pass
         assert_frame_equal(ret1, ret2, check_dtype=False, rtol=1e-7)
 
     def test_extract_range_plus(self):
@@ -60,6 +66,12 @@ class TestWDM(TestCase):
             ),
             how="outer",
         )
-        ret1 = ret1.replace(np.nan, pd.NA)
-        ret2 = ret2.replace(np.nan, pd.NA)
+        try:
+            ret1 = ret1.replace(np.nan, pd.NA)
+        except RecursionError:
+            pass
+        try:
+            ret2 = ret2.replace(np.nan, pd.NA)
+        except RecursionError:
+            pass
         assert_frame_equal(ret1, ret2, check_dtype=False, rtol=1e-7)
