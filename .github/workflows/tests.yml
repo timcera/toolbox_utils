@@ -40,6 +40,8 @@ jobs:
                       numpy-versions: numpy==1.*
                     - pandas-versions: pandas==1.*
                       numpy-versions: numpy==2.*
+                    - python-versions: '3.10'
+                      pandas-versions: pandas==3.*
 
         steps:
             - name: Checkout repository
