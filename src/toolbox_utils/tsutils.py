@@ -14,7 +14,6 @@ from contextlib import suppress
 from functools import reduce, wraps
 from importlib.metadata import distribution
 from io import BytesIO, StringIO, TextIOWrapper
-from math import gcd
 from pathlib import Path
 from string import Template
 from textwrap import TextWrapper, dedent
@@ -106,17 +105,17 @@ def error_wrapper(estr: str) -> str:
 
 _CODES = {
     "SUB_D": {
-        "N": "Nanoseconds",
-        "U": "microseconds",
-        "L": "miLliseconds",
-        "S": "Secondly",
-        "T": "minuTely",
-        "H": "Hourly",
+        "ns": "nanoseconds",
+        "us": "microseconds",
+        "ms": "milliseconds",
+        "s": "secondly",
+        "min": "minutely",
+        "h": "hourly",
     },
     "DAILY": {
         "D": "calendar Day",
-        "B": "Business day",
-        "C": "Custom business day (experimental)",
+        "B": "Business Day",
+        "C": "Custom Business Day (experimental)",
     },
     "WEEKLY": {
         "W": "Weekly",
@@ -129,27 +128,27 @@ _CODES = {
         "W-SAT": "Weekly frequency (SATurdays)",
     },
     "MONTH": {
-        "M": "Month end",
+        "ME": "Month end",
         "MS": "Month Start",
-        "BM": "Business Month end",
+        "BME": "Business Month end",
         "BMS": "Business Month Start",
-        "CBM": "Custom Business Month end",
+        "CBME": "Custom Business Month end",
         "CBMS": "Custom Business Month Start",
     },
     "QUARTERLY": {
-        "Q": "Quarter end",
-        "Q-JAN": "Quarterly, quarter ends end of JANuary",
-        "Q-FEB": "Quarterly, quarter ends end of FEBruary",
-        "Q-MAR": "Quarterly, quarter ends end of MARch",
-        "Q-APR": "Quarterly, quarter ends end of APRil",
-        "Q-MAY": "Quarterly, quarter ends end of MAY",
-        "Q-JUN": "Quarterly, quarter ends end of JUNe",
-        "Q-JUL": "Quarterly, quarter ends end of JULy",
-        "Q-AUG": "Quarterly, quarter ends end of AUGust",
-        "Q-SEP": "Quarterly, quarter ends end of SEPtember",
-        "Q-OCT": "Quarterly, quarter ends end of OCTober",
-        "Q-NOV": "Quarterly, quarter ends end of NOVember",
-        "Q-DEC": "Quarterly, quarter ends end of DECember",
+        "QE": "Quarter end",
+        "QE-JAN": "Quarterly, quarter ends end of JANuary",
+        "QE-FEB": "Quarterly, quarter ends end of FEBruary",
+        "QE-MAR": "Quarterly, quarter ends end of MARch",
+        "QE-APR": "Quarterly, quarter ends end of APRil",
+        "QE-MAY": "Quarterly, quarter ends end of MAY",
+        "QE-JUN": "Quarterly, quarter ends end of JUNe",
+        "QE-JUL": "Quarterly, quarter ends end of JULy",
+        "QE-AUG": "Quarterly, quarter ends end of AUGust",
+        "QE-SEP": "Quarterly, quarter ends end of SEPtember",
+        "QE-OCT": "Quarterly, quarter ends end of OCTober",
+        "QE-NOV": "Quarterly, quarter ends end of NOVember",
+        "QE-DEC": "Quarterly, quarter ends end of DECember",
         "QS": "Quarter Start",
         "QS-JAN": "Quarterly, quarter Starts end of JANuary",
         "QS-FEB": "Quarterly, quarter Starts end of FEBruary",
@@ -163,62 +162,62 @@ _CODES = {
         "QS-OCT": "Quarterly, quarter Starts end of OCTober",
         "QS-NOV": "Quarterly, quarter Starts end of NOVember",
         "QS-DEC": "Quarterly, quarter Starts end of DECember",
-        "BQ": "Business Quarter end",
+        "BQE": "Business Quarter end",
         "BQS": "Business Quarter Start",
     },
     "ANNUAL": {
-        "A": "Annual end",
-        "A-JAN": "Annual, year ends end of JANuary",
-        "A-FEB": "Annual, year ends end of FEBruary",
-        "A-MAR": "Annual, year ends end of MARch",
-        "A-APR": "Annual, year ends end of APRil",
-        "A-MAY": "Annual, year ends end of MAY",
-        "A-JUN": "Annual, year ends end of JUNe",
-        "A-JUL": "Annual, year ends end of JULy",
-        "A-AUG": "Annual, year ends end of AUGust",
-        "A-SEP": "Annual, year ends end of SEPtember",
-        "A-OCT": "Annual, year ends end of OCTober",
-        "A-NOV": "Annual, year ends end of NOVember",
-        "A-DEC": "Annual, year ends end of DECember",
-        "AS": "Annual Start",
-        "AS-JAN": "Annual, year Starts end of JANuary",
-        "AS-FEB": "Annual, year Starts end of FEBruary",
-        "AS-MAR": "Annual, year Starts end of MARch",
-        "AS-APR": "Annual, year Starts end of APRil",
-        "AS-MAY": "Annual, year Starts end of MAY",
-        "AS-JUN": "Annual, year Starts end of JUNe",
-        "AS-JUL": "Annual, year Starts end of JULy",
-        "AS-AUG": "Annual, year Starts end of AUGust",
-        "AS-SEP": "Annual, year Starts end of SEPtember",
-        "AS-OCT": "Annual, year Starts end of OCTober",
-        "AS-NOV": "Annual, year Starts end of NOVember",
-        "AS-DEC": "Annual, year Starts end of DECember",
-        "BA": "Business Annual end",
-        "BA-JAN": "Business Annual, business year ends end of JANuary",
-        "BA-FEB": "Business Annual, business year ends end of FEBruary",
-        "BA-MAR": "Business Annual, business year ends end of MARch",
-        "BA-APR": "Business Annual, business year ends end of APRil",
-        "BA-MAY": "Business Annual, business year ends end of MAY",
-        "BA-JUN": "Business Annual, business year ends end of JUNe",
-        "BA-JUL": "Business Annual, business year ends end of JULy",
-        "BA-AUG": "Business Annual, business year ends end of AUGust",
-        "BA-SEP": "Business Annual, business year ends end of SEPtember",
-        "BA-OCT": "Business Annual, business year ends end of OCTober",
-        "BA-NOV": "Business Annual, business year ends end of NOVember",
-        "BA-DEC": "Business Annual, business year ends end of DECember",
-        "BAS": "Business Annual Start",
-        "BS-JAN": "Business Annual Start, business year starts end of JANuary",
-        "BS-FEB": "Business Annual Start, business year starts end of FEBruary",
-        "BS-MAR": "Business Annual Start, business year starts end of MARch",
-        "BS-APR": "Business Annual Start, business year starts end of APRil",
-        "BS-MAY": "Business Annual Start, business year starts end of MAY",
-        "BS-JUN": "Business Annual Start, business year starts end of JUNe",
-        "BS-JUL": "Business Annual Start, business year starts end of JULy",
-        "BS-AUG": "Business Annual Start, business year starts end of AUGust",
-        "BS-SEP": "Business Annual Start, business year starts end of SEPtember",
-        "BS-OCT": "Business Annual Start, business year starts end of OCTober",
-        "BS-NOV": "Business Annual Start, business year starts end of NOVember",
-        "BS-DEC": "Business Annual Start, business year starts end of DECember",
+        "YE": "Annual end",
+        "YE-JAN": "Annual, year ends end of JANuary",
+        "YE-FEB": "Annual, year ends end of FEBruary",
+        "YE-MAR": "Annual, year ends end of MARch",
+        "YE-APR": "Annual, year ends end of APRil",
+        "YE-MAY": "Annual, year ends end of MAY",
+        "YE-JUN": "Annual, year ends end of JUNe",
+        "YE-JUL": "Annual, year ends end of JULy",
+        "YE-AUG": "Annual, year ends end of AUGust",
+        "YE-SEP": "Annual, year ends end of SEPtember",
+        "YE-OCT": "Annual, year ends end of OCTober",
+        "YE-NOV": "Annual, year ends end of NOVember",
+        "YE-DEC": "Annual, year ends end of DECember",
+        "YS": "Annual Start",
+        "YS-JAN": "Annual, year Starts end of JANuary",
+        "YS-FEB": "Annual, year Starts end of FEBruary",
+        "YS-MAR": "Annual, year Starts end of MARch",
+        "YS-APR": "Annual, year Starts end of APRil",
+        "YS-MAY": "Annual, year Starts end of MAY",
+        "YS-JUN": "Annual, year Starts end of JUNe",
+        "YS-JUL": "Annual, year Starts end of JULy",
+        "YS-AUG": "Annual, year Starts end of AUGust",
+        "YS-SEP": "Annual, year Starts end of SEPtember",
+        "YS-OCT": "Annual, year Starts end of OCTober",
+        "YS-NOV": "Annual, year Starts end of NOVember",
+        "YS-DEC": "Annual, year Starts end of DECember",
+        "BYE": "Business Annual end",
+        "BYE-JAN": "Business Annual, business year ends end of JANuary",
+        "BYE-FEB": "Business Annual, business year ends end of FEBruary",
+        "BYE-MAR": "Business Annual, business year ends end of MARch",
+        "BYE-APR": "Business Annual, business year ends end of APRil",
+        "BYE-MAY": "Business Annual, business year ends end of MAY",
+        "BYE-JUN": "Business Annual, business year ends end of JUNe",
+        "BYE-JUL": "Business Annual, business year ends end of JULy",
+        "BYE-AUG": "Business Annual, business year ends end of AUGust",
+        "BYE-SEP": "Business Annual, business year ends end of SEPtember",
+        "BYE-OCT": "Business Annual, business year ends end of OCTober",
+        "BYE-NOV": "Business Annual, business year ends end of NOVember",
+        "BYE-DEC": "Business Annual, business year ends end of DECember",
+        "BYS": "Business Annual Start",
+        "BYS-JAN": "Business Annual Start, business year starts end of JANuary",
+        "BYS-FEB": "Business Annual Start, business year starts end of FEBruary",
+        "BYS-MAR": "Business Annual Start, business year starts end of MARch",
+        "BYS-APR": "Business Annual Start, business year starts end of APRil",
+        "BYS-MAY": "Business Annual Start, business year starts end of MAY",
+        "BYS-JUN": "Business Annual Start, business year starts end of JUNe",
+        "BYS-JUL": "Business Annual Start, business year starts end of JULy",
+        "BYS-AUG": "Business Annual Start, business year starts end of AUGust",
+        "BYS-SEP": "Business Annual Start, business year starts end of SEPtember",
+        "BYS-OCT": "Business Annual Start, business year starts end of OCTober",
+        "BYS-NOV": "Business Annual Start, business year starts end of NOVember",
+        "BYS-DEC": "Business Annual Start, business year starts end of DECember",
     },
 }
 
@@ -414,33 +413,33 @@ docstrings = {
         +-------+---------------+
         | Alias | Description   |
         +=======+===============+
-        | N     | Nanoseconds   |
+        | ns    | Nanoseconds   |
         +-------+---------------+
-        | U     | microseconds  |
+        | us    | microseconds  |
         +-------+---------------+
-        | L     | milliseconds  |
+        | ms    | milliseconds  |
         +-------+---------------+
-        | S     | Secondly      |
+        | s     | Secondly      |
         +-------+---------------+
-        | T     | Minutely      |
+        | min   | Minutely      |
         +-------+---------------+
-        | H     | Hourly        |
+        | h     | Hourly        |
         +-------+---------------+
         | D     | calendar Day  |
         +-------+---------------+
         | W     | Weekly        |
         +-------+---------------+
-        | M     | Month end     |
+        | ME    | Month end     |
         +-------+---------------+
         | MS    | Month Start   |
         +-------+---------------+
-        | Q     | Quarter end   |
+        | QE    | Quarter end   |
         +-------+---------------+
         | QS    | Quarter Start |
         +-------+---------------+
-        | A     | Annual end    |
+        | YE    | Annual end    |
         +-------+---------------+
-        | AS    | Annual Start  |
+        | YS    | Annual Start  |
         +-------+---------------+
 
         Business offset codes.
@@ -450,21 +449,21 @@ docstrings = {
         +=======+====================================+
         | B     | Business day                       |
         +-------+------------------------------------+
-        | BM    | Business Month end                 |
+        | BME   | Business Month end                 |
         +-------+------------------------------------+
         | BMS   | Business Month Start               |
         +-------+------------------------------------+
-        | BQ    | Business Quarter end               |
+        | BQE   | Business Quarter end               |
         +-------+------------------------------------+
         | BQS   | Business Quarter Start             |
         +-------+------------------------------------+
-        | BA    | Business Annual end                |
+        | BYE   | Business Annual end                |
         +-------+------------------------------------+
-        | BAS   | Business Annual Start              |
+        | BYS   | Business Annual Start              |
         +-------+------------------------------------+
         | C     | Custom business day (experimental) |
         +-------+------------------------------------+
-        | CBM   | Custom Business Month end          |
+        | CBME  | Custom Business Month end          |
         +-------+------------------------------------+
         | CBMS  | Custom Business Month Start        |
         +-------+------------------------------------+
@@ -496,10 +495,10 @@ docstrings = {
         +-------+----------+-------------+----------------------------+
         | Alias | Examples | Equivalents | Description                |
         +=======+==========+=============+============================+
-        | x-DEC | A-DEC    | A           | year ends end of DECember  |
-        |       | Q-DEC    | Q           |                            |
-        |       | AS-DEC   | AS          |                            |
-        |       | QS-DEC   | QS          |                            |
+        | x-DEC | YE-DEC   | YE QE YS QS | year ends end of DECember  |
+        |       | QE-DEC   |             |                            |
+        |       | YS-DEC   |             |                            |
+        |       | QS-DEC   |             |                            |
         +-------+----------+-------------+----------------------------+
         | x-JAN |          |             | year ends end of JANuary   |
         +-------+----------+-------------+----------------------------+
@@ -1495,6 +1494,7 @@ def common_kwds(
 
         return ntsd.resample(groupby)
 
+    ntsd[ntsd.isna()] = np.nan
     return ntsd
 
 
@@ -1664,6 +1664,24 @@ _ANNUALS: Dict[int, str] = {
 _WEEKLIES = {0: "MON", 1: "TUE", 2: "WED", 3: "THU", 4: "FRI", 5: "SAT", 6: "SUN"}
 
 
+def _replace_nan_with_na(data: DataFrame, freq="") -> DataFrame:
+    """
+    Replace NaN values with NA values.
+
+    Parameters
+    ----------
+    data
+        DataFrame to replace NaN values in.
+
+    Returns
+    -------
+    _replace_nan_with_na
+        DataFrame with NaN values replaced with NA values.
+    """
+    data = data.asfreq(freq) if freq else data
+    return data.replace(np.nan, pd.NA)
+
+
 def asbestfreq(data: DataFrame, force_freq: Optional[str] = None) -> DataFrame:
     """
     Test to determine best frequency to represent data.
@@ -1674,7 +1692,7 @@ def asbestfreq(data: DataFrame, force_freq: Optional[str] = None) -> DataFrame:
     2. If data.index.freq is not None, just return.
     3. If data.index.inferred_freq is set use .asfreq.
     4. Use pd.infer_freq - fails if any missing
-    5. Use .is_* functions to establish A, AS, A-*, AS-*, Q, QS, M, MS
+    5. Use .is_* functions to establish YE, YS, Y-*, YS-*, Q, QS, M, MS
     6. Use minimum interval to establish the fixed time periods up to
        weekly
     7. Gives up returning None for PANDAS offset string
@@ -1691,23 +1709,20 @@ def asbestfreq(data: DataFrame, force_freq: Optional[str] = None) -> DataFrame:
     asbestfreq
         DataFrame with index set to best frequency.
     """
-    if not isinstance(data.index, pd.DatetimeIndex):
-        return data
+    if not isinstance(data.index, pd.DatetimeIndex) or data.index.freq:
+        return _replace_nan_with_na(data)
 
-    if force_freq is not None:
-        return data.asfreq(force_freq)
-
-    if data.index.freq is not None:
-        return data
+    if force_freq:
+        return _replace_nan_with_na(data, freq=force_freq)
 
     # Since pandas doesn't set data.index.freq and data.index.freqstr when
     # using .asfreq, this function returns that PANDAS time offset alias code
     # also.  Not ideal at all.
     #
     # This gets most of the frequencies...
-    if data.index.inferred_freq is not None:
+    if data.index.inferred_freq:
         with suppress(ValueError):
-            return data.asfreq(data.index.inferred_freq)
+            return _replace_nan_with_na(data, freq=data.index.inferred_freq)
 
     # pd.infer_freq would fail if given a large dataset
     slic = slice(None, 999) if len(data.index) > 1000 else slice(None, None)
@@ -1715,37 +1730,38 @@ def asbestfreq(data: DataFrame, force_freq: Optional[str] = None) -> DataFrame:
         infer_freq = pd.infer_freq(data.index[slic])
     except ValueError:
         infer_freq = None
-    if infer_freq is not None:
-        return data.asfreq(infer_freq)
+    if infer_freq:
+        return _replace_nan_with_na(data, freq=infer_freq)
 
     # At this point pd.infer_freq failed probably because of missing values.
     # The following algorithm would not capture things like BQ, BQS
     # ...etc.
     if np.all(data.index.is_year_end):
-        infer_freq = "A"
+        infer_freq = pandas_offset_by_version("YE")
     elif np.all(data.index.is_year_start):
-        infer_freq = "AS"
+        infer_freq = pandas_offset_by_version("YS")
     elif np.all(data.index.is_quarter_end):
-        infer_freq = "Q"
+        infer_freq = pandas_offset_by_version("QE")
     elif np.all(data.index.is_quarter_start):
-        infer_freq = "QS"
+        infer_freq = pandas_offset_by_version("QS")
     elif np.all(data.index.is_month_end):
         if np.all(data.index.month == data.index[0].month):
             # Actually yearly with different ends
-            infer_freq = f"A-{_ANNUALS[data.index[0].month]}"
+            infer_freq = f"YE-{_ANNUALS[data.index[0].month]}"
         else:
-            infer_freq = "M"
+            infer_freq = "ME"
     elif np.all(data.index.is_month_start):
         if np.all(data.index.month == data.index[0].month):
             # Actually yearly with different start
-            infer_freq = f"A-{_ANNUALS[data.index[0].month - 1]}"
+            infer_freq = f"YE-{_ANNUALS[data.index[0].month - 1]}"
         else:
             infer_freq = "MS"
-    if infer_freq is not None:
-        return data.asfreq(infer_freq)
+    if infer_freq:
+        return _replace_nan_with_na(data, freq=infer_freq)
 
+    data.index = data.index.astype("datetime64[ns]")
     ndiff = (
-        data.index.values.astype("int64")[1:] - data.index.values.astype("int64")[:-1]
+        data.index.astype("int64").values[1:] - data.index.astype("int64").values[:-1]
     )
 
     if np.any(ndiff <= 0):
@@ -1765,7 +1781,11 @@ def asbestfreq(data: DataFrame, force_freq: Optional[str] = None) -> DataFrame:
     # Use the minimum of the intervals to test a new interval.
     # Should work for fixed intervals.
     ndiff = sorted(set(ndiff))
-    ngcd = ndiff[0] if len(ndiff) == 1 else reduce(gcd, ndiff)
+    ngcd = (
+        ndiff[0].astype("int64")
+        if len(ndiff) == 1
+        else reduce(np.gcd, [i.astype("int64") for i in ndiff])
+    )
     if ngcd < 1000:
         infer_freq = f"{ngcd}{pandas_offset_by_version('ns')}"
     elif ngcd < 1000000:
@@ -1787,7 +1807,8 @@ def asbestfreq(data: DataFrame, force_freq: Optional[str] = None) -> DataFrame:
         else:
             infer_freq = "D"
 
-    return data.asfreq(infer_freq) if infer_freq is not None else data
+    data.index = data.index.astype("datetime64[ns]")
+    return _replace_nan_with_na(data, freq=infer_freq)
 
 
 def dedup_index(
@@ -2332,7 +2353,7 @@ def read_iso_ts(
                         nres.extend(
                             wdm(fname, npar) for npar in range_to_numlist(str(par))
                         )
-                    res = pd.concat(nres, axis="columns")
+                    res = pd.concat(nres, axis="columns", sort=False)
                 elif ext.lower() == ".hbn":
                     res = pd.DataFrame()
                     # fname: str,
@@ -2395,7 +2416,7 @@ def read_iso_ts(
                         )
 
                     if isinstance(res, dict):
-                        res = pd.concat(res, axis="columns")
+                        res = pd.concat(res, axis="columns", sort=False)
                         # Collapse columns MultiIndex
                         flat_index = res.columns.to_flat_index()
                         flat_index = [
@@ -2551,8 +2572,8 @@ def read_iso_ts(
         result.columns = names
 
     result.sort_index(inplace=True)
-
-    return result.convert_dtypes()
+    result = result.convert_dtypes()
+    return _replace_nan_with_na(result)
 
 
 @validate_call

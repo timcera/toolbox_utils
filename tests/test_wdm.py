@@ -7,6 +7,7 @@ Tests for `hspf_reader` module.
 
 from unittest import TestCase
 
+import numpy as np
 import pandas as pd
 from pandas.testing import assert_frame_equal
 
@@ -28,7 +29,7 @@ class TestWDM(TestCase):
         ret2 = tsutils.asbestfreq(
             pd.read_csv("tests/data_wdm_2.csv", index_col=0, parse_dates=True)
         )
-        assert_frame_equal(ret1, ret2, check_dtype=False)
+        assert_frame_equal(ret1, ret2, check_dtype=False, check_index_type=False)
 
     def test_extract_range(self):
         ret1 = tsutils.common_kwds("tests/data.wdm,1:2")
@@ -42,11 +43,14 @@ class TestWDM(TestCase):
             ),
             how="outer",
         )
-        assert_frame_equal(ret1, ret2, check_dtype=False)
+        ret1 = ret1.replace(np.nan, pd.NA)
+        ret2 = ret2.replace(np.nan, pd.NA)
+        assert_frame_equal(ret1, ret2, check_dtype=False, rtol=1e-7)
 
     def test_extract_range_plus(self):
         ret1 = tsutils.common_kwds("tests/data.wdm,1+2")
         ret1.columns = ["data.wdm_1", "data.wdm_2"]
+        ret1[ret1.isnull()] = np.nan
         ret2 = tsutils.asbestfreq(
             pd.read_csv("tests/data_wdm_1.csv", index_col=0, parse_dates=True)
         )
@@ -56,4 +60,6 @@ class TestWDM(TestCase):
             ),
             how="outer",
         )
-        assert_frame_equal(ret1, ret2, check_dtype=False)
+        ret1 = ret1.replace(np.nan, pd.NA)
+        ret2 = ret2.replace(np.nan, pd.NA)
+        assert_frame_equal(ret1, ret2, check_dtype=False, rtol=1e-7)

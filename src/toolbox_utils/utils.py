@@ -101,12 +101,12 @@ def pandas_offset_by_version(new_offset: str) -> str:
     Parameters
     ----------
     offset
-        The offset to convert.
+        The new style offset to convert if needed for older pandas version.
 
     Returns
     -------
     offset_by_version
-        The offset converted to the correct version of pandas.
+        The offset for the installed version of pandas.
     """
     new_to_old_freq = {}
     major, minor = pd.__version__.split(".")[:2]

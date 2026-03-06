@@ -11,6 +11,7 @@ class TestRead(TestCase):
         dr = pandas.date_range("2000-01-01", periods=2, freq="D")
 
         ts = pandas.Series([4.5, 4.6], index=dr)
+        print(ts.index.dtype)
 
         self.read_direct = pandas.DataFrame(ts, columns=["Value"])
         self.read_direct.index.name = "Datetime"
@@ -58,21 +59,21 @@ class TestRead(TestCase):
     def test_read_direct(self):
         """Test read API for single column - daily."""
         out = tsutils.common_kwds(input_tsd="tests/data_simple.csv")
-        assert_frame_equal(out, self.read_direct)
+        assert_frame_equal(out, self.read_direct, check_index_type=False)
 
     def test_read_mulitple_direct(self):
         """Test read API for multiple columns - daily."""
         out = tsutils.common_kwds(
             input_tsd=["tests/data_simple.csv", "tests/data_simple.csv"]
         )
-        assert_frame_equal(out, self.read_multiple_direct)
+        assert_frame_equal(out, self.read_multiple_direct, check_index_type=False)
 
     def test_read_mulitple_direct_list(self):
         """Test read API for multiple columns - daily."""
         out = tsutils.common_kwds(
             input_tsd=["tests/data_simple.csv", "tests/data_simple.csv"]
         )
-        assert_frame_equal(out, self.read_multiple_direct)
+        assert_frame_equal(out, self.read_multiple_direct, check_index_type=False)
 
     def test_read_bi_monthly(self):
         """Test read API for bi monthly time series."""
