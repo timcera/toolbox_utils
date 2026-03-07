@@ -2559,12 +2559,16 @@ def read_iso_ts(
 
         result = pd.DataFrame()
 
-        for lres in lresult_list:
+        for counter, lres in enumerate(lresult_list):
+            if counter < 2:
+                lcounter = "_r"
+            else:
+                lcounter = f"_r{counter}"
             if len(offset_set) < 2:
-                result = result.join(lres, how="outer", rsuffix="_r")
+                result = result.join(lres, how="outer", rsuffix=f"{lcounter}")
             else:
                 result = result.join(
-                    lres.asfreq(moffset - epoch), how="outer", rsuffix="_r"
+                    lres.asfreq(moffset - epoch), how="outer", rsuffix=f"{lcounter}"
                 )
     else:
         result = lresult_list[0]
