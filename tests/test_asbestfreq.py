@@ -34,7 +34,11 @@ def create_test_data(start, periods, freq, columns=["value"]):
 @pytest.mark.parametrize(
     "test_input, expected",
     [
-        # Happy path tests
+        pytest.param(
+            create_test_data("2010-01-01", 16, pandas_offset_by_version("h")),
+            "(H|h)",
+            id="hourly_freq_on_jan_01",
+        ),
         pytest.param(create_test_data("2021-01-01", 10, "D"), "D", id="daily_freq"),
         pytest.param(
             create_test_data("2021-01-01", 10, pandas_offset_by_version("ME")),
@@ -46,7 +50,6 @@ def create_test_data(start, periods, freq, columns=["value"]):
             "(YE-DEC|A-DEC)",
             id="annual_freq",
         ),
-        # Edge cases
         pytest.param(
             create_test_data("2021-01-01", 10, f"5{pandas_offset_by_version('h')}"),
             "(5h|5H)",
@@ -57,7 +60,6 @@ def create_test_data(start, periods, freq, columns=["value"]):
             "(15min|15T)",
             id="15_minute_freq",
         ),
-        # Error cases
         pytest.param(
             create_test_data("2021-01-01", 10, "D").iloc[::2], "2D", id="2_day"
         ),

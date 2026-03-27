@@ -1027,7 +1027,6 @@ def make_list(
         )
 
     # At this point 'strorlist' variable should be a list or tuple.
-
     if n is None:
         n = len(strorlist)
 
@@ -1696,9 +1695,9 @@ def asbestfreq(data: DataFrame, force_freq: Optional[str] = None) -> DataFrame:
     2. If data.index.freq is not None, just return.
     3. If data.index.inferred_freq is set use .asfreq.
     4. Use pd.infer_freq - fails if any missing
-    5. Use .is_* functions to establish YE, YS, Y-*, YS-*, Q, QS, M, MS
-    6. Use minimum interval to establish the fixed time periods up to
+    5. Use minimum interval to establish the fixed time periods up to
        weekly
+    6. Use .is_* functions to establish YE, YS, Y-*, YS-*, Q, QS, M, MS
     7. Gives up returning None for PANDAS offset string
 
     Parameters
@@ -1734,32 +1733,6 @@ def asbestfreq(data: DataFrame, force_freq: Optional[str] = None) -> DataFrame:
         infer_freq = pd.infer_freq(data.index[slic])
     except ValueError:
         infer_freq = None
-    if infer_freq:
-        return _replace_nan_with_na(data, freq=infer_freq)
-
-    # At this point pd.infer_freq failed probably because of missing values.
-    # The following algorithm would not capture things like BQ, BQS
-    # ...etc.
-    if np.all(data.index.is_year_end):
-        infer_freq = pandas_offset_by_version("YE")
-    elif np.all(data.index.is_year_start):
-        infer_freq = pandas_offset_by_version("YS")
-    elif np.all(data.index.is_quarter_end):
-        infer_freq = pandas_offset_by_version("QE")
-    elif np.all(data.index.is_quarter_start):
-        infer_freq = pandas_offset_by_version("QS")
-    elif np.all(data.index.is_month_end):
-        if np.all(data.index.month == data.index[0].month):
-            # Actually yearly with different ends
-            infer_freq = f"YE-{_ANNUALS[data.index[0].month]}"
-        else:
-            infer_freq = "ME"
-    elif np.all(data.index.is_month_start):
-        if np.all(data.index.month == data.index[0].month):
-            # Actually yearly with different start
-            infer_freq = f"YE-{_ANNUALS[data.index[0].month - 1]}"
-        else:
-            infer_freq = "MS"
     if infer_freq:
         return _replace_nan_with_na(data, freq=infer_freq)
 
@@ -1810,8 +1783,33 @@ def asbestfreq(data: DataFrame, force_freq: Optional[str] = None) -> DataFrame:
             infer_freq = f"{infer_freq}-{_WEEKLIES[data.index[0].dayofweek]}"
         else:
             infer_freq = "D"
+    if infer_freq:
+        return _replace_nan_with_na(data, freq=infer_freq)
 
-    data.index = data.index.astype("datetime64[ns]")
+    # At this point pd.infer_freq failed probably because of missing values.
+    # The following algorithm would not capture things like BQ, BQS
+    # ...etc.
+    if np.all(data.index.is_month_start):
+        if np.all(data.index.month == data.index[0].month):
+            # Actually yearly with different start
+            infer_freq = f"YE-{_ANNUALS[data.index[0].month - 1]}"
+        else:
+            infer_freq = "MS"
+    elif np.all(data.index.is_month_end):
+        if np.all(data.index.month == data.index[0].month):
+            # Actually yearly with different ends
+            infer_freq = f"YE-{_ANNUALS[data.index[0].month]}"
+        else:
+            infer_freq = "ME"
+    elif np.all(data.index.is_quarter_end):
+        infer_freq = pandas_offset_by_version("QE")
+    elif np.all(data.index.is_quarter_start):
+        infer_freq = pandas_offset_by_version("QS")
+    elif np.all(data.index.is_year_end):
+        infer_freq = pandas_offset_by_version("YE")
+    elif np.all(data.index.is_year_start):
+        infer_freq = pandas_offset_by_version("YS")
+
     return _replace_nan_with_na(data, freq=infer_freq)
 
 
