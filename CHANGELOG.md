@@ -1,3 +1,10 @@
+## v5.2.4 (2026-03-27)
+
+### Fix
+
+- reordered calculation of best frequency in asbestfreq
+- fix column suffixes to join
+
 ## v5.2.3 (2026-03-06)
 
 ### Fix
