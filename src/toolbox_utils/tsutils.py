@@ -470,58 +470,58 @@ docstrings = {
 
         Weekly has the following anchored frequencies:
 
-        +-------+-------------+-------------------------------+
-        | Alias | Equivalents | Description                   |
-        +=======+=============+===============================+
-        | W-SUN | W           | Weekly frequency (SUNdays)    |
-        +-------+-------------+-------------------------------+
-        | W-MON |             | Weekly frequency (MONdays)    |
-        +-------+-------------+-------------------------------+
-        | W-TUE |             | Weekly frequency (TUEsdays)   |
-        +-------+-------------+-------------------------------+
-        | W-WED |             | Weekly frequency (WEDnesdays) |
-        +-------+-------------+-------------------------------+
-        | W-THU |             | Weekly frequency (THUrsdays)  |
-        +-------+-------------+-------------------------------+
-        | W-FRI |             | Weekly frequency (FRIdays)    |
-        +-------+-------------+-------------------------------+
-        | W-SAT |             | Weekly frequency (SATurdays)  |
-        +-------+-------------+-------------------------------+
+        +--------+-------------------------------+
+        | Alias  | Description                   |
+        +========+===============================+
+        | W      | Weekly frequency = W-SUN      |
+        +--------+-------------------------------+
+        | W-SUN  | Weekly frequency (SUNdays)    |
+        +--------+-------------------------------+
+        | W-MON  | Weekly frequency (MONdays)    |
+        +--------+-------------------------------+
+        | W-TUE  | Weekly frequency (TUEsdays)   |
+        +--------+-------------------------------+
+        | W-WED  | Weekly frequency (WEDnesdays) |
+        +--------+-------------------------------+
+        | W-THU  | Weekly frequency (THUrsdays)  |
+        +--------+-------------------------------+
+        | W-FRI  | Weekly frequency (FRIdays)    |
+        +--------+-------------------------------+
+        | W-SAT  | Weekly frequency (SATurdays)  |
+        +--------+-------------------------------+
 
-        Quarterly frequencies (Q, BQ, QS, BQS) and annual frequencies (A,
-        BA, AS, BAS) replace the "x" in the "Alias" column to have the
-        following anchoring suffixes:
+        Quarterly frequencies (Q, BQ) and annual frequencies (Y, BYE) replace
+        the "x" in the "Alias" column to have the following anchoring suffixes:
 
-        +-------+----------+-------------+----------------------------+
-        | Alias | Examples | Equivalents | Description                |
-        +=======+==========+=============+============================+
-        | x-DEC | YE-DEC   | YE QE YS QS | year ends end of DECember  |
-        |       | QE-DEC   |             |                            |
-        |       | YS-DEC   |             |                            |
-        |       | QS-DEC   |             |                            |
-        +-------+----------+-------------+----------------------------+
-        | x-JAN |          |             | year ends end of JANuary   |
-        +-------+----------+-------------+----------------------------+
-        | x-FEB |          |             | year ends end of FEBruary  |
-        +-------+----------+-------------+----------------------------+
-        | x-MAR |          |             | year ends end of MARch     |
-        +-------+----------+-------------+----------------------------+
-        | x-APR |          |             | year ends end of APRil     |
-        +-------+----------+-------------+----------------------------+
-        | x-MAY |          |             | year ends end of MAY       |
-        +-------+----------+-------------+----------------------------+
-        | x-JUN |          |             | year ends end of JUNe      |
-        +-------+----------+-------------+----------------------------+
-        | x-JUL |          |             | year ends end of JULy      |
-        +-------+----------+-------------+----------------------------+
-        | x-AUG |          |             | year ends end of AUGust    |
-        +-------+----------+-------------+----------------------------+
-        | x-SEP |          |             | year ends end of SEPtember |
-        +-------+----------+-------------+----------------------------+
-        | x-OCT |          |             | year ends end of OCTober   |
-        +-------+----------+-------------+----------------------------+
-        | x-NOV |          |             | year ends end of NOVember  |
-        +-------+----------+-------------+----------------------------+
+        +--------+------------------------------------+
+        | Alias  | Description                        |
+        +========+====================================+
+        | YE     | year ends end of DECember = Y-DEC  |
+        +--------+------------------------------------+
+        | x-DEC  | year ends end of DECember          |
+        +--------+------------------------------------+
+        | x-JAN  | year ends end of JANuary           |
+        +--------+------------------------------------+
+        | x-FEB  | year ends end of FEBruary          |
+        +--------+------------------------------------+
+        | x-MAR  | year ends end of MARch             |
+        +--------+------------------------------------+
+        | x-APR  | year ends end of APRil             |
+        +--------+------------------------------------+
+        | x-MAY  | year ends end of MAY               |
+        +--------+------------------------------------+
+        | x-JUN  | year ends end of JUNe              |
+        +--------+------------------------------------+
+        | x-JUL  | year ends end of JULy              |
+        +--------+------------------------------------+
+        | x-AUG  | year ends end of AUGust            |
+        +--------+------------------------------------+
+        | x-SEP  | year ends end of SEPtember         |
+        +--------+------------------------------------+
+        | x-OCT  | year ends end of OCTober           |
+        +--------+------------------------------------+
+        | x-NOV  | year ends end of NOVember          |
+        +--------+------------------------------------+
 
         """,
     "plotting_position_table": """
