@@ -470,58 +470,58 @@ docstrings = {
 
         Weekly has the following anchored frequencies:
 
-        +--------+-------------------------------+
-        | Alias  | Description                   |
-        +========+===============================+
-        | W      | Weekly frequency = W-SUN      |
-        +--------+-------------------------------+
-        | W-SUN  | Weekly frequency (SUNdays)    |
-        +--------+-------------------------------+
-        | W-MON  | Weekly frequency (MONdays)    |
-        +--------+-------------------------------+
-        | W-TUE  | Weekly frequency (TUEsdays)   |
-        +--------+-------------------------------+
-        | W-WED  | Weekly frequency (WEDnesdays) |
-        +--------+-------------------------------+
-        | W-THU  | Weekly frequency (THUrsdays)  |
-        +--------+-------------------------------+
-        | W-FRI  | Weekly frequency (FRIdays)    |
-        +--------+-------------------------------+
-        | W-SAT  | Weekly frequency (SATurdays)  |
-        +--------+-------------------------------+
+        +-------+-------------+-------------------------------+
+        | Alias | Equivalents | Description                   |
+        +=======+=============+===============================+
+        | W-SUN | W           | Weekly frequency (SUNdays)    |
+        +-------+-------------+-------------------------------+
+        | W-MON |             | Weekly frequency (MONdays)    |
+        +-------+-------------+-------------------------------+
+        | W-TUE |             | Weekly frequency (TUEsdays)   |
+        +-------+-------------+-------------------------------+
+        | W-WED |             | Weekly frequency (WEDnesdays) |
+        +-------+-------------+-------------------------------+
+        | W-THU |             | Weekly frequency (THUrsdays)  |
+        +-------+-------------+-------------------------------+
+        | W-FRI |             | Weekly frequency (FRIdays)    |
+        +-------+-------------+-------------------------------+
+        | W-SAT |             | Weekly frequency (SATurdays)  |
+        +-------+-------------+-------------------------------+
 
-        Quarterly frequencies (Q, BQ) and annual frequencies (Y, BYE) replace
-        the "x" in the "Alias" column to have the following anchoring suffixes:
+        Quarterly frequencies (Q, BQ, QS, BQS) and annual frequencies (A,
+        BA, AS, BAS) replace the "x" in the "Alias" column to have the
+        following anchoring suffixes:
 
-        +--------+------------------------------------+
-        | Alias  | Description                        |
-        +========+====================================+
-        | YE     | year ends end of DECember = Y-DEC  |
-        +--------+------------------------------------+
-        | x-DEC  | year ends end of DECember          |
-        +--------+------------------------------------+
-        | x-JAN  | year ends end of JANuary           |
-        +--------+------------------------------------+
-        | x-FEB  | year ends end of FEBruary          |
-        +--------+------------------------------------+
-        | x-MAR  | year ends end of MARch             |
-        +--------+------------------------------------+
-        | x-APR  | year ends end of APRil             |
-        +--------+------------------------------------+
-        | x-MAY  | year ends end of MAY               |
-        +--------+------------------------------------+
-        | x-JUN  | year ends end of JUNe              |
-        +--------+------------------------------------+
-        | x-JUL  | year ends end of JULy              |
-        +--------+------------------------------------+
-        | x-AUG  | year ends end of AUGust            |
-        +--------+------------------------------------+
-        | x-SEP  | year ends end of SEPtember         |
-        +--------+------------------------------------+
-        | x-OCT  | year ends end of OCTober           |
-        +--------+------------------------------------+
-        | x-NOV  | year ends end of NOVember          |
-        +--------+------------------------------------+
+        +-------+----------+-------------+----------------------------+
+        | Alias | Examples | Equivalents | Description                |
+        +=======+==========+=============+============================+
+        | x-DEC | YE-DEC   | YE QE YS QS | year ends end of DECember  |
+        |       | QE-DEC   |             |                            |
+        |       | YS-DEC   |             |                            |
+        |       | QS-DEC   |             |                            |
+        +-------+----------+-------------+----------------------------+
+        | x-JAN |          |             | year ends end of JANuary   |
+        +-------+----------+-------------+----------------------------+
+        | x-FEB |          |             | year ends end of FEBruary  |
+        +-------+----------+-------------+----------------------------+
+        | x-MAR |          |             | year ends end of MARch     |
+        +-------+----------+-------------+----------------------------+
+        | x-APR |          |             | year ends end of APRil     |
+        +-------+----------+-------------+----------------------------+
+        | x-MAY |          |             | year ends end of MAY       |
+        +-------+----------+-------------+----------------------------+
+        | x-JUN |          |             | year ends end of JUNe      |
+        +-------+----------+-------------+----------------------------+
+        | x-JUL |          |             | year ends end of JULy      |
+        +-------+----------+-------------+----------------------------+
+        | x-AUG |          |             | year ends end of AUGust    |
+        +-------+----------+-------------+----------------------------+
+        | x-SEP |          |             | year ends end of SEPtember |
+        +-------+----------+-------------+----------------------------+
+        | x-OCT |          |             | year ends end of OCTober   |
+        +-------+----------+-------------+----------------------------+
+        | x-NOV |          |             | year ends end of NOVember  |
+        +-------+----------+-------------+----------------------------+
 
         """,
     "plotting_position_table": """
@@ -1477,7 +1477,9 @@ def common_kwds(
 
     ntsd = _date_slice(ntsd, start_date=start_date, end_date=end_date, por=por)
 
-    if ntsd.index.inferred_type == "datetime64":
+    if (
+        not ntsd.index.name or "Datetime" not in ntsd.index.name
+    ) and ntsd.index.inferred_type == "datetime64":
         ntsd.index.name = "Datetime"
 
     if dropna in ("any", "all"):
@@ -1494,6 +1496,8 @@ def common_kwds(
         return ntsd.resample(groupby)
 
     ntsd[ntsd.isna()] = np.nan
+    ntsd.columns = [i.strip() for i in ntsd.columns]
+    ntsd.index.name = ntsd.index.name.strip()
     return ntsd
 
 
@@ -1995,11 +1999,11 @@ def _printiso(
         if tsd.columns.empty:
             tsd = pd.DataFrame(index=tsd.index)
 
-        if not tsd.index.name:
+        if not tsd.index.name or "Datetime" not in tsd.index.name:
             tsd.index.name = "UniqueID"
 
-        if isinstance(tsd.index, (pd.DatetimeIndex, pd.PeriodIndex)):
-            tsd.index.name = "Datetime"
+            if isinstance(tsd.index, (pd.DatetimeIndex, pd.PeriodIndex)):
+                tsd.index.name = "Datetime"
 
     elif isinstance(tsd, (int, float, tuple, np.ndarray)):
         tablefmt = None
@@ -2135,7 +2139,6 @@ def memory_optimize(tsd: DataFrame) -> DataFrame:
         # TypeError: Not datetime like index
         # ValueError: Less than three rows
         tsd.index.freq = pd.infer_freq(tsd.index)
-
     return tsd
 
 
@@ -2572,9 +2575,10 @@ def read_iso_ts(
         result = lresult_list[0]
 
     # Assign names to the index and columns.
-
     if names is not None:
-        result.index.name = names.pop(0)
+        possible_index_name = names.pop(0)
+        if not result.index.name:
+            result.index.name = possible_index_name
         result.columns = names
 
     result.sort_index(inplace=True)
