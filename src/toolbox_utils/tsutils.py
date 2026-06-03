@@ -1989,7 +1989,7 @@ def _printiso(
     headers: str = "keys",
     tablefmt: Optional[str] = "csv",
 ) -> None:
-    """Separate this function so can use in tests."""
+    """Print data.  If time series data, print in ISO format."""
     showindex = {"always": True, "never": False, True: True, False: False}[showindex]
 
     if isinstance(tsd, (pd.DataFrame, pd.Series)):
@@ -2022,7 +2022,6 @@ def _printiso(
                     sep=sep,
                     index=showindex,
                 )
-
                 return
             except OSError:
                 return
@@ -2031,6 +2030,7 @@ def _printiso(
 
     if tablefmt is None:
         print(str(list(tsd))[1:-1])
+        return
 
     if ntablefmt is None:
         all_table = tb(
@@ -2050,7 +2050,7 @@ def _printiso(
         )
 
     if tablefmt in ("csv_nos", "tsv_nos"):
-        print(all_table.replace(" ", ""))
+        print(re.sub(r" *, *", ",", all_table))
     else:
         print(all_table)
 
