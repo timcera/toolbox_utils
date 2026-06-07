@@ -1,3 +1,11 @@
+## v5.2.5 (2026-06-07)
+
+### Fix
+
+- fix and refactor hbn reader to make hdf reader easier to implement
+- fix the csv_nos and tsc_nos to be more robust and not remove spaces in the middle of values
+- remove spaces either side of column names and index
+
 ## v5.2.4 (2026-03-27)
 
 ### Fix
