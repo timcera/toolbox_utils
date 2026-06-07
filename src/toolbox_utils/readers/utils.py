@@ -1,0 +1,179 @@
+"""A collection of functions used by toolbox_utils, wdmtoolbox, ...etc."""
+
+from typing import List, Optional, Union
+
+import pint_pandas  # not used directly, but required to use pint in pandas
+
+from .. import tsutils
+
+# This is here so that linters don't remove the pint_pandas import which is
+# needed to use pint in pandas
+_ = pint_pandas.version("pint")
+
+
+def normalize_labels(labels: Optional[Union[str, List[str]]]) -> List[str]:
+    """
+    Process labels for the hbn function.
+
+    Parameters
+    ----------
+    labels
+        The labels to be processed.
+
+    Returns
+    -------
+    process_labels
+        A list of processed labels.
+    """
+    if labels is None:
+        labels = [",,,"]
+
+    testem = {
+        "PERLND": [
+            "ATEMP",
+            "SNOW",
+            "PWATER",
+            "SEDMNT",
+            "PSTEMP",
+            "PWTGAS",
+            "PQUAL",
+            "MSTLAY",
+            "PEST",
+            "NITR",
+            "PHOS",
+            "TRACER",
+            "",
+        ],
+        "IMPLND": ["ATEMP", "SNOW", "IWATER", "SOLIDS", "IWTGAS", "IQUAL", ""],
+        "RCHRES": [
+            "HYDR",
+            "CONS",
+            "HTRCH",
+            "SEDTRN",
+            "GQUAL",
+            "OXRX",
+            "NUTRX",
+            "PLANK",
+            "PHCARB",
+            "INFLOW",
+            "OFLOW",
+            "ROFLOW",
+            "",
+        ],
+        "BMPRAC": [""],
+        "": [""],
+    }
+
+    lablist = []
+
+    # convert label tuples to lists
+    labels = list(labels)
+
+    # turn into a list of lists
+    nlabels = []
+    for label in labels:
+        if isinstance(label, str):
+            nlabels.append(label.split(","))
+        else:
+            nlabels.append(label)
+    labels = nlabels
+
+    # Check the list members for valid values
+    for label in labels:
+        if len(label) != 4:
+            raise ValueError(
+                tsutils.error_wrapper(
+                    f"""
+                    The label '{label}' has the wrong number of entries.
+                    """
+                )
+            )
+
+        # replace empty fields with None
+        words = [None if i == "" else i for i in label]
+
+        # first word must be a valid operation type or None
+        if words[0] is not None:
+            # force uppercase before comparison
+            words[0] = words[0].upper()
+            if words[0] not in testem:
+                raise ValueError(
+                    tsutils.error_wrapper(
+                        f"""
+                        Operation type must be one of 'PERLND', 'IMPLND',
+                        'RCHRES', or 'BMPRAC', or missing (to get all) instead
+                        of {words[0]}.
+                        """
+                    )
+                )
+
+        # second word must be integer 1-999 or None or range to parse
+        if words[1] is not None:
+            try:
+                words[1] = int(words[1])
+                luelist = [words[1]]
+            except ValueError:
+                luelist = tsutils.range_to_numlist(words[1])
+            for luenum in luelist:
+                if luenum < 1 or luenum > 999:
+                    raise ValueError(
+                        tsutils.error_wrapper(
+                            f"""
+                            The land use element must be an integer from 1 to
+                            999 inclusive, instead of {luenum}.
+                            """
+                        )
+                    )
+        else:
+            luelist = [None]
+
+        # third word must be a valid group name or None
+        if words[2] is not None:
+            words[2] = words[2].upper()
+            if (words[0] is not None) and (words[2] not in testem[words[0]]):
+                raise ValueError(
+                    tsutils.error_wrapper(
+                        f"""
+                        The {words[0]} operation type only allows the variable
+                        groups: {testem[words[0]][:-1]},
+                        instead you gave {words[2]}.
+                        """
+                    )
+                )
+
+        # fourth word is currently not checked - assumed to be a variable name
+        # if not, it will simply never be found in the file, so ok
+        # but no warning for the user - add check?
+
+        # add to new list of checked and expanded lists
+        for luenum in luelist:
+            words[1] = luenum
+            lablist.append(list(words))
+    return lablist
+
+
+def tuple_match(findme, hay):
+    """Part of partial ordered matching.
+    See http://stackoverflow.com/a/4559604
+    """
+    return len(findme) == len(hay) and all(
+        i is None or j is None or i == j for i, j in zip(findme, hay)
+    )
+
+
+def tuple_combine(findme, hay):
+    """Part of partial ordered matching.
+    See http://stackoverflow.com/a/4559604
+    """
+    return tuple(i is None and j or i for i, j in zip(findme, hay))
+
+
+def tuple_search(findme, haystack):
+    """Partial ordered matching with 'None' as wildcard
+    See http://stackoverflow.com/a/4559604
+    """
+    return [
+        (index, tuple_combine(findme, hay))
+        for index, hay in enumerate(haystack)
+        if tuple_match(findme, hay)
+    ]

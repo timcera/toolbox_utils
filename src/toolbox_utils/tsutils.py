@@ -28,12 +28,6 @@ from numpy import int64, ndarray
 from pandas.core.frame import DataFrame
 from pandas.core.indexes.base import Index
 from pandas.tseries.frequencies import to_offset
-
-try:
-    from pydantic import validate_call
-except ImportError:
-    from pydantic import validate_arguments as validate_call
-
 from scipy.stats.distributions import lognorm, norm
 from tabulate import simple_separated_format
 from tabulate import tabulate as tb
@@ -42,6 +36,11 @@ from .readers.hbn import hbn_extract as hbn
 from .readers.plotgen import plotgen_extract as plotgen
 from .readers.wdm import wdm_extract as wdm
 from .utils import pandas_offset_by_version
+
+try:
+    from pydantic import validate_call
+except ImportError:
+    from pydantic import validate_arguments as validate_call
 
 # This is here so that linters don't remove the pint_pandas import which is
 # needed to use pint in pandas
@@ -723,7 +722,7 @@ def copy_doc(source: Callable) -> Callable:
 
     def wrapper_copy_doc(func: Callable) -> Callable:
         if source.__doc__:
-            func.__doc__ = source.__doc__  # noqa: WPS125
+            func.__doc__ = source.__doc__
 
         return func
 
