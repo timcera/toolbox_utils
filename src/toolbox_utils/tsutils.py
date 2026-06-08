@@ -2367,7 +2367,7 @@ def read_iso_ts(
                     res = res.join(hbn(fname, interval, labels), how="outer")
                 elif ext.lower() == ".plt":
                     res = plotgen(fname)
-                elif ext.lower() == ".hdf5":
+                elif ext.lower() in (".h5", ".hdf5"):
                     if args:
                         res = pd.DataFrame()
 

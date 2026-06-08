@@ -1,3 +1,9 @@
+## v5.3.0 (2026-06-08)
+
+### Feat
+
+- added pandas_period_by_version to adjust period alias code for pandas<2.2 vs pandas>=2.2
+
 ## v5.2.5 (2026-06-07)
 
 ### Fix
