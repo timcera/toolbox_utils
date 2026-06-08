@@ -1,6 +1,58 @@
 import pandas as pd
 
 
+def pandas_period_by_version(new_offset: str) -> str:
+    """
+    Convert the time offset code to match the version of pandas.
+
+    +------------------------+--------+---------+-----------------------------+
+    | DateOffset             | less   | greater | Generic offset class,       |
+    |                        | 2.2    | equal   | defaults to absolute 24     |
+    |                        |        | 2.2     | hours                       |
+    +========================+========+=========+=============================+
+    | Year                   | 'A'    | 'Y '    | calendar year               |
+    +------------------------+--------+---------+-----------------------------+
+    | Hour                   | 'H'    | 'h'     | one hour                    |
+    +------------------------+--------+---------+-----------------------------+
+    | Minute                 | 'T' or | 'min'   | one minute                  |
+    |                        | 'min'  |         |                             |
+    +------------------------+--------+---------+-----------------------------+
+    | Second                 | 'S'    | 's'     | one second                  |
+    +------------------------+--------+---------+-----------------------------+
+    | Milli                  | 'L' or | 'ms'    | one millisecond             |
+    |                        | 'ms'   |         |                             |
+    +------------------------+--------+---------+-----------------------------+
+    | Micro                  | 'U' or | 'us'    | one microsecond             |
+    |                        | 'us'   |         |                             |
+    +------------------------+--------+---------+-----------------------------+
+    | Nano                   | 'N'    | 'ns'    | one nanosecond              |
+    +------------------------+--------+---------+-----------------------------+
+
+    Parameters
+    ----------
+    offset
+        The new style offset to convert if needed for older pandas version.
+
+    Returns
+    -------
+    offset_by_version
+        The offset for the installed version of pandas.
+    """
+    new_to_old_period = {}
+    major, minor = pd.__version__.split(".")[:2]
+    if (int(major) + int(minor) / 10) < 2.2:
+        new_to_old_freq = {
+            "Y": "A",
+            "h": "H",
+            "min": "T",
+            "s": "S",
+            "ms": "L",
+            "us": "U",
+            "ns": "N",
+        }
+    return new_to_old_period.get(new_offset, new_offset)
+
+
 def pandas_offset_by_version(new_offset: str) -> str:
     """
     Convert the time offset code to match the version of pandas.

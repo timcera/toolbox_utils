@@ -8,7 +8,7 @@ from typing import Literal
 import pandas as pd
 
 from .. import tsutils
-from ..utils import pandas_offset_by_version
+from ..utils import pandas_period_by_version
 from . import utils
 
 code2intervalmap = {5: "yearly", 4: "monthly", 3: "daily", 2: "bivl"}
@@ -16,8 +16,8 @@ code2intervalmap = {5: "yearly", 4: "monthly", 3: "daily", 2: "bivl"}
 interval2codemap = {"yearly": 5, "monthly": 4, "daily": 3, "bivl": 2}
 
 code2freqmap = {
-    5: pandas_offset_by_version("YE"),
-    4: pandas_offset_by_version("ME"),
+    5: pandas_period_by_version("Y"),
+    4: "M",
     3: "D",
     2: None,
 }
