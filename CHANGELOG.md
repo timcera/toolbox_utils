@@ -1,3 +1,9 @@
+## v5.4.0 (2026-06-09)
+
+### Feat
+
+- add "rename_index=True" to printiso function for functions in hspf_utils to name the index "BALANCE TERM"
+
 ## v5.3.0 (2026-06-08)
 
 ### Feat
