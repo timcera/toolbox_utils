@@ -1402,6 +1402,7 @@ def common_kwds(
     names: Optional[Union[List[str], str]] = None,
     usecols: Optional[List[Union[int, str]]] = None,
     por: bool = False,
+    rename_index: bool = True,
 ):
     """
     Process all common_kwds across sub-commands into single function.
@@ -1476,10 +1477,18 @@ def common_kwds(
 
     ntsd = _date_slice(ntsd, start_date=start_date, end_date=end_date, por=por)
 
-    if (
-        not ntsd.index.name or "Datetime" not in ntsd.index.name
-    ) and ntsd.index.inferred_type == "datetime64":
-        ntsd.index.name = "Datetime"
+    if rename_index and ((not ntsd.index.name) or ("Datetime" not in ntsd.index.name)):
+        ntsd.index.name = "UniqueID"
+
+        if isinstance(ntsd.index, pd.DatetimeIndex):
+            timezone = ntsd.index.tz
+            if timezone:
+                ntsd.index.name = f"Datetime:{timezone}"
+            else:
+                ntsd.index.name = "Datetime"
+
+        if isinstance(ntsd.index, pd.PeriodIndex):
+            ntsd.index.name = "Period"
 
     if dropna in ("any", "all"):
         ntsd = ntsd.dropna(axis="index", how=dropna)
