@@ -1,3 +1,9 @@
+## v5.5.0 (2026-06-09)
+
+### Feat
+
+- add "rename_index" keyword "common_kwds" function
+
 ## v5.4.0 (2026-06-09)
 
 ### Feat
