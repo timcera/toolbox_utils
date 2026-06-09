@@ -1,4 +1,4 @@
-"""hspfbintoolbox to read HSPF binary files."""
+"""function to read HSPF binary files."""
 
 import datetime
 import struct
@@ -107,9 +107,7 @@ def _get_data(binfilename, interval="daily", labels=None, catalog_only=True):
                     # read the variable name
                     variable_name = struct.unpack(f"{length}s", binfp.read(length))[0]
 
-                    # add variable name to the set for this operation
-                    # why a set instead of a list? There should never be
-                    # a duplicate anyway
+                    # add variable name to the vnames list
                     vnames.setdefault((lue, group), []).append(variable_name)
 
                     # update how far along the record we are
@@ -131,6 +129,8 @@ def _get_data(binfilename, interval="daily", labels=None, catalog_only=True):
                 vals = struct.unpack(f"{numvals}f", binfp.read(4 * numvals))
                 recpos += 4 * numvals
 
+                # delta accounts for HSPF's use of hour 24 to represent
+                # the end of the last interval of the day.
                 delta = datetime.timedelta(hours=0)
                 if level == interval2codemap["bivl"]:
                     delta = datetime.timedelta(hours=hour) + datetime.timedelta(

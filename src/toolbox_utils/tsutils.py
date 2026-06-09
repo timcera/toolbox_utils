@@ -1987,6 +1987,7 @@ def _printiso(
     showindex: Union[str, bool] = True,
     headers: str = "keys",
     tablefmt: Optional[str] = "csv",
+    rename_index: bool = True,
 ) -> None:
     """Print data.  If time series data, print in ISO format."""
     showindex = {"always": True, "never": False, True: True, False: False}[showindex]
@@ -1998,11 +1999,20 @@ def _printiso(
         if tsd.columns.empty:
             tsd = pd.DataFrame(index=tsd.index)
 
-        if not tsd.index.name or "Datetime" not in tsd.index.name:
+        if rename_index and (
+            (not tsd.index.name) or ("Datetime" not in tsd.index.name)
+        ):
             tsd.index.name = "UniqueID"
 
-            if isinstance(tsd.index, (pd.DatetimeIndex, pd.PeriodIndex)):
-                tsd.index.name = "Datetime"
+            if isinstance(tsd.index, pd.DatetimeIndex):
+                timezone = tsd.index.tz
+                if timezone:
+                    tsd.index.name = f"Datetime:{timezone}"
+                else:
+                    tsd.index.name = "Datetime"
+
+            if isinstance(tsd.index, pd.PeriodIndex):
+                tsd.index.name = "Period"
 
     elif isinstance(tsd, (int, float, tuple, np.ndarray)):
         tablefmt = None
