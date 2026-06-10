@@ -11,7 +11,6 @@ class TestRead(TestCase):
         dr = pandas.date_range("2000-01-01", periods=2, freq="D")
 
         ts = pandas.Series([4.5, 4.6], index=dr)
-        print(ts.index.dtype)
 
         self.read_direct = pandas.DataFrame(ts, columns=["Value"])
         self.read_direct.index.name = "Datetime"

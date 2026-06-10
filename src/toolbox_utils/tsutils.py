@@ -1752,7 +1752,8 @@ def asbestfreq(data: DataFrame, force_freq: Optional[str] = None) -> DataFrame:
 
     data.index = data.index.astype("datetime64[ns]")
     ndiff = (
-        ndata.index.astype("int64").values[1:] - ndata.index.astype("int64").values[:-1]
+        ndata.index.astype("datetime64[ns]").values[1:]
+        - ndata.index.astype("datetime64[ns]").values[:-1]
     )
 
     if np.any(ndiff <= 0):

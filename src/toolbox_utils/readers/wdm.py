@@ -143,10 +143,12 @@ def wdm_extract(wdmfile, *idsn):
         tgroup = dattr["TGROUP"]
         tstep = dattr["TSSTEP"]
         tcode = dattr["TCODE"]
-        cindex = pd.date_range(start=start, periods=len(records) + 1, freq=freq[tgroup])
+        cindex = pd.date_range(
+            start=start, periods=len(records) + 1, freq=freq[tgroup]
+        ).astype("datetime64[ns]")
         tindex = pd.date_range(
             start=start, end=cindex[-1], freq=str(tstep) + freq[tcode]
-        )
+        ).astype("datetime64[ns]")
         counts = np.diff(np.searchsorted(tindex, cindex))
 
         # Get timeseries data

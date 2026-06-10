@@ -41,7 +41,7 @@ def pandas_period_by_version(new_offset: str) -> str:
     new_to_old_period = {}
     major, minor = pd.__version__.split(".")[:2]
     if (int(major) + int(minor) / 10) < 2.2:
-        new_to_old_freq = {
+        new_to_old_period = {
             "Y": "A",
             "h": "H",
             "min": "T",
