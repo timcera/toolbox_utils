@@ -1777,11 +1777,32 @@ def asbestfreq(data: DataFrame, force_freq: Optional[str] = None) -> DataFrame:
         if len(ndiff) == 1
         else reduce(np.gcd, [i.astype("int64") for i in ndiff])
     )
+    ndiff = np.array(ndiff)
     # ngcd is the greatest common divisor of the intervals in nanoseconds.
     infer_freq = f"{ngcd}{pandas_offset_by_version('ns')}"
-    if (
-        ngcd < 1_000
-    ):  # if less than 1000 nanoseconds, then some multiplier of nanoseconds
+    if data.index.is_month_end.all() and all(ndiff >= 2_419_200_000_000_000):
+        infer_freq = pandas_offset_by_version("ME")
+        if np.all(data.index.month == data.index[0].month):
+            # Actually yearly with different ends
+            infer_freq = (
+                f"{pandas_offset_by_version('YE')}-{_ANNUALS[data.index[0].month]}"
+            )
+    elif data.index.is_month_start.all() and all(ndiff >= 2_419_200_000_000_000):
+        infer_freq = pandas_offset_by_version("MS")
+        if np.all(data.index.month == data.index[0].month):
+            # Actually yearly with different start
+            infer_freq = (
+                f"{pandas_offset_by_version('YS')}-{_ANNUALS[data.index[0].month - 1]}"
+            )
+    elif data.index.is_quarter_end.all() and all(ndiff >= 7_257_600_000_000_000):
+        infer_freq = pandas_offset_by_version("QE")
+    elif data.index.is_quarter_start.all() and all(ndiff >= 7_257_600_000_000_000):
+        infer_freq = pandas_offset_by_version("QS")
+    elif data.index.is_year_end.all() and all(ndiff >= 31_536_000_000_000_000):
+        infer_freq = pandas_offset_by_version("YE")
+    elif data.index.is_year_start.all() and all(ndiff >= 31_536_000_000_000_000):
+        infer_freq = pandas_offset_by_version("YS")
+    elif ngcd < 1_000:
         infer_freq = f"{ngcd}{pandas_offset_by_version('ns')}"
     elif ngcd % 604_800_000_000_000 == 0:
         infer_freq = f"{ngcd // 604_800_000_000_000}W"
@@ -1799,28 +1820,6 @@ def asbestfreq(data: DataFrame, force_freq: Optional[str] = None) -> DataFrame:
         infer_freq = f"{ngcd // 1_000_000}{pandas_offset_by_version('ms')}"
     elif ngcd % 1_000 == 0:
         infer_freq = f"{ngcd // 1_000}{pandas_offset_by_version('us')}"
-    elif data.index.is_month_end.all():
-        infer_freq = pandas_offset_by_version("ME")
-        if np.all(data.index.month == data.index[0].month):
-            # Actually yearly with different ends
-            infer_freq = (
-                f"{pandas_offset_by_version('YE')}-{_ANNUALS[data.index[0].month]}"
-            )
-    elif data.index.is_month_start.all():
-        infer_freq = pandas_offset_by_version("MS")
-        if np.all(data.index.month == data.index[0].month):
-            # Actually yearly with different start
-            infer_freq = (
-                f"{pandas_offset_by_version('YS')}-{_ANNUALS[data.index[0].month - 1]}"
-            )
-    elif data.index.is_quarter_end.all():
-        infer_freq = pandas_offset_by_version("QE")
-    elif data.index.is_quarter_start.all():
-        infer_freq = pandas_offset_by_version("QS")
-    elif data.index.is_year_end.all():
-        infer_freq = pandas_offset_by_version("YE")
-    elif data.index.is_year_start.all():
-        infer_freq = pandas_offset_by_version("YS")
 
     if infer_freq:
         return _replace_nan_with_na(data, freq=infer_freq)
