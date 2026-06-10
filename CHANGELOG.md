@@ -1,3 +1,9 @@
+## v5.5.1 (2026-06-10)
+
+### Fix
+
+- made asbestfreq more robust
+
 ## v5.5.0 (2026-06-09)
 
 ### Feat
