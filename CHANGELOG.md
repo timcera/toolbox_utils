@@ -1,3 +1,9 @@
+## v5.5.2 (2026-06-10)
+
+### Fix
+
+- rearranged frequency guessing in asbestfreq since an sub-daily time series all on XXXX-01-01 was thought of as a YS frequency instead of hourly
+
 ## v5.5.1 (2026-06-10)
 
 ### Fix
