@@ -1779,7 +1779,27 @@ def asbestfreq(data: DataFrame, force_freq: Optional[str] = None) -> DataFrame:
     )
     # ngcd is the greatest common divisor of the intervals in nanoseconds.
     infer_freq = f"{ngcd}{pandas_offset_by_version('ns')}"
-    if data.index.is_month_end.all():
+    if (
+        ngcd < 1_000
+    ):  # if less than 1000 nanoseconds, then some multiplier of nanoseconds
+        infer_freq = f"{ngcd}{pandas_offset_by_version('ns')}"
+    elif ngcd % 604_800_000_000_000 == 0:
+        infer_freq = f"{ngcd // 604_800_000_000_000}W"
+        if np.all(data.index.dayofweek == data.index[0].dayofweek):
+            infer_freq = f"{infer_freq}-{_WEEKLIES[data.index[0].dayofweek]}"
+    elif ngcd % 86_400_000_000_000 == 0:
+        infer_freq = f"{ngcd // 86_400_000_000_000}D"
+    elif ngcd % 3_600_000_000_000 == 0:
+        infer_freq = f"{ngcd // 3_600_000_000_000}{pandas_offset_by_version('h')}"
+    elif ngcd % 60_000_000_000 == 0:
+        infer_freq = f"{ngcd // 60_000_000_000}{pandas_offset_by_version('min')}"
+    elif ngcd % 1_000_000_000 == 0:
+        infer_freq = f"{ngcd // 1_000_000_000}{pandas_offset_by_version('s')}"
+    elif ngcd % 1_000_000 == 0:
+        infer_freq = f"{ngcd // 1_000_000}{pandas_offset_by_version('ms')}"
+    elif ngcd % 1_000 == 0:
+        infer_freq = f"{ngcd // 1_000}{pandas_offset_by_version('us')}"
+    elif data.index.is_month_end.all():
         infer_freq = pandas_offset_by_version("ME")
         if np.all(data.index.month == data.index[0].month):
             # Actually yearly with different ends
@@ -1801,26 +1821,6 @@ def asbestfreq(data: DataFrame, force_freq: Optional[str] = None) -> DataFrame:
         infer_freq = pandas_offset_by_version("YE")
     elif data.index.is_year_start.all():
         infer_freq = pandas_offset_by_version("YS")
-    elif (
-        ngcd < 1_000
-    ):  # if less than 1000 nanoseconds, then some multiplier of nanoseconds
-        infer_freq = f"{ngcd}{pandas_offset_by_version('ns')}"
-    elif ngcd % 604_800_000_000_000 == 0:
-        infer_freq = f"{ngcd // 604_800_000_000_000}W"
-        if np.all(data.index.dayofweek == data.index[0].dayofweek):
-            infer_freq = f"{infer_freq}-{_WEEKLIES[data.index[0].dayofweek]}"
-    elif ngcd % 86_400_000_000_000 == 0:
-        infer_freq = f"{ngcd // 86_400_000_000_000}D"
-    elif ngcd % 3_600_000_000_000 == 0:
-        infer_freq = f"{ngcd // 3_600_000_000_000}{pandas_offset_by_version('h')}"
-    elif ngcd % 60_000_000_000 == 0:
-        infer_freq = f"{ngcd // 60_000_000_000}{pandas_offset_by_version('min')}"
-    elif ngcd % 1_000_000_000 == 0:
-        infer_freq = f"{ngcd // 1_000_000_000}{pandas_offset_by_version('s')}"
-    elif ngcd % 1_000_000 == 0:
-        infer_freq = f"{ngcd // 1_000_000}{pandas_offset_by_version('ms')}"
-    elif ngcd % 1_000 == 0:
-        infer_freq = f"{ngcd // 1_000}{pandas_offset_by_version('us')}"
 
     if infer_freq:
         return _replace_nan_with_na(data, freq=infer_freq)
