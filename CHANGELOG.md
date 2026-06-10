@@ -1,3 +1,9 @@
+## v5.5.3 (2026-06-10)
+
+### Fix
+
+- added interval check for monthly, quarterly, and yearly frequencies in asbestfreq
+
 ## v5.5.2 (2026-06-10)
 
 ### Fix
