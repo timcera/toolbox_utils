@@ -1754,7 +1754,7 @@ def asbestfreq(data: DataFrame, force_freq: Optional[str] = None) -> DataFrame:
     ndiff = (
         ndata.index.astype("datetime64[ns]").values[1:]
         - ndata.index.astype("datetime64[ns]").values[:-1]
-    )
+    ).astype("int64")
 
     if np.any(ndiff <= 0):
         raise ValueError(
@@ -1773,11 +1773,7 @@ def asbestfreq(data: DataFrame, force_freq: Optional[str] = None) -> DataFrame:
     # Use the minimum of the intervals to test a new interval.
     # Should work for fixed intervals.
     ndiff = sorted(set(ndiff))
-    ngcd = (
-        ndiff[0].astype("int64")
-        if len(ndiff) == 1
-        else reduce(np.gcd, [i.astype("int64") for i in ndiff])
-    )
+    ngcd = ndiff[0] if len(ndiff) == 1 else reduce(np.gcd, ndiff)
     ndiff = np.array(ndiff)
     # ngcd is the greatest common divisor of the intervals in nanoseconds.
     infer_freq = f"{ngcd}{pandas_offset_by_version('ns')}"
