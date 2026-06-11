@@ -1,3 +1,9 @@
+## v5.5.5 (2026-06-11)
+
+### Fix
+
+- support numpy 1.* by casting ndiff to int64
+
 ## v5.5.4 (2026-06-10)
 
 ### Fix
