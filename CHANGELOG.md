@@ -1,3 +1,9 @@
+## v5.6.0 (2026-06-27)
+
+### Feat
+
+- added reading HSP2 HDF5 files
+
 ## v5.5.5 (2026-06-11)
 
 ### Fix
