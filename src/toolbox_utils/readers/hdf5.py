@@ -261,7 +261,7 @@ def _get_data(binfilename, interval="daily", labels=None, catalog_only=True):
                             else:
                                 series = (
                                     df[vname].astype("float32")
-                                    .groupby(pd.Grouper(freq=code2freqmap[ival]))
+                                    .resample(code2freqmap[ival])
                                     .last()
                                 )
                             ndates = series.index
