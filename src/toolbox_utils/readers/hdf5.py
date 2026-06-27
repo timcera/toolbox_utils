@@ -260,7 +260,7 @@ def _get_data(binfilename, interval="daily", labels=None, catalog_only=True):
                                 series = df[vname]
                             else:
                                 series = (
-                                    df[vname]
+                                    df[vname].astype("float32")
                                     .groupby(pd.Grouper(freq=code2freqmap[ival]))
                                     .last()
                                 )
