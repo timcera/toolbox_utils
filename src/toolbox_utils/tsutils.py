@@ -1,5 +1,6 @@
 """A collection of functions used by toolbox_utils, wdmtoolbox, ...etc."""
 
+# Standard library imports
 import bz2
 import datetime
 import gzip
@@ -20,6 +21,7 @@ from textwrap import TextWrapper, dedent
 from typing import Any, Callable, Dict, List, Literal, Optional, Tuple, Union
 from urllib.parse import urlparse
 
+# Third party imports
 import dateparser
 import numpy as np
 import pandas as pd
@@ -28,19 +30,17 @@ from numpy import int64, ndarray
 from pandas.core.frame import DataFrame
 from pandas.core.indexes.base import Index
 from pandas.tseries.frequencies import to_offset
+from pydantic import validate_call
 from scipy.stats.distributions import lognorm, norm
 from tabulate import simple_separated_format
 from tabulate import tabulate as tb
 
+# Local folder imports
 from .readers.hbn import hbn_extract as hbn
+from .readers.hdf5 import hdf5_extract as hdf5
 from .readers.plotgen import plotgen_extract as plotgen
 from .readers.wdm import wdm_extract as wdm
 from .utils import pandas_offset_by_version
-
-try:
-    from pydantic import validate_call
-except ImportError:
-    from pydantic import validate_arguments as validate_call
 
 # This is here so that linters don't remove the pint_pandas import which is
 # needed to use pint in pandas
@@ -2383,18 +2383,15 @@ def read_iso_ts(
                     # *labels,
                     interval, *labels = args
                     res = res.join(hbn(fname, interval, labels), how="outer")
+                elif ext.lower() in (".h5", ".hdf5"):
+                    res = pd.DataFrame()
+                    # fname: str,
+                    # interval: Literal["yearly", "monthly", "daily", "bivl"],
+                    # *labels,
+                    interval, *labels = args
+                    res = res.join(hdf5(fname, interval, labels), how="outer")
                 elif ext.lower() == ".plt":
                     res = plotgen(fname)
-                elif ext.lower() in (".h5", ".hdf5"):
-                    if args:
-                        res = pd.DataFrame()
-
-                        for i in args:
-                            res = res.join(
-                                pd.read_hdf(fname, key=i, **newkwds), how="outer"
-                            )
-                    else:
-                        res = pd.read_hdf(fpi, **newkwds)
                 elif ext.lower() in (
                     ".xls",
                     ".xlsx",
