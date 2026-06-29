@@ -1,3 +1,18 @@
+## v5.7.0 (2026-06-29)
+
+### Feat
+
+- finish adding hdf plus tests to read hsp2 files
+- move to using git lfs
+
+### Fix
+
+- another try with Grouper for numpy 1.* and pandas 1.x
+- use resample?
+- support larger arrays?
+- hopefully will use the gfs files
+- forgot that pytables was actually tables
+
 ## v5.6.0 (2026-06-27)
 
 ### Feat

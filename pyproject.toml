@@ -62,7 +62,7 @@ github = "https://github.com/timcera/toolbox_utils"
 name = "cz_conventional_commits"
 tag_format = "v$version"
 update_changelog_on_bump = true
-version = "5.6.0"
+version = "5.7.0"
 version_files = ["VERSION"]
 multiline = true
 
