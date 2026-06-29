@@ -10,11 +10,17 @@ from io import BytesIO
 from unittest import TestCase
 
 # Third party imports
+import numpy as np
 import pandas as pd
+import pytest
 from pandas.testing import assert_frame_equal
 
 # First party imports
-import toolbox_utils
+from toolbox_utils import tsutils
+from toolbox_utils.readers import hdf5
+
+major_np_version = np.__version__.split(".")[0]
+major_pd_version = pd.__version__.split(".")[0]
 
 
 class TestDescribe(TestCase):
@@ -34,21 +40,27 @@ class TestDescribe(TestCase):
 1976-12,0.007189
 1977-01,0.007183
 """
-        self.extract = toolbox_utils.tsutils.asbestfreq(
+        self.extract = tsutils.asbestfreq(
             pd.read_csv(BytesIO(self.extract), header=0, index_col=0, parse_dates=True)
         )
         self.extract.index = self.extract.index.to_period()
 
+    @pytest.mark.skipif(
+        major_np_version == "1" and major_pd_version == "1",
+        reason="fails if using older versions of the numpy and pandas libraries",
+    )
     def test_extract_one_label_labellist_api(self):
-        out = toolbox_utils.tsutils.common_kwds("tests/data.h5,monthly,,1,,AGWS")
+        out = tsutils.common_kwds("tests/data.h5,monthly,,1,,AGWS")
         assert_frame_equal(
             out, self.extract, check_dtype=False, check_exact=False, rtol=1e-4
         )
 
+    @pytest.mark.skipif(
+        major_np_version == "1" and major_pd_version == "1",
+        reason="fails if using older versions of the numpy and pandas libraries",
+    )
     def test_extract_one_label_labellist_api_2(self):
-        out = toolbox_utils.readers.hdf5.hdf5_extract(
-            "tests/data.h5", "monthly", ["", 1, "", "AGWS"]
-        )
+        out = hdf5.hdf5_extract("tests/data.h5", "monthly", ["", 1, "", "AGWS"])
         assert_frame_equal(
             out, self.extract, check_dtype=False, check_exact=False, rtol=1e-4
         )

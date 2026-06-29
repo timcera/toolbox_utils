@@ -74,6 +74,7 @@ formats = "auto:percent"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = "src"
 
 [tool.ruff]
 fix = true

@@ -12,15 +12,15 @@ import pandas as pd
 from pydantic import validate_call
 
 # Local folder imports
-from .. import tsutils, utils
+from .. import tsutils
 
 code2intervalmap = {5: "yearly", 4: "monthly", 3: "daily", 2: "bivl"}
 
 interval2codemap = {"yearly": 5, "monthly": 4, "daily": 3, "bivl": 2}
 
 code2freqmap = {
-    5: utils.pandas_offset_by_version("YE"),
-    4: utils.pandas_offset_by_version("ME"),
+    5: pd.offsets.YearEnd(),
+    4: pd.offsets.MonthEnd(),
     3: "D",
     2: None,
 }
@@ -229,7 +229,20 @@ def _get_data(binfilename, interval="daily", labels=None, catalog_only=True):
         lue = int(lue[1:])
         group = keyparts[2]
 
-        df = pd.read_hdf(binfilename, key=key)
+        with pd.HDFStore(binfilename, "r") as store:
+            df = store.get(key)
+
+        if df.index[0].year < 1677:
+            raise ValueError(
+                tsutils.error_wrapper(
+                    """
+                    Error occurred that only happens if numpy version is 1.*
+                    and pandas version is 1.*.  This only impacts "pd.read_hdf"
+                    and I didn't find a work-around.  If you need this feature
+                    please update the numpy and pandas versions.
+                    """
+                )
+            )
 
         for vname in df.columns:
             tmpkey = (
@@ -259,11 +272,7 @@ def _get_data(binfilename, interval="daily", labels=None, catalog_only=True):
                             if ival == 2:
                                 series = df[vname]
                             else:
-                                series = (
-                                    df[vname].astype("float32")
-                                    .groupby([pd.Grouper(freq=code2freqmap[ival])])
-                                    .last()
-                                )
+                                series = df[vname].resample(code2freqmap[ival]).last()
                             ndates = series.index
                             collect_dict[nres] = series.values
 
