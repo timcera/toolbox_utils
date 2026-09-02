@@ -1,68 +1,115 @@
 """A collection of functions used by toolbox_utils, wdmtoolbox, ...etc."""
 
-from typing import List, Optional, Union
+# Standard library imports
 
+# Third party imports
+import pandas as pd
 import pint_pandas  # not used directly, but required to use pint in pandas
 
-from .. import tsutils
+# Local folder imports
+from .. import tsutils, utils
+
+code2intervalmap = {5: "yearly", 4: "monthly", 3: "daily", 2: "bivl"}
+
+interval2codemap = {"yearly": 5, "monthly": 4, "daily": 3, "bivl": 2}
+
+code2freqmap = {
+    5: pd.offsets.YearEnd(),
+    4: pd.offsets.MonthEnd(),
+    3: "D",
+    2: None,
+}
+
+code2min_count = {
+    (utils.pandas_offset_by_version("h"), 3): 20,
+    ("D", 4): 24,
+    ("D", 5): 300,
+    ("60min", 3): 20,
+    ("60min", 4): 576,
+    ("60min", 5): 7200,
+}
 
 # This is here so that linters don't remove the pint_pandas import which is
 # needed to use pint in pandas
 _ = pint_pandas.version("pint")
 
+test_labels = {
+    "BMPRAC": [
+        "",
+        "INFLOW",
+        "RECEIV",
+        "REMOVE",
+        "ROFLOW",
+    ],
+    "IMPLND": [
+        "",
+        "ATEMP",
+        "IQUAL",
+        "IWATER",
+        "IWTGAS",
+        "SNOW",
+        "SOLIDS",
+    ],
+    "PERLND": [
+        "",
+        "ATEMP",
+        "MSTLAY",
+        "NITR",
+        "PEST",
+        "PHOS",
+        "PQUAL",
+        "PSTEMP",
+        "PWATER",
+        "PWTGAS",
+        "SEDMNT",
+        "SNOW",
+        "TRACER",
+    ],
+    "RCHRES": [
+        "",
+        "CONS",
+        "GQUAL",
+        "HTRCH",
+        "HYDR",
+        "INFLOW",
+        "NUTRX",
+        "OFLOW",
+        "OXRX",
+        "PHCARB",
+        "PLANK",
+        "ROFLOW",
+        "SEDTRN",
+    ],
+    "": [""],
+}
 
-def normalize_labels(labels: Optional[Union[str, List[str]]]) -> List[str]:
+
+def normalize_labels(labels: str | list[str] | None, interval) -> tuple[list[str], int]:
     """
-    Process labels for the hbn function.
+    Process labels for the hbn and hdf5 functions.
 
     Parameters
     ----------
     labels
         The labels to be processed.
+    interval
+        The aggregation interval.
 
     Returns
     -------
     process_labels
         A list of processed labels.
+    interval_code
+        The HSPF interval code.
     """
+    # Normalize interval code
+    try:
+        intervalcode = interval2codemap[interval.lower()]
+    except AttributeError:
+        intervalcode = None
+
     if labels is None:
         labels = [",,,"]
-
-    testem = {
-        "PERLND": [
-            "ATEMP",
-            "SNOW",
-            "PWATER",
-            "SEDMNT",
-            "PSTEMP",
-            "PWTGAS",
-            "PQUAL",
-            "MSTLAY",
-            "PEST",
-            "NITR",
-            "PHOS",
-            "TRACER",
-            "",
-        ],
-        "IMPLND": ["ATEMP", "SNOW", "IWATER", "SOLIDS", "IWTGAS", "IQUAL", ""],
-        "RCHRES": [
-            "HYDR",
-            "CONS",
-            "HTRCH",
-            "SEDTRN",
-            "GQUAL",
-            "OXRX",
-            "NUTRX",
-            "PLANK",
-            "PHCARB",
-            "INFLOW",
-            "OFLOW",
-            "ROFLOW",
-            "",
-        ],
-        "BMPRAC": [""],
-        "": [""],
-    }
 
     lablist = []
 
@@ -96,7 +143,7 @@ def normalize_labels(labels: Optional[Union[str, List[str]]]) -> List[str]:
         if words[0] is not None:
             # force uppercase before comparison
             words[0] = words[0].upper()
-            if words[0] not in testem:
+            if words[0] not in test_labels:
                 raise ValueError(
                     tsutils.error_wrapper(
                         f"""
@@ -130,12 +177,12 @@ def normalize_labels(labels: Optional[Union[str, List[str]]]) -> List[str]:
         # third word must be a valid group name or None
         if words[2] is not None:
             words[2] = words[2].upper()
-            if (words[0] is not None) and (words[2] not in testem[words[0]]):
+            if (words[0] is not None) and (words[2] not in test_labels[words[0]]):
                 raise ValueError(
                     tsutils.error_wrapper(
                         f"""
                         The {words[0]} operation type only allows the variable
-                        groups: {testem[words[0]][:-1]},
+                        groups: {test_labels[words[0]][:-1]},
                         instead you gave {words[2]}.
                         """
                     )
@@ -149,7 +196,11 @@ def normalize_labels(labels: Optional[Union[str, List[str]]]) -> List[str]:
         for luenum in luelist:
             words[1] = luenum
             lablist.append(list(words))
-    return lablist
+
+    # add interval code as fifth word in list
+    lablist = [i + [intervalcode] for i in lablist]
+
+    return lablist, intervalcode
 
 
 def tuple_match(findme, hay):

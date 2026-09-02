@@ -5,12 +5,15 @@ hbn
 Tests for `hspf_reader hbn` module.
 """
 
+# Standard library imports
 from io import BytesIO
 from unittest import TestCase
 
+# Third party imports
 import pandas as pd
 from pandas.testing import assert_frame_equal
 
+# First party imports
 import toolbox_utils
 
 

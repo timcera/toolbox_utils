@@ -1,8 +1,11 @@
+# Standard library imports
 import re
 
+# Third party imports
 import pandas as pd
 import pytest
 
+# First party imports
 from toolbox_utils.utils import pandas_offset_by_version
 
 # Constants for testing
@@ -24,7 +27,9 @@ _WEEKLIES = {0: "MON", 1: "TUE", 2: "WED", 3: "THU", 4: "FRI", 5: "SAT", 6: "SUN
 
 
 # Helper function to create a DataFrame with a DatetimeIndex
-def create_test_data(start, periods, freq, columns=["value"]):
+def create_test_data(start, periods, freq, columns=None):
+    if columns is None:
+        columns = ["value"]
     index = pd.date_range(start=start, periods=periods, freq=freq)
     data = pd.DataFrame(index=index, columns=columns)
     data["value"] = range(periods)
@@ -76,6 +81,7 @@ def create_test_data(start, periods, freq, columns=["value"]):
     ],
 )
 def test_asbestfreq(test_input, expected):
+    # First party imports
     from toolbox_utils.tsutils import asbestfreq
 
     # Act

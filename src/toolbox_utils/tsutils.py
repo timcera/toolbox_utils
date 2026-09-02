@@ -11,6 +11,7 @@ import re
 import sys
 from ast import literal_eval
 from collections import OrderedDict
+from collections.abc import Callable
 from contextlib import suppress
 from functools import reduce, wraps
 from importlib.metadata import distribution
@@ -18,7 +19,7 @@ from io import BytesIO, StringIO, TextIOWrapper
 from pathlib import Path
 from string import Template
 from textwrap import TextWrapper, dedent
-from typing import Any, Callable, Dict, List, Literal, Optional, Tuple, Union
+from typing import Any, Literal
 from urllib.parse import urlparse
 
 # Third party imports
@@ -47,7 +48,7 @@ from .utils import pandas_offset_by_version
 _ = pint_pandas.version("pint")
 
 
-def normalize_command_line_args(args: List) -> List:
+def normalize_command_line_args(args: list) -> list:
     """
     Normalize command line arguments.
 
@@ -606,7 +607,7 @@ docstrings = {
 }
 
 
-def flatten(list_of_lists: Union[List, Tuple]) -> List:
+def flatten(list_of_lists: list | tuple) -> list:
     """
     Recursively flatten a list of lists or tuples into a single list.
 
@@ -633,7 +634,7 @@ def flatten(list_of_lists: Union[List, Tuple]) -> List:
 
 
 @validate_call
-def stride_and_unit(sunit: str) -> Tuple[str, int]:
+def stride_and_unit(sunit: str) -> tuple[str, int]:
     """
     Split a stride/unit combination into component parts.
 
@@ -657,7 +658,7 @@ def stride_and_unit(sunit: str) -> Tuple[str, int]:
 
 
 @validate_call
-def set_ppf(ptype: Optional[Literal["norm", "lognorm", "weibull"]]) -> Callable:
+def set_ppf(ptype: Literal["norm", "lognorm", "weibull"] | None) -> Callable:
     """
     Return correct Percentage Point Function for `ptype`.
 
@@ -759,24 +760,22 @@ def doc(fdict: dict) -> Callable:
 @validate_call(config={"arbitrary_types_allowed": True})
 @doc(docstrings)
 def set_plotting_position(
-    cnt: Union[int, int64],
-    plotting_position: Union[
-        float,
-        Literal[
-            "weibull",
-            "benard",
-            "bos-levenbach",
-            "filliben",
-            "yu",
-            "tukey",
-            "blom",
-            "cunnane",
-            "gringorton",
-            "hazen",
-            "larsen",
-            "gumbel",
-            "california",
-        ],
+    cnt: int | int64,
+    plotting_position: float
+    | Literal[
+        "weibull",
+        "benard",
+        "bos-levenbach",
+        "filliben",
+        "yu",
+        "tukey",
+        "blom",
+        "cunnane",
+        "gringorton",
+        "hazen",
+        "larsen",
+        "gumbel",
+        "california",
     ] = "weibull",
 ) -> ndarray:
     """
@@ -798,7 +797,7 @@ def set_plotting_position(
     set_plotting_position
         The plotting position array.
     """
-    ppdict: Dict[str, float] = {
+    ppdict: dict[str, float] = {
         "weibull": 0,
         "benard": 0.3,
         "filliben": 0.3175,
@@ -822,7 +821,7 @@ def set_plotting_position(
 
 @validate_call
 def parsedate(
-    dstr: Optional[Any], strftime: Optional[Any] = None, settings: Optional[Any] = None
+    dstr: Any | None, strftime: Any | None = None, settings: Any | None = None
 ) -> datetime.datetime:
     """
     Use dateparser to parse a wide variety of dates.
@@ -894,7 +893,7 @@ def about(name: str):
     return about_dict
 
 
-def _round_index(ntsd: DataFrame, round_index: Optional[str] = None) -> DataFrame:
+def _round_index(ntsd: DataFrame, round_index: str | None = None) -> DataFrame:
     """
     Round the index, typically time, to the nearest interval.
 
@@ -943,8 +942,8 @@ def _pick_column_or_value(tsd: DataFrame, var):
 
 
 def make_list(
-    *strorlist: Union[str, List],
-    n: Optional[int] = None,
+    *strorlist: str | list,
+    n: int | None = None,
     sep: str = ",",
     flat: bool = True,
 ) -> Any:
@@ -991,7 +990,7 @@ def make_list(
 
     if (
         strorlist is None
-        or isinstance(strorlist, (type(None)))
+        or (strorlist is None)
         or strorlist in ("None", "", b"None", b"")
     ):
         # None -> None
@@ -1074,7 +1073,7 @@ def make_list(
     return ret
 
 
-def make_iloc(columns: List, col_list: List):
+def make_iloc(columns: list, col_list: list):
     """
     Imitates the .ix option with subtracting 1 to convert.
 
@@ -1131,8 +1130,8 @@ def make_iloc(columns: List, col_list: List):
 
 def _normalize_units(
     ntsd: DataFrame,
-    source_units: Optional[str],
-    target_units: Optional[str],
+    source_units: str | None,
+    target_units: str | None,
     source_units_required: bool = False,
 ) -> DataFrame:
     """
@@ -1306,7 +1305,7 @@ def _normalize_units(
     return memory_optimize(ntsd)
 
 
-def get_default_args(func: Callable) -> Dict[str, Any]:
+def get_default_args(func: Callable) -> dict[str, Any]:
     """
     Get default arguments of the function through inspection.
 
@@ -1329,7 +1328,7 @@ def get_default_args(func: Callable) -> Dict[str, Any]:
     }
 
 
-def transform_args(**trans_func_for_arg: Dict) -> Callable:
+def transform_args(**trans_func_for_arg: dict) -> Callable:
     """
     Transforms function arguments before calling the function.
 
@@ -1385,11 +1384,11 @@ def common_kwds(
     input_tsd=None,
     start_date=None,
     end_date=None,
-    pick: Optional[List[Union[int, str]]] = None,
-    force_freq: Optional[str] = None,
-    groupby: Optional[str] = None,
-    dropna: Optional[Literal["no", "any", "all"]] = "no",
-    round_index: Optional[str] = None,
+    pick: list[int | str] | None = None,
+    force_freq: str | None = None,
+    groupby: str | None = None,
+    dropna: Literal["no", "any", "all"] | None = "no",
+    round_index: str | None = None,
     clean: bool = False,
     target_units=None,
     source_units=None,
@@ -1397,10 +1396,10 @@ def common_kwds(
     bestfreq: bool = True,
     parse_dates: bool = True,
     extended_columns: bool = False,
-    skiprows: Optional[Union[List[int], int]] = None,
+    skiprows: list[int] | int | None = None,
     index_type: Literal["datetime", "number"] = "datetime",
-    names: Optional[Union[List[str], str]] = None,
-    usecols: Optional[List[Union[int, str]]] = None,
+    names: list[str] | str | None = None,
+    usecols: list[int | str] | None = None,
     por: bool = False,
     rename_index: bool = True,
 ):
@@ -1509,7 +1508,7 @@ def common_kwds(
     return ntsd
 
 
-def _pick(tsd: DataFrame, columns: List[Union[str, int]]) -> DataFrame:
+def _pick(tsd: DataFrame, columns: list[str | int]) -> DataFrame:
     """
     Pick columns from a DataFrame.
 
@@ -1601,8 +1600,8 @@ def _pick(tsd: DataFrame, columns: List[Union[str, int]]) -> DataFrame:
 
 def _date_slice(
     input_tsd: DataFrame,
-    start_date: Optional[str] = None,
-    end_date: Optional[str] = None,
+    start_date: str | None = None,
+    end_date: str | None = None,
     por=False,
 ) -> DataFrame:
     """
@@ -1656,7 +1655,7 @@ def _date_slice(
     return input_tsd
 
 
-_ANNUALS: Dict[int, str] = {
+_ANNUALS: dict[int, str] = {
     0: "DEC",
     1: "JAN",
     2: "FEB",
@@ -1697,7 +1696,7 @@ def _replace_nan_with_na(data: DataFrame, freq="") -> DataFrame:
     return data
 
 
-def asbestfreq(data: DataFrame, force_freq: Optional[str] = None) -> DataFrame:
+def asbestfreq(data: DataFrame, force_freq: str | None = None) -> DataFrame:
     """
     Test to determine best frequency to represent data.
 
@@ -1770,6 +1769,9 @@ def asbestfreq(data: DataFrame, force_freq: Optional[str] = None) -> DataFrame:
             )
         )
 
+    if len(ndiff) == 0:
+        return _replace_nan_with_na(data)
+
     # Use the minimum of the intervals to test a new interval.
     # Should work for fixed intervals.
     ndiff = sorted(set(ndiff))
@@ -1825,7 +1827,7 @@ def asbestfreq(data: DataFrame, force_freq: Optional[str] = None) -> DataFrame:
 
 
 def dedup_index(
-    idx: List[str], fmt: Optional[Any] = None, ignore_first: bool = True
+    idx: list[str], fmt: Any | None = None, ignore_first: bool = True
 ) -> Index:
     """
     Remove duplicate values in list.
@@ -1859,7 +1861,7 @@ def dedup_index(
 
 
 @validate_call
-def renamer(column_names: str, suffix: Optional[str] = "") -> str:
+def renamer(column_names: str, suffix: str | None = "") -> str:
     """
     Print the suffix into the third ":" separated field of the header.
 
@@ -1895,7 +1897,7 @@ def print_input(
     intds: DataFrame,
     output: DataFrame,
     suffix: str = "",
-    date_format: str = None,
+    date_format: str | None = None,
     float_format: str = "g",
     tablefmt: str = "csv",
     showindex: str = "never",
@@ -1932,12 +1934,12 @@ def print_input(
 
 
 def return_input(
-    iftrue: Union[bool, str],
+    iftrue: bool | str,
     intds: DataFrame,
     output: DataFrame,
-    suffix: Optional[str] = "",
+    suffix: str | None = "",
     reverse_index: bool = False,
-    output_names: Optional[List] = None,
+    output_names: list | None = None,
 ) -> DataFrame:
     """
     Return the input time series also with the output dataframe.
@@ -1989,12 +1991,12 @@ def _apply_across_columns(func, xtsd, **kwds):
 
 def _printiso(
     tsd: DataFrame,
-    date_format: Optional[Any] = None,
+    date_format: Any | None = None,
     sep: str = ",",
     float_format: str = "g",
-    showindex: Union[str, bool] = True,
+    showindex: str | bool = True,
     headers: str = "keys",
-    tablefmt: Optional[str] = "csv",
+    tablefmt: str | None = "csv",
     rename_index: bool = True,
 ) -> None:
     """Print data.  If time series data, print in ISO format."""
@@ -2159,7 +2161,7 @@ def memory_optimize(tsd: DataFrame) -> DataFrame:
     return tsd
 
 
-def is_valid_url(url: Union[bytes, str], qualifying: Optional[Any] = None) -> bool:
+def is_valid_url(url: bytes | str, qualifying: Any | None = None) -> bool:
     """Return whether "url" is valid."""
     min_attributes = ("scheme", "netloc")
     qualifying = min_attributes if qualifying is None else qualifying
@@ -2171,14 +2173,14 @@ def is_valid_url(url: Union[bytes, str], qualifying: Optional[Any] = None) -> bo
 @validate_call
 def read_iso_ts(
     *inindat,
-    dropna: Optional[Literal["no", "any", "all"]] = None,
+    dropna: Literal["no", "any", "all"] | None = None,
     extended_columns: bool = False,
     parse_dates: bool = True,
-    skiprows: Optional[Union[int, List[int]]] = None,
+    skiprows: int | list[int] | None = None,
     index_type: Literal["datetime", "number"] = "datetime",
-    names: Optional[str] = None,
-    header: Optional[Union[int, str]] = "infer",
-    sep: Optional[str] = ",",
+    names: str | None = None,
+    header: int | str | None = "infer",
+    sep: str | None = ",",
     index_col=0,
     usecols=None,
     **kwds,
@@ -2334,7 +2336,7 @@ def read_iso_ts(
         elif isinstance(fname, (tuple, list, float)):
             res = pd.DataFrame({f"values{source_index}": fname}, index=[0])
 
-        newkwds: Dict[str, Union[str, bool]] = {}
+        newkwds: dict[str, str | bool] = {}
         if res.empty:
             # Store keywords for each source.
             parameters = [str(p) for p in parameters]
@@ -2601,7 +2603,7 @@ def read_iso_ts(
 
 
 @validate_call
-def range_to_numlist(rangestr: Union[str, int, List]) -> List:
+def range_to_numlist(rangestr: str | int | list) -> list:
     """
     Convert a range string to a list of numbers.
 
@@ -2628,7 +2630,7 @@ def range_to_numlist(rangestr: Union[str, int, List]) -> List:
         slices = make_list(sub, sep=":")
         for tst in slices:
             if not isinstance(tst, int):
-                raise ValueError(
+                raise TypeError(
                     error_wrapper(
                         f"""Invalid range specification in '{sub}' of the
                         '{rangestr}'.  The value {tst} is not an integer.

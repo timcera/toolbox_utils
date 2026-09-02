@@ -2,11 +2,14 @@
 Pure python WDM file reader.
 """
 
-from datetime import datetime
+# Standard library imports
+import datetime
 
+# Third party imports
 import numpy as np
 import pandas as pd
 
+# Local folder imports
 from ..utils import pandas_offset_by_version
 
 # look up attributes NAME, data type (Integer; Real; String) and data length by attribute number
@@ -144,11 +147,14 @@ def wdm_extract(wdmfile, *idsn):
         tstep = dattr["TSSTEP"]
         tcode = dattr["TCODE"]
         cindex = pd.date_range(
-            start=start, periods=len(records) + 1, freq=freq[tgroup]
-        ).astype("datetime64[ns]")
-        tindex = pd.date_range(
-            start=start, end=cindex[-1], freq=str(tstep) + freq[tcode]
-        ).astype("datetime64[ns]")
+            start=start, periods=len(records) + 1, freq=freq[tgroup], tz="UTC"
+        )
+        tindex = (
+            pd.date_range(start=start, end=cindex[-1], freq=str(tstep) + freq[tcode])
+            .tz_localize(None)
+            .astype("datetime64[ns]")
+        )
+        cindex = cindex.tz_localize(None).astype("datetime64[ns]")
         counts = np.diff(np.searchsorted(tindex, cindex))
 
         # Get timeseries data
@@ -170,9 +176,10 @@ def todatetime(year=1900, month=1, day=1, hour=0):
     """takes yr,mo,dy,hr information then returns its datetime64"""
 
     return (
-        datetime(year, month, day, 23) + pd.Timedelta(1, "h")
+        datetime.datetime(year, month, day, 23, tzinfo=datetime.timezone.utc)
+        + pd.Timedelta(1, "h")
         if hour == 24
-        else datetime(year, month, day, hour)
+        else datetime.datetime(year, month, day, hour, tzinfo=datetime.timezone.utc)
     )
 
 

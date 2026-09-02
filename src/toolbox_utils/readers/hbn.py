@@ -1,27 +1,17 @@
 """function to read HSPF binary files."""
 
+# Standard library imports
 import datetime
 import struct
 import sys
 from typing import Literal
 
+# Third party imports
 import pandas as pd
 
+# Local folder imports
 from .. import tsutils
-from ..utils import pandas_period_by_version
 from . import utils
-
-code2intervalmap = {5: "yearly", 4: "monthly", 3: "daily", 2: "bivl"}
-
-interval2codemap = {"yearly": 5, "monthly": 4, "daily": 3, "bivl": 2}
-
-code2freqmap = {
-    5: pandas_period_by_version("Y"),
-    4: "M",
-    3: "D",
-    2: None,
-}
-
 
 _LOCAL_DOCSTRINGS = {
     "hbnfilename": """hbnfilename: str
@@ -34,14 +24,8 @@ def _get_data(binfilename, interval="daily", labels=None, catalog_only=True):
     """Underlying function to read from the binary file.  Used by
     'extract', 'catalog'.
     """
-    # Normalize interval code
-    try:
-        intervalcode = interval2codemap[interval.lower()]
-    except AttributeError:
-        intervalcode = None
 
-    lablist = utils.normalize_labels(labels)
-    lablist = [i + [intervalcode] for i in lablist]
+    lablist, intervalcode = utils.normalize_labels(labels, interval)
 
     collect_dict = {}
     # Now read through the binary file and collect the data matching the labels
@@ -132,12 +116,15 @@ def _get_data(binfilename, interval="daily", labels=None, catalog_only=True):
                 # delta accounts for HSPF's use of hour 24 to represent
                 # the end of the last interval of the day.
                 delta = datetime.timedelta(hours=0)
-                if level == interval2codemap["bivl"]:
+                if level == utils.interval2codemap["bivl"]:
                     delta = datetime.timedelta(hours=hour) + datetime.timedelta(
                         minutes=minute
                     )
 
-                ndate = datetime.datetime(year, month, day) + delta
+                ndate = (
+                    datetime.datetime(year, month, day, tzinfo=datetime.timezone.utc)
+                    + delta
+                )
 
                 #  Go through labels to see if these values need to be
                 #  collected
@@ -188,7 +175,7 @@ def _get_data(binfilename, interval="daily", labels=None, catalog_only=True):
             )
         )
 
-    ndates = sorted(list(ndates))
+    ndates = sorted(ndates)
 
     if catalog_only is False:
         for lbl in lablist:
@@ -203,7 +190,7 @@ def _get_data(binfilename, interval="daily", labels=None, catalog_only=True):
                 )
     else:
         for key in collect_dict:
-            delta = ndates[1] - ndates[0] if key[4] == 2 else code2freqmap[key[4]]
+            delta = ndates[1] - ndates[0] if key[4] == 2 else utils.code2freqmap[key[4]]
             collect_dict[key] = (
                 pd.Period(ndates[0], freq=delta),
                 pd.Period(ndates[-1], freq=delta),
@@ -241,8 +228,10 @@ def hbn_extract(
             [pd.Series(data[i], index=index) for i in skeys], sort=False, axis=1
         ).reindex(pd.Index(index))
     )
+
     columns = [f"{i[0]}_{i[1]}_{i[3]}".replace(" ", "-") for i in skeys]
     result.columns = columns
+
     if interval == "bivl":
         result.index = result.index.to_period(result.index[1] - result.index[0])
     else:

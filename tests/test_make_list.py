@@ -5,12 +5,15 @@ catalog
 Tests for `toolbox_utils` module.
 """
 
+# Standard library imports
 from io import BytesIO, StringIO
 
+# Third party imports
 import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
 
+# First party imports
 from toolbox_utils import tsutils
 
 
@@ -88,5 +91,5 @@ def test_make_list(test_input, expected, kwds):
     ],
 )
 def test_make_list_exception(test_input, expected, kwds):
-    with pytest.raises(Exception):
+    with pytest.raises(ValueError):
         _ = tsutils.make_list(test_input, **kwds)

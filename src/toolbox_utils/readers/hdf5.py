@@ -13,17 +13,7 @@ from pydantic import validate_call
 
 # Local folder imports
 from .. import tsutils
-
-code2intervalmap = {5: "yearly", 4: "monthly", 3: "daily", 2: "bivl"}
-
-interval2codemap = {"yearly": 5, "monthly": 4, "daily": 3, "bivl": 2}
-
-code2freqmap = {
-    5: pd.offsets.YearEnd(),
-    4: pd.offsets.MonthEnd(),
-    3: "D",
-    2: None,
-}
+from . import utils
 
 _LOCAL_DOCSTRINGS = {
     "hdf5filename": r"""hdf5filename: str
@@ -45,33 +35,6 @@ The format for floating point numbers in the output table.
 """
 
 
-def tuple_match(a, b):
-    """Part of partial ordered matching.
-    See http://stackoverflow.com/a/4559604
-    """
-    return len(a) == len(b) and all(
-        i is None or j is None or i == j for i, j in zip(a, b)
-    )
-
-
-def tuple_combine(a, b):
-    """Part of partial ordered matching.
-    See http://stackoverflow.com/a/4559604
-    """
-    return tuple(i is None and j or i for i, j in zip(a, b))
-
-
-def tuple_search(findme, haystack):
-    """Partial ordered matching with 'None' as wildcard
-    See http://stackoverflow.com/a/4559604
-    """
-    return [
-        (i, tuple_combine(findme, h))
-        for i, h in enumerate(haystack)
-        if tuple_match(findme, h)
-    ]
-
-
 def _get_data(binfilename, interval="daily", labels=None, catalog_only=True):
     """Underlying function to read from the binary file.  Used by
     'extract', 'catalog'.
@@ -82,145 +45,17 @@ def _get_data(binfilename, interval="daily", labels=None, catalog_only=True):
             This function works with HDF5 files that typically have an filename
             extension of '*.h5' or '*.hdf5'.  You have {binfilename}.""")
 
-    if labels is None:
-        labels = [",,,"]
-    testem = {
-        "PERLND": [
-            "ATEMP",
-            "SNOW",
-            "PWATER",
-            "SEDMNT",
-            "PSTEMP",
-            "PWTGAS",
-            "PQUAL",
-            "MSTLAY",
-            "PEST",
-            "NITR",
-            "PHOS",
-            "TRACER",
-            "",
-        ],
-        "IMPLND": ["ATEMP", "SNOW", "IWATER", "SOLIDS", "IWTGAS", "IQUAL", ""],
-        "RCHRES": [
-            "HYDR",
-            "CONS",
-            "HTRCH",
-            "SEDTRN",
-            "GQUAL",
-            "OXRX",
-            "NUTRX",
-            "PLANK",
-            "PHCARB",
-            "INFLOW",
-            "OFLOW",
-            "ROFLOW",
-            "",
-        ],
-        "BMPRAC": [""],
-        "": [""],
-    }
-
-    collect_dict = {}
-    lablist = []
-
-    # Normalize interval code
-    try:
-        intervalcode = interval2codemap[interval.lower()]
-    except AttributeError:
-        intervalcode = None
-
-    # convert label tuples to lists
-    labels = list(labels)
-
-    # turn into a list of lists
-    nlabels = []
-    for label in labels:
-        if isinstance(label, str):
-            nlabels.append(label.split(","))
-        else:
-            nlabels.append(label)
-    labels = nlabels
-
-    # Check the list members for valid values
-    for label in labels:
-        if len(label) != 4:
-            raise ValueError(
-                tsutils.error_wrapper(
-                    f"""
-                    The label '{label}' has the wrong number of entries.
-                    """
-                )
-            )
-
-        # replace empty fields with None
-        words = [None if i == "" else i for i in label]
-
-        # first word must be a valid operation type or None
-        if words[0] is not None:
-            # force uppercase before comparison
-            words[0] = words[0].upper()
-            if words[0] not in testem:
-                raise ValueError(
-                    tsutils.error_wrapper(
-                        f"""
-                        Operation type must be one of 'PERLND', 'IMPLND',
-                        'RCHRES', or 'BMPRAC', or missing (to get all) instead
-                        of {words[0]}.
-                        """
-                    )
-                )
-
-        # second word must be integer 1-999 or None or range to parse
-        if words[1] is not None:
-            try:
-                words[1] = int(words[1])
-                luelist = [words[1]]
-            except ValueError:
-                luelist = tsutils.range_to_numlist(words[1])
-            for luenum in luelist:
-                if luenum < 1 or luenum > 999:
-                    raise ValueError(
-                        tsutils.error_wrapper(
-                            f"""
-                            The land use element must be an integer from 1 to
-                            999 inclusive, instead of {luenum}.
-                            """
-                        )
-                    )
-        else:
-            luelist = [None]
-
-        # third word must be a valid group name or None
-        if words[2] is not None:
-            words[2] = words[2].upper()
-            if (words[0] is not None) and (words[2] not in testem[words[0]]):
-                raise ValueError(
-                    tsutils.error_wrapper(
-                        f"""
-                        The {words[0]} operation type only allows the variable
-                        groups: {testem[words[0]][:-1]},
-                        instead you gave {words[2]}.
-                        """
-                    )
-                )
-
-        # fourth word is currently not checked - assumed to be a variable name
-        # if not, it will simply never be found in the file, so ok
-        # but no warning for the user - add check?
-
-        # add interval code as fifth word in list
-        words.append(intervalcode)
-
-        # add to new list of checked and expanded lists
-        for luenum in luelist:
-            words[1] = luenum
-            lablist.append(list(words))
+    lablist, intervalcode = utils.normalize_labels(labels, interval)
 
     labeltest = set()
     with pd.HDFStore(binfilename, "r") as store:
         # "/RESULTS/RCHRES_R005/SEDTRN"
         keys = store.keys()
 
+    _dirname = Path(__file__).parent.parent
+    hspf_time_series = pd.read_csv(_dirname / "data" / "HSPF_TIME_SERIES.csv")
+
+    collect_dict = {}
     for key in keys:
         keyparts = key.strip("/").split("/")
         if keyparts[0] != "RESULTS":
@@ -254,7 +89,7 @@ def _get_data(binfilename, interval="daily", labels=None, catalog_only=True):
             )
 
             for lbl in lablist:
-                res = tuple_search(tmpkey, [lbl])
+                res = utils.tuple_search(tmpkey, [lbl])
                 if not res:
                     continue
                 nres = res[0][1]
@@ -272,7 +107,35 @@ def _get_data(binfilename, interval="daily", labels=None, catalog_only=True):
                             if ival == 2:
                                 series = df[vname]
                             else:
-                                series = df[vname].resample(code2freqmap[ival]).last()
+                                min_count = 1
+                                min_count = utils.code2min_count[
+                                    (df.index.freqstr, ival)
+                                ]
+                                agg_type = hspf_time_series.loc[
+                                    (hspf_time_series["OPERATION"] == nres[0])
+                                    & (hspf_time_series["GROUP"] == nres[2])
+                                    & (hspf_time_series["MEMN"] == nres[3]),
+                                    "AGGREGATE",
+                                ].squeeze()
+                                # Suspect that "ANY" or "NONE" would never come
+                                # up in binary output.  Just in case assigned
+                                # those categories to the same aggregation for
+                                # "LAST".
+                                if agg_type in ["LAST", "ANY", "NONE"]:
+                                    series = (
+                                        df[vname]
+                                        .resample(utils.code2freqmap[ival])
+                                        .last(min_count=min_count)
+                                    )
+                                elif agg_type == "SUM":
+                                    series = (
+                                        df[vname]
+                                        .resample(utils.code2freqmap[ival])
+                                        .sum(min_count=min_count)
+                                    )
+                            series = series.loc[: series.last_valid_index()].asfreq(
+                                utils.code2freqmap[ival]
+                            )
                             ndates = series.index
                             collect_dict[nres] = series.values
 
@@ -288,11 +151,11 @@ def _get_data(binfilename, interval="daily", labels=None, catalog_only=True):
             )
         )
 
-    ndates = sorted(list(ndates))
+    ndates = sorted(ndates)
 
     if catalog_only:
         for key in collect_dict:
-            delta = ndates[1] - ndates[0] if key[4] == 2 else code2freqmap[key[4]]
+            delta = ndates[1] - ndates[0] if key[4] == 2 else utils.code2freqmap[key[4]]
             collect_dict[key] = (
                 pd.Period(ndates[0], freq=delta),
                 pd.Period(ndates[-1], freq=delta),
@@ -431,10 +294,11 @@ def hdf5_extract(
     result.columns = columns
     result = tsutils.asbestfreq(result)
     result = tsutils.common_kwds(result, start_date=start_date, end_date=end_date)
-    if interval == "bivl":
-        result.index = result.index.to_period(result.index[1] - result.index[0])
-    else:
-        result.index = result.index.to_period()
+    if len(result) > 1:
+        if interval == "bivl":
+            result.index = result.index.to_period(result.index[1] - result.index[0])
+        else:
+            result.index = result.index.to_period()
     result.index.name = "Datetime"
 
     return result

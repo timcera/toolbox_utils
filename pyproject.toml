@@ -78,9 +78,6 @@ pythonpath = "src"
 
 [tool.ruff]
 fix = true
-exclude = [
-    "src/*/toolbox_utils/**/*.py"
-]
 
 [tool.ruff.lint]
 extend-select = ["I"]
@@ -99,6 +96,9 @@ license-files = ["LICENSE.txt"]
 [tool.setuptools.dynamic]
 readme = {file = "README.rst"}
 version = {file = "VERSION"}
+
+[tool.setuptools.package-data]
+"toolbox_utils.data" = ["*"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

@@ -1,0 +1,625 @@
+INDEX,FNAME,OPERATION,GROUP,AGGREGATE,MEMN,MDIM1,X1,MAXSB1,MAXSB2,MKIND,SPTRN,MSECT,MIO,OSVBAS,OSVOFF,ENG_UNITS,ENG_LTVAL11,ENG_LTVAL12,ENG_LTVAL21,ENG_LTVAL22,DESCRIPTION,MET_UNITS,MET_LTVAL11,MET_LTVAL12,MET_LTVAL21,MET_LTVAL22
+2,./HSPF90/BMPRACTS.SEQ,BMPRAC,INFLOW,SUM,CIVOL,100,1,-9,1,2,0,0,2,0,593,acft/iv,0,1,0,0.00123,Inflow of water by category,Mm3/iv,0,810.71,0,1
+13,./HSPF90/BMPRACTS.SEQ,BMPRAC,INFLOW,SUM,IACID,7,1,-10,1,2,0,0,2,0,3630,lb/iv,0,1,0,0.4536,Inflows of acid chemicals,kg/iv,0,2.205,0,1
+3,./HSPF90/BMPRACTS.SEQ,BMPRAC,INFLOW,SUM,ICON,10,1,-7,1,2,0,0,2,0,2069,qty/iv,0,1,0,1,Inflow of conservative constits.,qty/iv,0,1,0,1
+9,./HSPF90/BMPRACTS.SEQ,BMPRAC,INFLOW,SUM,IDNUT,4,1,4,1,2,0,0,2,0,3054,lb/iv,0,1,0,0.4536,Inflows of dissolved nutrients,kg/iv,0,2.205,0,1
+6,./HSPF90/BMPRACTS.SEQ,BMPRAC,INFLOW,SUM,IDQAL,3,1,-8,1,2,0,0,2,0,2566,qty/iv,0,1,0,1,Inflow of dissolved qual,qty/iv,0,1,0,1
+4,./HSPF90/BMPRACTS.SEQ,BMPRAC,INFLOW,SUM,IHEAT,1,1,1,1,2,0,0,2,0,2424,BTU/iv,0,1,0,0.252,Inflow of heat,kcl/iv,0,3.969,0,1
+8,./HSPF90/BMPRACTS.SEQ,BMPRAC,INFLOW,SUM,IOX,2,1,2,1,2,0,0,2,0,2978,lb/iv,0,1,0,0.4536,Inflows of DO and BOD,kg/iv,0,2.205,0,1
+12,./HSPF90/BMPRACTS.SEQ,BMPRAC,INFLOW,SUM,IPH,2,1,2,1,2,0,0,2,0,3539,lb/iv,0,1,0,0.4536,Inflows of TIC and CO2,kg/iv,0,2.205,0,1
+11,./HSPF90/BMPRACTS.SEQ,BMPRAC,INFLOW,SUM,IPLK,5,1,5,1,2,0,0,2,0,3389,lb/iv,0,1,0,0.4536,Inflows of plankton related constituents,kg/iv,0,2.205,0,1
+5,./HSPF90/BMPRACTS.SEQ,BMPRAC,INFLOW,SUM,ISED,3,1,3,1,2,0,0,2,0,2467,tn/iv,0,1,0,0.907,Inflows of sediment,tne/iv,0,1.1025,0,1
+10,./HSPF90/BMPRACTS.SEQ,BMPRAC,INFLOW,SUM,ISNUT,3,2,3,2,2,0,0,2,0,3092,lb/iv,0,1,0,0.4536,Inflows of adsorbed NH4 and PO4,kg/iv,0,2.205,0,1
+7,./HSPF90/BMPRACTS.SEQ,BMPRAC,INFLOW,SUM,ISQAL,3,3,3,-8,2,0,0,2,0,2617,qty/iv,0,1,0,1,Inflows of sed-assoc qual,qty/iv,0,1,0,1
+1,./HSPF90/BMPRACTS.SEQ,BMPRAC,INFLOW,SUM,IVOL,1,1,1,1,2,0,0,2,0,91,acft/iv,0,1,0,0.00123,Inflow of water,Mm3/iv,0,810.71,0,1
+15,./HSPF90/BMPRACTS.SEQ,BMPRAC,RECEIV,SUM,CIVOL,100,1,-9,1,2,0,0,0,0,693,acft/iv,0,1,0,0.00123,Inflow of water by category,Mm3/iv,0,810.71,0,1
+26,./HSPF90/BMPRACTS.SEQ,BMPRAC,RECEIV,SUM,IACID,7,1,-10,1,2,0,0,0,0,3637,lb/iv,0,1,0,0.4536,Inflows of acid chemicals,kg/iv,0,2.205,0,1
+16,./HSPF90/BMPRACTS.SEQ,BMPRAC,RECEIV,SUM,ICON,10,1,-7,1,2,0,0,0,0,2079,qty/iv,0,1,0,1,Inflow of conservative constits.,qty/iv,0,1,0,1
+22,./HSPF90/BMPRACTS.SEQ,BMPRAC,RECEIV,SUM,IDNUT,4,1,4,1,2,0,0,0,0,3058,lb/iv,0,1,0,0.4536,Inflows of dissolved nutrients,kg/iv,0,2.205,0,1
+19,./HSPF90/BMPRACTS.SEQ,BMPRAC,RECEIV,SUM,IDQAL,3,1,-8,1,2,0,0,0,0,2569,qty/iv,0,1,0,1,Inflow of dissolved qual,qty/iv,0,1,0,1
+17,./HSPF90/BMPRACTS.SEQ,BMPRAC,RECEIV,SUM,IHEAT,1,1,1,1,2,0,0,0,0,2425,BTU/iv,0,1,0,0.252,Inflow of heat,kcl/iv,0,3.969,0,1
+21,./HSPF90/BMPRACTS.SEQ,BMPRAC,RECEIV,SUM,IOX,2,1,2,1,2,0,0,0,0,2980,lb/iv,0,1,0,0.4536,Inflows of DO and BOD,kg/iv,0,2.205,0,1
+25,./HSPF90/BMPRACTS.SEQ,BMPRAC,RECEIV,SUM,IPH,2,1,2,1,2,0,0,0,0,3541,lb/iv,0,1,0,0.4536,Inflows of TIC and CO2,kg/iv,0,2.205,0,1
+24,./HSPF90/BMPRACTS.SEQ,BMPRAC,RECEIV,SUM,IPLK,5,1,5,1,2,0,0,0,0,3394,lb/iv,0,1,0,0.4536,Inflows of plankton related constituents,kg/iv,0,2.205,0,1
+18,./HSPF90/BMPRACTS.SEQ,BMPRAC,RECEIV,SUM,ISED,3,1,3,1,2,0,0,0,0,2470,tn/iv,0,1,0,0.907,Inflows of sediment,tne/iv,0,1.1025,0,1
+23,./HSPF90/BMPRACTS.SEQ,BMPRAC,RECEIV,SUM,ISNUT,3,2,3,2,2,0,0,0,0,3098,lb/iv,0,1,0,0.4536,Inflows of adsorbed NH4 and PO4,kg/iv,0,2.205,0,1
+20,./HSPF90/BMPRACTS.SEQ,BMPRAC,RECEIV,SUM,ISQAL,3,3,3,-8,2,0,0,0,0,2626,qty/iv,0,1,0,1,Inflows of sed-assoc qual,qty/iv,0,1,0,1
+14,./HSPF90/BMPRACTS.SEQ,BMPRAC,RECEIV,SUM,IVOL,1,1,1,1,2,0,0,0,0,92,acft/iv,0,1,0,0.00123,Inflow of water,Mm3/iv,0,810.71,0,1
+41,./HSPF90/BMPRACTS.SEQ,BMPRAC,REMOVE,SUM,CRMVOL,100,1,-9,1,2,0,0,0,0,1919,acft/iv,0,1,0,0.00123,Removal of water by category,Mm3/iv,0,810.71,0,1
+52,./HSPF90/BMPRACTS.SEQ,BMPRAC,REMOVE,SUM,RMACID,7,1,-10,1,2,0,0,0,0,3819,lb/iv,0,1,0,0.4536,Removals of acid chemicals,kg/iv,0,2.205,0,1
+42,./HSPF90/BMPRACTS.SEQ,BMPRAC,REMOVE,SUM,RMCON,10,1,-7,1,2,0,0,0,0,2409,qty/iv,0,1,0,1,Removal of conservative constits.,qty/iv,0,1,0,1
+48,./HSPF90/BMPRACTS.SEQ,BMPRAC,REMOVE,SUM,RMDNUT,4,1,4,1,2,0,0,0,0,3324,lb/iv,0,1,0,0.4536,Removals of dissolved nutrients,kg/iv,0,2.205,0,1
+45,./HSPF90/BMPRACTS.SEQ,BMPRAC,REMOVE,SUM,RMDQAL,3,1,-8,1,2,0,0,0,0,2911,qty/iv,0,1,0,1,Removal of dissolved qual,qty/iv,0,1,0,1
+43,./HSPF90/BMPRACTS.SEQ,BMPRAC,REMOVE,SUM,RMHEAT,1,1,1,1,2,0,0,0,0,2451,BTU/iv,0,1,0,0.252,Removal of heat,kcl/iv,0,3.969,0,1
+47,./HSPF90/BMPRACTS.SEQ,BMPRAC,REMOVE,SUM,RMOX,2,1,2,1,2,0,0,0,0,3032,lb/iv,0,1,0,0.4536,Removals of DO and BOD,kg/iv,0,2.205,0,1
+51,./HSPF90/BMPRACTS.SEQ,BMPRAC,REMOVE,SUM,RMPH,2,1,2,1,2,0,0,0,0,3593,lb/iv,0,1,0,0.4536,Removals of TIC and CO2,kg/iv,0,2.205,0,1
+50,./HSPF90/BMPRACTS.SEQ,BMPRAC,REMOVE,SUM,RMPLK,5,1,5,1,2,0,0,0,0,3524,lb/iv,0,1,0,0.4536,Removals of plankton related constituents,kg/iv,0,2.205,0,1
+44,./HSPF90/BMPRACTS.SEQ,BMPRAC,REMOVE,SUM,RMSED,3,1,3,1,2,0,0,0,0,2548,tn/iv,0,1,0,0.907,Removals of sediments,tne/iv,0,1.1025,0,1
+49,./HSPF90/BMPRACTS.SEQ,BMPRAC,REMOVE,SUM,RMSNUT,3,2,3,2,2,0,0,0,0,3358,lb/iv,0,1,0,0.4536,Removals of adsorbed NH4 and PO4,kg/iv,0,2.205,0,1
+46,./HSPF90/BMPRACTS.SEQ,BMPRAC,REMOVE,SUM,RMSQAL,3,3,3,-8,2,0,0,0,0,2959,qty/iv,0,1,0,1,Removals of sed-assoc qual,qty/iv,0,1,0,1
+40,./HSPF90/BMPRACTS.SEQ,BMPRAC,REMOVE,SUM,RMVOL,1,1,1,1,2,0,0,0,0,1418,acft/iv,0,1,0,0.00123,Removal of water,Mm3/iv,0,810.71,0,1
+28,./HSPF90/BMPRACTS.SEQ,BMPRAC,ROFLOW,SUM,CROVOL,100,1,-9,1,2,0,0,0,0,1313,acft/iv,0,1,0,0.00123,Outflow of water by category,Mm3/iv,0,810.71,0,1
+39,./HSPF90/BMPRACTS.SEQ,BMPRAC,ROFLOW,SUM,ROACID,7,1,-10,1,2,0,0,0,0,3777,lb/iv,0,1,0,0.4536,Outflows of acid chemicals,kg/iv,0,0.4537,0,1
+29,./HSPF90/BMPRACTS.SEQ,BMPRAC,ROFLOW,SUM,ROCON,10,1,-7,1,2,0,0,0,0,2349,qty/iv,0,1,0,1,Outflow of conservative constits.,qty/iv,0,1,0,1
+35,./HSPF90/BMPRACTS.SEQ,BMPRAC,ROFLOW,SUM,RODNUT,4,1,4,1,2,0,0,0,0,3264,lb/iv,0,1,0,0.4536,Outflows of dissolved nutrients,kg/iv,0,453.7,0,1000
+32,./HSPF90/BMPRACTS.SEQ,BMPRAC,ROFLOW,SUM,RODQAL,3,1,-8,1,2,0,0,0,0,2839,qty/iv,0,1,0,1,Outflow of dissolved qual,qty/iv,0,1,0,1
+30,./HSPF90/BMPRACTS.SEQ,BMPRAC,ROFLOW,SUM,ROHEAT,1,1,1,1,2,0,0,0,0,2445,BTU/iv,0,1,0,0.252,Outflow of heat,kcl/iv,0,3.969,0,1
+34,./HSPF90/BMPRACTS.SEQ,BMPRAC,ROFLOW,SUM,ROOX,2,1,2,1,2,0,0,0,0,3020,lb/iv,0,1,0,0.4536,Outflows of DO and BOD,kg/iv,0,453.7,0,1000
+38,./HSPF90/BMPRACTS.SEQ,BMPRAC,ROFLOW,SUM,ROPH,2,1,2,1,2,0,0,0,0,3581,lb/iv,0,1,0,0.4536,Outflows of TIC and CO2,kg/iv,0,453.7,0,1000
+37,./HSPF90/BMPRACTS.SEQ,BMPRAC,ROFLOW,SUM,ROPLK,5,1,5,1,2,0,0,0,0,3494,lb/iv,0,1,0,0.4536,Outflows of plankton related constituents,kg/iv,0,453.7,0,1000
+31,./HSPF90/BMPRACTS.SEQ,BMPRAC,ROFLOW,SUM,ROSED,3,1,3,1,2,0,0,0,0,2530,tn/iv,0,1,0,0.907,Outflows of sediments,tne/iv,0,1.1025,0,1
+36,./HSPF90/BMPRACTS.SEQ,BMPRAC,ROFLOW,SUM,ROSNUT,3,2,3,2,2,0,0,0,0,3298,lb/iv,0,1,0,0.4536,Outflows of adsorbed NH4 and PO4,kg/iv,0,453.7,0,1000
+33,./HSPF90/BMPRACTS.SEQ,BMPRAC,ROFLOW,SUM,ROSQAL,3,3,3,-8,2,0,0,0,0,2887,qty/iv,0,1,0,1,Outflows of sed-assoc qual,qty/iv,0,1,0,1
+27,./HSPF90/BMPRACTS.SEQ,BMPRAC,ROFLOW,SUM,ROVOL,1,1,1,1,2,0,0,0,0,812,acft/iv,0,1,0,0.00123,Outflow of water,Mm3/iv,0,810.71,0,1
+54,./HSPF90/COPYTS.SEQ,COPY,INPUT,ANY,MEAN,20,1,-3,1,2,0,0,2,0,50,any,0,1,0,1,Mean-valued input time series,any,0,1,0,1
+53,./HSPF90/COPYTS.SEQ,COPY,INPUT,ANY,POINT,20,1,-2,1,1,0,0,2,0,30,any,0,1,0,1,Point-valued input time series,any,0,1,0,1
+56,./HSPF90/COPYTS.SEQ,COPY,OUTPUT,ANY,MEAN,20,1,-3,1,2,0,0,0,0,90,any,0,1,0,1,Mean-valued output time series,any,0,1,0,1
+55,./HSPF90/COPYTS.SEQ,COPY,OUTPUT,ANY,POINT,20,1,-2,1,1,0,0,0,0,70,any,0,1,0,1,Point-valued output time series,any,0,1,0,1
+57,./HSPF90/DISPLYTS.SEQ,DISPLY,INPUT,ANY,TIMSER,1,1,1,1,2,0,0,2,0,2470,any,0,1,0,1,A mean-valued input time series,any,0,1,0,1
+58,./HSPF90/DURANLTS.SEQ,DURANL,INPUT,ANY,TIMSER,1,1,1,1,2,0,0,2,0,109,any,0,1,0,1,A mean-valued input time series,any,0,1,0,1
+59,./HSPF90/GENERTS.SEQ,GENER,INPUT,ANY,ONE,20,1,-61,1,2,0,0,2,0,62,any,0,1,0,1,First input time series,any,0,1,0,1
+60,./HSPF90/GENERTS.SEQ,GENER,INPUT,ANY,TWO,20,1,-61,1,2,0,0,2,0,82,any,0,1,0,1,Second input time series,any,0,1,0,1
+61,./HSPF90/GENERTS.SEQ,GENER,OUTPUT,ANY,TIMSER,20,1,-61,1,2,0,0,0,0,102,any,0,1,0,1,Output time series (mean-valued),any,0,1,0,1
+78,./HSPF90/IMPLNDTS.SEQ,IMPLND,ATEMP,LAST,AIRTMP,1,1,1,1,2,0,1,1,0,144,Deg F,0,1,17.8,1.8,Estimated surf air temp over PLS,Deg C,0,1,17.8,1.8
+67,./HSPF90/IMPLNDTS.SEQ,IMPLND,EXTNL,LAST,CLOUD,1,1,1,1,2,0,0,2,0,156,tenths,0,1,0,1,Cloud cover (range 0 thru 10),tenths,0,1,0,1
+64,./HSPF90/IMPLNDTS.SEQ,IMPLND,EXTNL,LAST,DTMPG,1,1,1,1,2,0,0,2,0,153,Deg F,0,1,17.8,1.8,Measured dewpoint temp over ILS,Deg C,0,1,17.8,1.8
+62,./HSPF90/IMPLNDTS.SEQ,IMPLND,EXTNL,LAST,GATMP,1,1,1,1,2,0,0,2,0,115,Deg F,0,1,17.8,1.8,Measured air temp over ILS,Deg C,0,1,17.8,1.8
+77,./HSPF90/IMPLNDTS.SEQ,IMPLND,EXTNL,LAST,IQADCN,10,1,-624,1,2,0,0,2,0,614,qty/ft3,0,3630,0,102833,Atmoshperic deposition of QUAL to ILS,qty/l,0,3630,0,102833
+76,./HSPF90/IMPLNDTS.SEQ,IMPLND,EXTNL,SUM,IQADFX,10,1,-624,1,2,0,0,2,0,604,qty/aciv,0,1,0,0.4047,Atmoshperic deposition of QUAL to ILS,qty/haiv,0,1,0,0.4047
+69,./HSPF90/IMPLNDTS.SEQ,IMPLND,EXTNL,SUM,PETINP,1,1,1,1,2,0,0,2,0,327,in/iv,0,1,0,0.0394,Input potential E-T from ILS,mm/iv,0,1,0,0.0394
+63,./HSPF90/IMPLNDTS.SEQ,IMPLND,EXTNL,SUM,PREC,1,1,1,1,2,0,0,2,0,116,in/iv,0,1,0,0.0394,Measured precipitation on ILS,mm/iv,0,1,0,0.0394
+73,./HSPF90/IMPLNDTS.SEQ,IMPLND,EXTNL,LAST,SLICO2,1,1,1,1,2,0,0,2,0,468,mg/l,0,1,0,1,Conc of CO2 in surface lateral inflow,mg/l,0,1,0,1
+72,./HSPF90/IMPLNDTS.SEQ,IMPLND,EXTNL,LAST,SLIDOX,1,1,1,1,2,0,0,2,0,467,mg/l,0,1,0,1,Conc of DO in surface lateral inflow,mg/l,0,1,0,1
+74,./HSPF90/IMPLNDTS.SEQ,IMPLND,EXTNL,SUM,SLIQO,7,1,-626,1,2,0,0,2,0,584,qty/aciv,0,1,0,0.4047,Lateral input of QUALOF to ILS,qty/haiv,0,1,0,0.4047
+75,./HSPF90/IMPLNDTS.SEQ,IMPLND,EXTNL,LAST,SLIQSP,7,1,-625,1,2,0,0,2,0,594,qty/ton,0,1,0,0.9072,Pot fac of QUALSD on lat sediment inflow,qty/tonn,0,1,0,0.9072
+71,./HSPF90/IMPLNDTS.SEQ,IMPLND,EXTNL,LAST,SLITMP,1,1,1,1,2,0,0,2,0,466,Deg F,-32,0.555,0,1,Temp of surface lateral inflow,Deg C,-32,0.555,0,1
+70,./HSPF90/IMPLNDTS.SEQ,IMPLND,EXTNL,SUM,SLSLD,1,1,1,1,2,0,0,2,0,422,tn/iv,0,1,0,0.4462,Lateral input of solids to ILS,tne/iv,0,1,0,0.4462
+66,./HSPF90/IMPLNDTS.SEQ,IMPLND,EXTNL,SUM,SOLRAD,1,1,1,1,2,0,0,2,0,155,Ly/iv,0,1,0,1,Measured solar radiation over ILS,Ly/iv,0,1,0,1
+68,./HSPF90/IMPLNDTS.SEQ,IMPLND,EXTNL,SUM,SURLI,1,1,1,1,2,0,0,2,0,326,in/iv,0,1,0,0.0394,Surface lateral inflow to ILS,mm/iv,0,1,0,0.0394
+65,./HSPF90/IMPLNDTS.SEQ,IMPLND,EXTNL,SUM,WINMOV,1,1,1,1,2,0,0,2,0,154,mi/iv,0,1,0,0.621,Measured wind movement over ILS,km/iv,0,1,0,0.621
+125,./HSPF90/IMPLNDTS.SEQ,IMPLND,IQUAL,SUM,IQADDR,10,1,-624,1,2,0,6,0,0,1717,qty/aciv,0,1,0,0.4047,Dry atmospheric deposition flux to PLS,qty/haiv,0,1,0,0.4047
+127,./HSPF90/IMPLNDTS.SEQ,IMPLND,IQUAL,SUM,IQADEP,10,1,-624,1,2,0,6,0,0,1737,qty/aciv,0,1,0,0.4047,Total atmospheric deposition flux to PLS,qty/haiv,0,1,0,0.4047
+126,./HSPF90/IMPLNDTS.SEQ,IMPLND,IQUAL,SUM,IQADWT,10,1,-624,1,2,0,6,0,0,1727,qty/aciv,0,1,0,0.4047,Wet atmospheric deposition flux to PLS,qty/haiv,0,1,0,0.4047
+124,./HSPF90/IMPLNDTS.SEQ,IMPLND,IQUAL,LAST,SOQC,10,1,-624,1,2,0,6,0,0,1707,qty/ft3,0,3630,0,102833,Conc of QUAL in surface outflow,qty/l,0,3630,0,102833
+121,./HSPF90/IMPLNDTS.SEQ,IMPLND,IQUAL,SUM,SOQO,7,1,-626,1,2,0,6,0,0,1677,qty/aciv,0,1,0,0.4047,Washoff of QUALOF from surface,qty/haiv,0,1,0,0.4047
+122,./HSPF90/IMPLNDTS.SEQ,IMPLND,IQUAL,LAST,SOQOC,7,1,-626,1,2,0,6,0,0,1687,qty/ft3,0,3630,0,102833,Conc of QUALOF in surface outflow,qty/l,0,3630,0,102833
+120,./HSPF90/IMPLNDTS.SEQ,IMPLND,IQUAL,SUM,SOQS,7,1,-625,1,2,0,6,0,0,1667,qty/aciv,0,1,0,0.4047,Total flux of QUALSD from surface,qty/haiv,0,1,0,0.4047
+119,./HSPF90/IMPLNDTS.SEQ,IMPLND,IQUAL,LAST,SOQSP,7,1,-625,1,1,0,6,0,0,1417,qty/ton,0,1,0,0.9072,Pot factor of QUALSD on sediment outflow,qty/tonn,0,1,0,0.9072
+123,./HSPF90/IMPLNDTS.SEQ,IMPLND,IQUAL,SUM,SOQUAL,10,1,-624,1,2,0,6,0,0,1697,qty/aciv,0,1,0,0.4047,Total outflow of QUAL from the surface,qty/haiv,0,1,0,0.4047
+118,./HSPF90/IMPLNDTS.SEQ,IMPLND,IQUAL,LAST,SQO,7,1,-626,1,1,0,6,0,0,1407,qty/ac,0,1,0,0.4047,Storage of QUALOF on the surface,qty/ha,0,1,0,0.4047
+108,./HSPF90/IMPLNDTS.SEQ,IMPLND,IWATER,SUM,IMPEV,1,1,1,1,2,0,3,0,0,415,in/iv,0,1,0,0.0394,Total simulated E-T from ILS,mm/iv,0,1,0,0.0394
+101,./HSPF90/IMPLNDTS.SEQ,IMPLND,IWATER,LAST,IMPS,1,1,1,1,1,0,3,0,0,376,in,0,1,0,0.0394,Total water stored in the ILS,mm,0,1,0,0.0394
+107,./HSPF90/IMPLNDTS.SEQ,IMPLND,IWATER,SUM,PET,1,1,1,1,2,0,3,0,0,414,in/iv,0,1,0,0.0394,"Pot. E-T, adj for snow cover + air temp",mm/iv,0,1,0,0.0394
+104,./HSPF90/IMPLNDTS.SEQ,IMPLND,IWATER,NONE,PETADJ,1,1,1,1,1,0,3,1,0,379,none,0,1,0,1,Potential ET adjustment factor,none,0,1,0,1
+102,./HSPF90/IMPLNDTS.SEQ,IMPLND,IWATER,LAST,RETS,1,1,1,1,1,0,3,0,0,377,in,0,1,0,0.0394,Retention storage,mm,0,1,0,0.0394
+105,./HSPF90/IMPLNDTS.SEQ,IMPLND,IWATER,SUM,SUPY,1,1,1,1,2,0,3,1,0,412,in/iv,0,1,0,0.0394,Moisture supply,mm/iv,0,1,0,0.0394
+109,./HSPF90/IMPLNDTS.SEQ,IMPLND,IWATER,SUM,SURI,1,1,1,1,2,0,3,0,0,416,in/iv,0,1,0,0.0394,Surface inflow to ILS,mm/iv,0,1,0,0.0394
+106,./HSPF90/IMPLNDTS.SEQ,IMPLND,IWATER,SUM,SURO,1,1,1,1,2,0,3,1,0,413,in/iv,0,1,0,0.0394,Surface outflow from ILS,mm/iv,0,1,0,0.0394
+103,./HSPF90/IMPLNDTS.SEQ,IMPLND,IWATER,LAST,SURS,1,1,1,1,1,0,3,1,0,378,in,0,1,0,0.0394,Surface (overland flow) storage,mm,0,1,0,0.0394
+114,./HSPF90/IMPLNDTS.SEQ,IMPLND,IWTGAS,LAST,SOCO2,1,1,1,1,1,0,5,0,0,503,mg/l,0,1,0,1,CO2 conc in surface outflow,mg/l,0,1,0,1
+117,./HSPF90/IMPLNDTS.SEQ,IMPLND,IWTGAS,SUM,SOCO2M,1,1,1,1,2,0,5,0,0,523,lb/aciv,0,4.411,0,3.937,Flux of CO2 in surface outflow,kg/haiv,0,4.411,0,3.937
+113,./HSPF90/IMPLNDTS.SEQ,IMPLND,IWTGAS,LAST,SODOX,1,1,1,1,1,0,5,0,0,502,mg/l,0,1,0,1,DO conc in surface outflow,mg/l,0,1,0,1
+116,./HSPF90/IMPLNDTS.SEQ,IMPLND,IWTGAS,SUM,SODOXM,1,1,1,1,2,0,5,0,0,522,lb/aciv,0,4.411,0,3.937,Flux of DO in surface outflow,kg/haiv,0,4.411,0,3.937
+115,./HSPF90/IMPLNDTS.SEQ,IMPLND,IWTGAS,SUM,SOHT,1,1,1,1,2,0,5,0,0,521,BTU/aciv,0,0.000002455,0,0.000003942,Heat in surf outflow (rel. to 0 DEG C),kcl/haiv,0,0.000002455,0,0.000003942
+112,./HSPF90/IMPLNDTS.SEQ,IMPLND,IWTGAS,LAST,SOTMP,1,1,1,1,1,0,5,0,0,501,Deg F,-32,0.555,0,1,Temp of surface outflow,Deg C,-32,0.555,0,1
+91,./HSPF90/IMPLNDTS.SEQ,IMPLND,SNOW,NONE,ALBEDO,1,1,1,1,1,0,2,0,0,274,none,0,1,0,1,Albedo of the pack,none,0,1,0,1
+84,./HSPF90/IMPLNDTS.SEQ,IMPLND,SNOW,LAST,COVINX,1,1,1,1,1,0,2,0,0,267,in,0,1,0,0.0394,Snowfall cover index for complete cover,mm,0,1,0,0.0394
+93,./HSPF90/IMPLNDTS.SEQ,IMPLND,SNOW,LAST,DEWTMP,1,1,1,1,1,0,2,0,0,276,Deg F,0,1,17.8,1.8,Effective dewpoint temp,Deg C,0,1,17.8,1.8
+90,./HSPF90/IMPLNDTS.SEQ,IMPLND,SNOW,NONE,DULL,1,1,1,1,1,0,2,0,0,273,none,0,1,0,1,Dullness index of the pack,none,0,1,0,1
+99,./HSPF90/IMPLNDTS.SEQ,IMPLND,SNOW,SUM,MELT,1,1,1,1,2,0,2,0,0,318,in/iv,0,1,0,0.0394,Quantity of melt from PACKF(water equiv),mm/iv,0,1,0,0.0394
+85,./HSPF90/IMPLNDTS.SEQ,IMPLND,SNOW,LAST,NEGHTS,1,1,1,1,1,0,2,0,0,268,in,0,1,0,0.0394,Negative heat storage of pack (water eq),mm,0,1,0,0.0394
+79,./HSPF90/IMPLNDTS.SEQ,IMPLND,SNOW,LAST,PACK,1,1,1,1,1,0,2,0,0,262,in,0,1,0,0.0394,Total contents of pack(water equiv),mm,0,1,0,0.0394
+80,./HSPF90/IMPLNDTS.SEQ,IMPLND,SNOW,LAST,PACKF,1,1,1,1,1,0,2,1,0,263,in,0,1,0,0.0394,Frozen contents of pack (water equiv),mm,0,1,0,0.0394
+82,./HSPF90/IMPLNDTS.SEQ,IMPLND,SNOW,LAST,PACKI,1,1,1,1,1,0,2,1,0,265,in,0,1,0,0.0394,Ice in pack (water equiv),mm,0,1,0,0.0394
+81,./HSPF90/IMPLNDTS.SEQ,IMPLND,SNOW,LAST,PACKW,1,1,1,1,1,0,2,0,0,264,in,0,1,0,0.0394,Liquid water in pack,mm,0,1,0,0.0394
+92,./HSPF90/IMPLNDTS.SEQ,IMPLND,SNOW,LAST,PAKTMP,1,1,1,1,1,0,2,0,0,275,Deg F,0,1,17.8,1.8,Mean temp of the pack,Deg C,0,1,17.8,1.8
+83,./HSPF90/IMPLNDTS.SEQ,IMPLND,SNOW,LAST,PDEPTH,1,1,1,1,1,0,2,0,0,266,in,0,1,0,0.0394,Pack depth,mm,0,1,0,0.0394
+96,./HSPF90/IMPLNDTS.SEQ,IMPLND,SNOW,SUM,PRAIN,1,1,1,1,2,0,2,0,0,315,in/iv,0,1,0,0.0394,Rainfall on pack,mm/iv,0,1,0,0.0394
+100,./HSPF90/IMPLNDTS.SEQ,IMPLND,SNOW,SUM,RAINF,1,1,1,1,2,0,2,1,0,319,in/iv,0,1,0,0.0394,Rainfall,mm/iv,0,1,0,0.0394
+87,./HSPF90/IMPLNDTS.SEQ,IMPLND,SNOW,NONE,RDENPF,1,1,1,1,1,0,2,0,0,270,none,0,1,0,1,Rel density of frozen contents of pack,none,0,1,0,1
+88,./HSPF90/IMPLNDTS.SEQ,IMPLND,SNOW,NONE,SKYCLR,1,1,1,1,1,0,2,0,0,271,none,0,1,0,1,Fraction of sky assumed clear,none,0,1,0,1
+89,./HSPF90/IMPLNDTS.SEQ,IMPLND,SNOW,NONE,SNOCOV,1,1,1,1,1,0,2,1,0,272,none,0,1,0,1,Fraction of PLS covered by pack,none,0,1,0,1
+94,./HSPF90/IMPLNDTS.SEQ,IMPLND,SNOW,LAST,SNOTMP,1,1,1,1,1,0,2,0,0,277,Deg F,0,1,17.8,1.8,Curren max temp for precip as snowfall,Deg C,0,1,17.8,1.8
+97,./HSPF90/IMPLNDTS.SEQ,IMPLND,SNOW,SUM,SNOWE,1,1,1,1,2,0,2,0,0,316,in/iv,0,1,0,0.0394,Evap from PACKF (sublimation),mm/iv,0,1,0,0.0394
+95,./HSPF90/IMPLNDTS.SEQ,IMPLND,SNOW,SUM,SNOWF,1,1,1,1,2,0,2,0,0,314,in/iv,0,1,0,0.0394,"Snowfall, water equivalent",mm/iv,0,1,0,0.0394
+98,./HSPF90/IMPLNDTS.SEQ,IMPLND,SNOW,SUM,WYIELD,1,1,1,1,2,0,2,1,0,317,in/iv,0,1,0,0.0394,Water yielded by pack (to land-surface),mm/iv,0,1,0,0.0394
+86,./HSPF90/IMPLNDTS.SEQ,IMPLND,SNOW,LAST,XLNMLT,1,1,1,1,1,0,2,0,0,269,in,0,1,0,0.0394,Curr max increment to ice in pack,mm,0,1,0,0.0394
+110,./HSPF90/IMPLNDTS.SEQ,IMPLND,SOLIDS,LAST,SLDS,1,1,1,1,1,0,4,0,0,454,tn/ac,0,1,0,0.4462,Storage of solids on surface of ILS,tne/ha,0,1,0,0.4462
+111,./HSPF90/IMPLNDTS.SEQ,IMPLND,SOLIDS,SUM,SOSLD,1,1,1,1,2,0,4,1,0,462,tn/aciv,0,1,0,0.4462,Washoff of solids from surface of ILS,tne/haiv,0,1,0,0.4462
+129,./HSPF90/MUTSINTS.SEQ,MUTSIN,OUTPUT,ANY,MEAN,20,1,-3,1,2,0,0,0,0,94,any,0,1,0,1,Mean-valued output time series,any,0,1,0,1
+128,./HSPF90/MUTSINTS.SEQ,MUTSIN,OUTPUT,ANY,POINT,20,1,-2,1,1,0,0,0,0,74,any,0,1,0,1,Point-valued output time series,any,0,1,0,1
+184,./HSPF90/PERLNDTS.SEQ,PERLND,ATEMP,LAST,AIRTMP,1,1,1,1,2,0,1,1,0,144,Deg F,0,1,17.8,1.8,Estimated surf air temp over PLS,Deg C,0,1,17.8,1.8
+140,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,SUM,AGWLI,1,1,1,1,2,0,0,2,0,350,in/iv,0,1,0,0.0394,Active groundwater lateral inflow to PLS,mm/iv,0,1,0,0.0394
+159,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,LAST,ALICO2,1,1,1,1,2,0,0,2,0,1465,mg/l,0,1,0,1,Conc of CO2 in groundwater lateral inflow,mg/l,0,1,0,1
+156,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,LAST,ALIDOX,1,1,1,1,2,0,0,2,0,1462,mg/l,0,1,0,1,Conc of DO in groundwater lateral inflow,mg/l,0,1,0,1
+163,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,LAST,ALIQC,7,1,-1749,1,2,0,0,2,0,1715,qty/ft3,0,3630,0,102833,Conc of QUALGW in lat groundwater inflow,qty/l,0,3630,0,102833
+153,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,LAST,ALITMP,1,1,1,1,2,0,0,2,0,1459,Deg F,-32,0.555,0,1,Temp of groundwater lateral inflow,Deg C,-32,0.555,0,1
+142,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,NONE,CEPSC,5,1,5,1,2,0,0,2,0,352,none,0,1,0,1,Timeseries of intercep storage capacity,none,0,1,0,1
+135,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,LAST,CLOUD,1,1,1,1,2,0,0,2,0,156,tenths,0,1,0,1,Cloud cover (range 0 thru 10),tenths,0,1,0,1
+150,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,NONE,COVER,5,1,5,1,2,0,0,2,0,1232,none,0,1,0,1,Timeseries of erosion-related cover,none,0,1,0,1
+132,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,LAST,DTMPG,1,1,1,1,2,0,0,2,0,153,Deg F,0,1,17.8,1.8,Measured dewpoint temp over PLS,Deg C,0,1,17.8,1.8
+130,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,LAST,GATMP,1,1,1,1,2,0,0,2,0,115,Deg F,0,1,17.8,1.8,Measured air temp over PLS,Deg C,0,1,17.8,1.8
+138,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,SUM,IFWLI,1,1,1,1,2,0,0,2,0,348,in/iv,0,1,0,0.0394,Interflow lateral inflow to PLS,mm/iv,0,1,0,0.0394
+158,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,LAST,ILICO2,1,1,1,1,2,0,0,2,0,1464,mg/l,0,1,0,1,Conc of CO2 in interflow lateral inflow,mg/l,0,1,0,1
+155,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,LAST,ILIDOX,1,1,1,1,2,0,0,2,0,1461,mg/l,0,1,0,1,Conc of DO in interflow lateral inflow,mg/l,0,1,0,1
+162,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,LAST,ILIQC,10,1,-1748,1,2,0,0,2,0,1705,qty/ft3,0,3630,0,102833,Conc of QUALIF in lateral interflow inflow,qty/l,0,3630,0,102833
+152,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,LAST,ILITMP,1,1,1,1,2,0,0,2,0,1458,Deg F,-32,0.555,0,1,Temp of interflow lateral inflow,Deg C,-32,0.555,0,1
+145,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,NONE,INTFW,1,1,1,1,2,0,0,2,0,359,none,0,1,0,1,Timeseries of interflow inflow parameter,none,0,1,0,1
+146,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,NONE,IRC,1,1,1,1,2,0,0,2,0,360,none,0,1,0,1,Timeseries of interflow recession parm,none,0,1,0,1
+148,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,SUM,IRRINP,1,1,1,1,2,0,0,2,0,367,in/iv,0,1,0,0.0394,Input irrigation demand,mm/iv,0,1,0,0.0394
+170,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,SUM,LIAMS,5,1,5,1,2,0,0,2,0,4912,lb/aciv,0,1,0,0.892,Lateral inflow of soln ammon to each layer,kg/haiv,0,1.12,0,1
+171,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,SUM,LINO3,5,1,5,1,2,0,0,2,0,4917,lb/aciv,0,1,0,0.892,Lateral inflow of nitrate to each layer,kg/haiv,0,1.12,0,1
+177,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,SUM,LIP4S,5,1,5,1,2,0,0,2,0,6800,lb/aciv,0,1,0,0.892,Lateral inflow of soln PO4 to each layer,kg/haiv,0,1.12,0,1
+166,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,SUM,LIPSS,5,3,5,-3804,2,0,0,2,0,3765,lb/aciv,0,1,0,0.892,Lateral input of soln pest. to each layer,kg/haiv,0,1.12,0,1
+167,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,SUM,LISDPS,2,3,2,-3804,2,0,0,2,0,3780,lb/aciv,0,1,0,0.892,Lateral input of sediment-associated pest.,kg/haiv,0,1.12,0,1
+174,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,SUM,LISEDN,3,1,3,1,2,0,0,2,0,4932,lb/aciv,0,1,0,0.892,Lat inflow of sediment-associated N,kg/haiv,0,1.12,0,1
+178,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,SUM,LISEDP,2,1,2,1,2,0,0,2,0,6805,lb/aciv,0,1,0,0.892,Lateral inflow of sediment-associated P,kg/haiv,0,1.12,0,1
+172,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,SUM,LISLN,5,1,5,1,2,0,0,2,0,4922,lb/aciv,0,1,0,0.892,Lat inflow of soln lab ORGN to each layer,kg/haiv,0,1.12,0,1
+173,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,SUM,LISRN,5,1,5,1,2,0,0,2,0,4927,lb/aciv,0,1,0,0.892,Lat inflow of soln ref ORGN to each layer,kg/haiv,0,1.12,0,1
+181,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,SUM,LITRS,5,1,5,1,2,0,0,2,0,7392,lb/aciv,0,1,0,0.892,Lateral inflow of tracer to each layer,kg/haiv,0,1.12,0,1
+147,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,NONE,LZETP,1,1,1,1,2,0,0,2,0,361,none,0,1,0,1,Timeseries of lower zone e-t parm,none,0,1,0,1
+139,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,SUM,LZLI,1,1,1,1,2,0,0,2,0,349,in/iv,0,1,0,0.0394,Lower zone lateral inflow to PLS,mm/iv,0,1,0,0.0394
+176,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,LAST,NIADCN,3,2,3,2,2,0,0,2,0,4941,mg/l,0,0.226635,0,0.01,Concentration of N to soil layer in precip,mg/l,0,0.226635,0,0.01
+175,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,SUM,NIADFX,3,2,3,2,2,0,0,2,0,4935,lb/aciv,0,1,0,0.892,Atmospheric deposition of N to soil layer,kg/haiv,0,1.12,0,1
+144,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,NONE,NSUR,1,1,1,1,2,0,0,2,0,358,none,0,1,0,1,Timeseries of overland Manning's n,none,0,1,0,1
+169,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,LAST,PEADCN,3,3,-3804,3,2,0,0,2,0,3795,mg/l,0,0.226635,0,0.01,Concentration of pesticide form in precip,mg/l,0,0.226635,0,0.01
+168,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,SUM,PEADFX,3,3,-3804,3,2,0,0,2,0,3786,lb/aciv,0,1,0,0.892,Atmospheric deposition of pesticide form,kg/haiv,0,1.12,0,1
+141,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,SUM,PETINP,1,1,1,1,2,0,0,2,0,351,in/iv,0,1,0,0.0394,Input potential E-T from PLS,mm/iv,0,1,0,0.0394
+180,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,LAST,PHADCN,2,2,2,2,2,0,0,2,0,6811,mg/l,0,0.226635,0,0.01,Concentration of P to soil layer in precip,mg/l,0,0.226635,0,0.01
+179,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,SUM,PHADFX,2,2,2,2,2,0,0,2,0,6807,lb/aciv,0,1,0,0.892,Atmospheric deposition of P to soil layer,kg/haiv,0,1.12,0,1
+165,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,LAST,PQADCN,10,1,-1745,1,2,0,0,2,0,1735,qty/ft3,0,3630,0,102833,Concentration of QUAL in precip over PLS,qty/l,0,3630,0,102833
+164,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,SUM,PQADFX,10,1,-1745,1,2,0,0,2,0,1725,qty/aciv,0,1,0,0.4047,Atmospheric deposition of QUAL to PLS,qty/haiv,0,1,0,0.4047
+131,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,SUM,PREC,1,1,1,1,2,0,0,2,0,116,in/iv,0,1,0,0.0394,Measured precipitation on PLS,mm/iv,0,1,0,0.0394
+157,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,LAST,SLICO2,1,1,1,1,2,0,0,2,0,1463,mg/l,0,1,0,1,Conc of CO2 in surface lateral inflow,mg/l,0,1,0,1
+154,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,LAST,SLIDOX,1,1,1,1,2,0,0,2,0,1460,mg/l,0,1,0,1,Conc of DO in surface lateral inflow,mg/l,0,1,0,1
+160,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,SUM,SLIQO,10,1,-1747,1,2,0,0,2,0,1685,qty/aciv,0,1,0,0.4047,Lateral input of QUALOF to PLS,qty/haiv,0,1,0,0.4047
+161,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,LAST,SLIQSP,10,1,-1746,1,2,0,0,2,0,1695,qty/ton,0,1,0,0.9072,Pot fac of QUALSD on lat sediment inflow,qty/tonn,0,1,0,0.9072
+151,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,LAST,SLITMP,1,1,1,1,2,0,0,2,0,1457,Deg F,-32,0.555,0,1,Temp of surface lateral inflow,Deg C,-32,0.555,0,1
+149,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,SUM,SLSED,1,1,1,1,2,0,0,2,0,1231,tn/aciv,0,1,0,0.4462,Lateral input of sediment to PLS,tne/haiv,0,1,0,0.4462
+134,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,SUM,SOLRAD,1,1,1,1,2,0,0,2,0,155,Ly/iv,0,1,0,1,Measured solar radiation over PLS,Ly/iv,0,1,0,1
+136,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,SUM,SURLI,1,1,1,1,2,0,0,2,0,346,in/iv,0,1,0,0.0394,Surface lateral inflow to PLS,mm/iv,0,1,0,0.0394
+183,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,LAST,TRADCN,2,1,2,1,2,0,0,2,0,7399,mg/l,0,0.226635,0,0.01,Concentration of tracer to layer in precip,mg/l,0,0.226635,0,0.01
+182,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,SUM,TRADFX,2,1,2,1,2,0,0,2,0,7397,lb/aciv,0,1,0,0.892,Atmospheric deposition of tracer to layer,kg/haiv,0,1.12,0,1
+137,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,SUM,UZLI,1,1,1,1,2,0,0,2,0,347,in/iv,0,1,0,0.0394,Upper zone lateral inflow to PLS,mm/iv,0,1,0,0.0394
+143,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,NONE,UZSN,1,1,1,1,2,0,0,2,0,357,none,0,1,0,1,Timeseries of upper zone storage nominal,none,0,1,0,1
+133,./HSPF90/PERLNDTS.SEQ,PERLND,EXTNL,SUM,WINMOV,1,1,1,1,2,0,0,2,0,154,mi/iv,0,1,0,0.621,Measured wind movement over PLS,km/iv,0,1,0,0.621
+300,./HSPF90/PERLNDTS.SEQ,PERLND,MSTLAY,LAST,FRAC,8,1,8,1,1,0,8,0,0,3652,/ivl,0,1,0,1,Fractional fluxes thru soil,/ivl,0,1,0,1
+299,./HSPF90/PERLNDTS.SEQ,PERLND,MSTLAY,LAST,MST,5,1,5,1,1,0,8,1,0,3647,lb/ac,0,1,0,0.892,Water storages by zone,kg/ha,0,1.12,0,1
+325,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,LAST,AGPLTN,1,1,1,1,1,0,10,0,0,5814,lb/ac,0,1,0,0.892,N in above-ground plant storage,kg/ha,0,1.12,0,1
+345,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,AMIMB,5,1,5,1,2,0,10,0,0,6641,lb/aciv,0,1,0,0.892,Ammonia immobilization by layer & total,kg/haiv,0,1.12,0,1
+344,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,AMNIT,5,1,5,1,2,0,10,0,0,6636,lb/aciv,0,1,0,0.892,Ammonia nitrification by layer & total,kg/haiv,0,1.12,0,1
+359,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,AMUPA,5,1,5,1,2,0,10,0,0,6710,lb/aciv,0,1,0,0.892,Above-ground NH3 uptake by layer & total,kg/haiv,0,1.12,0,1
+361,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,AMUPB,5,1,5,1,2,0,10,0,0,6720,lb/aciv,0,1,0,0.892,Below-ground NH3 uptake by layer & total,kg/haiv,0,1.12,0,1
+356,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,AMVOL,5,1,5,1,2,0,10,0,0,6695,lb/aciv,0,1,0,0.892,Ammonia volatilization by layer & total,kg/haiv,0,1.12,0,1
+331,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,LAST,AN,8,1,8,1,1,0,10,0,0,5844,lb/ac,0,1,0,0.892,N in groundwater layer storage,kg/ha,0,1.12,0,1
+342,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,DENIF,5,1,5,1,2,0,10,0,0,6630,lb/aciv,0,1,0,0.892,Denitrification by layer & total,kg/haiv,0,1.12,0,1
+329,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,LAST,IN,4,1,4,1,1,0,10,0,0,5832,lb/ac,0,1,0,0.892,N in upper auxil layer storage,kg/ha,0,1.12,0,1
+326,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,LAST,LITTRN,1,1,1,1,1,0,10,0,0,5815,lb/ac,0,1,0,0.892,N in litter storage,kg/ha,0,1.12,0,1
+330,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,LAST,LN,8,1,8,1,1,0,10,0,0,5836,lb/ac,0,1,0,0.892,N in lower layer storage,kg/ha,0,1.12,0,1
+335,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,LAST,NDFCT,5,1,5,1,1,0,10,0,0,5866,lb/ac,0,1,0,0.892,"Plant uptake deficit by layer, and total",kg/ha,0,1.12,0,1
+350,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,NFIXFX,5,1,5,1,2,0,10,0,0,6669,lb/aciv,0,1,0,0.892,Nitrogen fixation (4 layers and total),kg/haiv,0,1.12,0,1
+347,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,NIADDR,3,2,3,2,2,0,10,0,0,6651,lb/aciv,0,1,0,0.892,Dry atmospheric deposition to PLS,kg/haiv,0,1.12,0,1
+349,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,NIADEP,3,2,3,2,2,0,10,0,0,6663,lb/aciv,0,1,0,0.892,Total atmospheric deposition to PLS,kg/haiv,0,1.12,0,1
+348,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,NIADWT,3,2,3,2,2,0,10,0,0,6657,lb/aciv,0,1,0,0.892,Wet atmospheric deposition to PLS,kg/haiv,0,1.12,0,1
+355,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,NIIMB,5,1,5,1,2,0,10,0,0,6690,lb/aciv,0,1,0,0.892,Nitrate immobilization by layer & total,kg/haiv,0,1.12,0,1
+324,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,LAST,NITIF,4,1,4,1,2,0,10,0,0,4793,lb/ac,0,1,0,0.892,Special Action inflow of nitrogen species,kg/ha,0,1.12,0,1
+358,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,NIUPA,5,1,5,1,2,0,10,0,0,6705,lb/aciv,0,1,0,0.892,Above-ground NO3 uptake by layer & total,kg/haiv,0,1.12,0,1
+360,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,NIUPB,5,1,5,1,2,0,10,0,0,6715,lb/aciv,0,1,0,0.892,Below-ground NO3 uptake by layer & total,kg/haiv,0,1.12,0,1
+336,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,NUPTG,4,1,4,1,2,0,10,0,0,5904,lb/aciv,0,1,0,0.892,Plant uptake target by layer,kg/haiv,0,1.12,0,1
+346,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,ORNMN,5,1,5,1,2,0,10,0,0,6646,lb/aciv,0,1,0,0.892,Organic N mineralization by layer & total,kg/haiv,0,1.12,0,1
+369,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,PONH4,1,1,1,1,2,0,10,0,0,6744,lb/aciv,0,1,0,0.892,Total outflow of NH4 from the PLS,kg/haiv,0,1.12,0,1
+371,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,PONITR,1,1,1,1,2,0,10,0,0,6746,lb/aciv,0,1,0,0.892,Tot outflow of N (NO3+NH4+ORGN) from PLS,kg/haiv,0,1.12,0,1
+368,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,PONO3,1,1,1,1,2,0,10,0,0,6743,lb/aciv,0,1,0,0.892,Total outflow of NO3 from the PLS,kg/haiv,0,1.12,0,1
+370,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,POORN,1,1,1,1,2,0,10,0,0,6745,lb/aciv,0,1,0,0.892,Total outflow of ORG N from the PLS,kg/haiv,0,1.12,0,1
+357,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,REFRON,5,1,5,1,2,0,10,0,0,6700,lb/aciv,0,1,0,0.892,Refractory N conversion by layer & total,kg/haiv,0,1.12,0,1
+362,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,RETAGN,1,1,1,1,2,0,10,0,0,6725,lb/aciv,0,1,0,0.892,Above-ground plant N return to litter,kg/haiv,0,1.12,0,1
+365,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,RTLBN,5,1,5,1,2,0,10,0,0,6732,lb/aciv,0,1,0,0.892,Plant N return to labile by layer & total,kg/haiv,0,1.12,0,1
+363,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,RTLLN,3,1,3,1,2,0,10,0,0,6726,lb/aciv,0,1,0,0.892,Litter return to labile by layer & total,kg/haiv,0,1.12,0,1
+366,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,RTRBN,5,1,5,1,2,0,10,0,0,6737,lb/aciv,0,1,0,0.892,Plant N return to refrac by layer & total,kg/haiv,0,1.12,0,1
+364,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,RTRLN,3,1,3,1,2,0,10,0,0,6729,lb/aciv,0,1,0,0.892,Litter return to refrac by layer & total,kg/haiv,0,1.12,0,1
+337,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,SEDN,3,1,3,1,2,0,10,0,0,6611,lb/aciv,0,1,0,0.892,Outflows of sediment-associated N,kg/haiv,0,1.12,0,1
+327,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,LAST,SN,8,1,8,1,1,0,10,0,0,5816,lb/ac,0,1,0,0.892,N in surface layer storage,kg/ha,0,1.12,0,1
+367,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,SOSEDN,1,1,1,1,2,0,10,0,0,6742,lb/aciv,0,1,0,0.892,Outflow of sed-assoc N (orgN + ads NH3),kg/haiv,0,1.12,0,1
+339,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,SSAMS,3,1,3,1,2,0,10,0,0,6619,lb/aciv,0,1,0,0.892,Fluxes of soln ammon in the subsoil,kg/haiv,0,1.12,0,1
+341,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,SSNO3,3,1,3,1,2,0,10,0,0,6627,lb/aciv,0,1,0,0.892,Fluxes of nitrate in the subsoil,kg/haiv,0,1.12,0,1
+352,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,SSSLN,3,1,3,1,2,0,10,0,0,6679,lb/aciv,0,1,0,0.892,Fluxes of soln labile ORGN in the subsoil,kg/haiv,0,1.12,0,1
+354,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,SSSRN,3,1,3,1,2,0,10,0,0,6687,lb/aciv,0,1,0,0.892,Fluxes of soln refrac ORGN in the subsoil,kg/haiv,0,1.12,0,1
+343,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,TDENIF,1,1,1,1,2,0,10,0,0,6635,lb/aciv,0,1,0,0.892,Total denitrification in the PLS,kg/haiv,0,1.12,0,1
+332,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,LAST,TN,8,1,8,1,1,0,10,0,0,5852,lb/ac,0,1,0,0.892,"Total N in soil, by species",kg/ha,0,1.12,0,1
+333,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,LAST,TNIT,5,1,5,1,1,0,10,0,0,5860,lb/ac,0,1,0,0.892,Total N stored in each layer (all species),kg/ha,0,1.12,0,1
+334,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,LAST,TOTNIT,1,1,1,1,1,0,10,0,0,5865,lb/ac,0,1,0,0.892,Total N stored in the PLS (all species),kg/ha,0,1.12,0,1
+338,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,TSAMS,5,1,5,1,2,0,10,0,0,6614,lb/aciv,0,1,0,0.892,Fluxes of soln ammon in the topsoil,kg/haiv,0,1.12,0,1
+340,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,TSNO3,5,1,5,1,2,0,10,0,0,6622,lb/aciv,0,1,0,0.892,Fluxes of nitrate in the topsoil,kg/haiv,0,1.12,0,1
+351,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,TSSLN,5,1,5,1,2,0,10,0,0,6674,lb/aciv,0,1,0,0.892,Fluxes of soln labile ORGN in the topsoil,kg/haiv,0,1.12,0,1
+353,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,SUM,TSSRN,5,1,5,1,2,0,10,0,0,6682,lb/aciv,0,1,0,0.892,Fluxes of soln refrac ORGN in the topsoil,kg/haiv,0,1.12,0,1
+328,./HSPF90/PERLNDTS.SEQ,PERLND,NITR,LAST,UN,8,1,8,1,1,0,10,0,0,5824,lb/ac,0,1,0,0.892,N in upper layer princ storage,kg/ha,0,1.12,0,1
+315,./HSPF90/PERLNDTS.SEQ,PERLND,PEST,SUM,ADEGPS,3,1,-3804,1,2,0,9,0,0,4728,lb/aciv,0,1,0,0.892,Amount of degr. in groundw. layer,kg/haiv,0,1.12,0,1
+305,./HSPF90/PERLNDTS.SEQ,PERLND,PEST,LAST,APS,3,3,3,-3804,1,0,9,0,0,4317,lb/ac,0,1,0,0.892,Amt of pest. in act. groundwater storage,kg/ha,0,1.12,0,1
+303,./HSPF90/PERLNDTS.SEQ,PERLND,PEST,LAST,IPS,3,1,-3804,1,1,0,9,0,0,4305,lb/ac,0,1,0,0.892,Amt. of pestic. in upper auxil storage,kg/ha,0,1.12,0,1
+314,./HSPF90/PERLNDTS.SEQ,PERLND,PEST,SUM,LDEGPS,3,1,-3804,1,2,0,9,0,0,4725,lb/aciv,0,1,0,0.892,Amount of degradation in lower layer,kg/haiv,0,1.12,0,1
+304,./HSPF90/PERLNDTS.SEQ,PERLND,PEST,LAST,LPS,3,3,3,-3804,1,0,9,0,0,4308,lb/ac,0,1,0,0.892,Amt. of pestic. in lower layer storage,kg/ha,0,1.12,0,1
+321,./HSPF90/PERLNDTS.SEQ,PERLND,PEST,SUM,PEADDR,3,3,-3804,3,2,0,9,0,0,4746,lb/aciv,0,1,0,0.892,Dry atmospheric deposition to PLS,kg/haiv,0,1.12,0,1
+323,./HSPF90/PERLNDTS.SEQ,PERLND,PEST,SUM,PEADEP,3,3,-3804,3,2,0,9,0,0,4764,lb/aciv,0,1,0,0.892,Total atmospheric deposition to PLS,kg/haiv,0,1.12,0,1
+322,./HSPF90/PERLNDTS.SEQ,PERLND,PEST,SUM,PEADWT,3,3,-3804,3,2,0,9,0,0,4755,lb/aciv,0,1,0,0.892,Wet atmospheric deposition to PLS,kg/haiv,0,1.12,0,1
+319,./HSPF90/PERLNDTS.SEQ,PERLND,PEST,SUM,POPST,3,1,-3804,1,2,0,9,0,0,4740,lb/aciv,0,1,0,0.892,Total outflow of sol. pestic. from PLS,kg/haiv,0,1.12,0,1
+312,./HSPF90/PERLNDTS.SEQ,PERLND,PEST,SUM,SDEGPS,3,1,-3804,1,2,0,9,0,0,4719,lb/aciv,0,1,0,0.892,Amount of degradation in surf. layer,kg/haiv,0,1.12,0,1
+309,./HSPF90/PERLNDTS.SEQ,PERLND,PEST,SUM,SDPS,2,3,2,-3804,2,0,9,0,0,4689,lb/aciv,0,1,0,0.892,Outflow of sediment-associated pesticide,kg/haiv,0,1.12,0,1
+318,./HSPF90/PERLNDTS.SEQ,PERLND,PEST,SUM,SOPEST,3,1,-3804,1,2,0,9,0,0,4737,lb/aciv,0,1,0,0.892,Total surface outflow of pesticide,kg/haiv,0,1.12,0,1
+317,./HSPF90/PERLNDTS.SEQ,PERLND,PEST,SUM,SOSDPS,3,1,-3804,1,2,0,9,0,0,4734,lb/aciv,0,1,0,0.892,Total outflow of sed-assoc. pesticide,kg/haiv,0,1.12,0,1
+301,./HSPF90/PERLNDTS.SEQ,PERLND,PEST,LAST,SPS,3,3,3,-3804,1,0,9,0,0,4287,lb/ac,0,1,0,0.892,Amt. of pestic. in surface storage,kg/ha,0,1.12,0,1
+311,./HSPF90/PERLNDTS.SEQ,PERLND,PEST,SUM,SSPSS,3,3,3,-3804,2,0,9,0,0,4710,lb/aciv,0,1,0,0.892,Fluxes of soln pest. for subsoil layers,kg/haiv,0,1.12,0,1
+316,./HSPF90/PERLNDTS.SEQ,PERLND,PEST,SUM,TDEGPS,3,1,-3804,1,2,0,9,0,0,4731,lb/aciv,0,1,0,0.892,Total amount of degradation in soil,kg/haiv,0,1.12,0,1
+320,./HSPF90/PERLNDTS.SEQ,PERLND,PEST,SUM,TOPST,3,1,-3804,1,2,0,9,0,0,4743,lb/aciv,0,1,0,0.892,Total outflow of pest. from PLS,kg/haiv,0,1.12,0,1
+308,./HSPF90/PERLNDTS.SEQ,PERLND,PEST,LAST,TOTPST,3,1,-3804,1,1,0,9,0,0,4350,lb/ac,0,1,0,0.892,Total amount of pesticide in the soil,kg/ha,0,1.12,0,1
+306,./HSPF90/PERLNDTS.SEQ,PERLND,PEST,LAST,TPS,3,3,3,-3804,1,0,9,0,0,4326,lb/ac,0,1,0,0.892,Total amount of pesticide in the soil,kg/ha,0,1.12,0,1
+307,./HSPF90/PERLNDTS.SEQ,PERLND,PEST,LAST,TPST,5,3,5,-3804,1,0,9,0,0,4335,lb/ac,0,1,0,0.892,Total amount of pesticide in each layer,kg/ha,0,1.12,0,1
+310,./HSPF90/PERLNDTS.SEQ,PERLND,PEST,SUM,TSPSS,5,3,5,-3804,2,0,9,0,0,4695,lb/aciv,0,1,0,0.892,Fluxes of soln pest. for topsoil layers,kg/haiv,0,1.12,0,1
+313,./HSPF90/PERLNDTS.SEQ,PERLND,PEST,SUM,UDEGPS,3,1,-3804,1,2,0,9,0,0,4722,lb/aciv,0,1,0,0.892,Amount of degradation in upper layer,kg/haiv,0,1.12,0,1
+302,./HSPF90/PERLNDTS.SEQ,PERLND,PEST,LAST,UPS,3,3,3,-3804,1,0,9,0,0,4296,lb/ac,0,1,0,0.892,Amt. of pestic. in upper princ. storage,kg/ha,0,1.12,0,1
+377,./HSPF90/PERLNDTS.SEQ,PERLND,PHOS,LAST,AP,4,1,4,1,1,0,11,0,0,7132,lb/ac,0,1,0,0.892,P in groundwater layer storage,kg/ha,0,1.12,0,1
+375,./HSPF90/PERLNDTS.SEQ,PERLND,PHOS,LAST,IP,1,1,1,1,1,0,11,0,0,7127,lb/ac,0,1,0,0.892,P in upper layer auxil storage,kg/ha,0,1.12,0,1
+376,./HSPF90/PERLNDTS.SEQ,PERLND,PHOS,LAST,LP,4,1,4,1,1,0,11,0,0,7128,lb/ac,0,1,0,0.892,P in lower layer storage,kg/ha,0,1.12,0,1
+387,./HSPF90/PERLNDTS.SEQ,PERLND,PHOS,SUM,ORPMN,5,1,5,1,2,0,11,0,0,7348,lb/aciv,0,1,0,0.892,ORP mineralization flux (each layer & tot),kg/haiv,0,1.12,0,1
+386,./HSPF90/PERLNDTS.SEQ,PERLND,PHOS,SUM,P4IMB,5,1,5,1,2,0,11,0,0,7343,lb/aciv,0,1,0,0.892,PO4 immobilization flux (each layer & tot),kg/haiv,0,1.12,0,1
+381,./HSPF90/PERLNDTS.SEQ,PERLND,PHOS,LAST,PDFCT,5,1,5,1,1,0,11,0,0,7146,lb/ac,0,1,0,0.892,"Plant uptake deficit by layer, and total",kg/ha,0,1.12,0,1
+390,./HSPF90/PERLNDTS.SEQ,PERLND,PHOS,SUM,PHADDR,2,2,2,2,2,0,11,0,0,7355,lb/aciv,0,1,0,0.892,Dry atmospheric deposition to PLS,kg/haiv,0,1.12,0,1
+392,./HSPF90/PERLNDTS.SEQ,PERLND,PHOS,SUM,PHADEP,2,2,2,2,2,0,11,0,0,7363,lb/aciv,0,1,0,0.892,Total atmospheric deposition to PLS,kg/haiv,0,1.12,0,1
+391,./HSPF90/PERLNDTS.SEQ,PERLND,PHOS,SUM,PHADWT,2,2,2,2,2,0,11,0,0,7359,lb/aciv,0,1,0,0.892,Wet atmospheric deposition to PLS,kg/haiv,0,1.12,0,1
+372,./HSPF90/PERLNDTS.SEQ,PERLND,PHOS,LAST,PHOIF,3,1,3,1,2,0,11,0,0,6762,lb/ac,0,1,0,0.892,Special Action inflow of phosphorus spec.,kg/ha,0,1.12,0,1
+389,./HSPF90/PERLNDTS.SEQ,PERLND,PHOS,SUM,POPHOS,1,1,1,1,2,0,11,0,0,7354,lb/aciv,0,1,0,0.892,Total outflow of P from the PLS.,kg/haiv,0,1.12,0,1
+382,./HSPF90/PERLNDTS.SEQ,PERLND,PHOS,SUM,PUPTG,4,1,4,1,2,0,11,0,0,7159,lb/aciv,0,1,0,0.892,Plant uptake target by layer,kg/haiv,0,1.12,0,1
+383,./HSPF90/PERLNDTS.SEQ,PERLND,PHOS,SUM,SEDP,2,1,2,1,2,0,11,0,0,7333,lb/aciv,0,1,0,0.892,Outflows of sediment-associated P,kg/haiv,0,1.12,0,1
+388,./HSPF90/PERLNDTS.SEQ,PERLND,PHOS,SUM,SOSEDP,1,1,1,1,2,0,11,0,0,7353,lb/aciv,0,1,0,0.892,Outflow of sed-assoc P (orgP + ads PO4),kg/haiv,0,1.12,0,1
+373,./HSPF90/PERLNDTS.SEQ,PERLND,PHOS,LAST,SP,4,1,4,1,1,0,11,0,0,7119,lb/ac,0,1,0,0.892,P in surface layer storage,kg/ha,0,1.12,0,1
+385,./HSPF90/PERLNDTS.SEQ,PERLND,PHOS,SUM,SSP4S,3,1,3,1,2,0,11,0,0,7340,lb/aciv,0,1,0,0.892,Fluxes of soln phosphate in the subsoil,kg/haiv,0,1.12,0,1
+380,./HSPF90/PERLNDTS.SEQ,PERLND,PHOS,LAST,TOTPHO,1,1,1,1,1,0,11,0,0,7145,lb/ac,0,1,0,0.892,Total P stored in the PLS (all species),kg/ha,0,1.12,0,1
+378,./HSPF90/PERLNDTS.SEQ,PERLND,PHOS,LAST,TP,4,1,4,1,1,0,11,0,0,7136,lb/ac,0,1,0,0.892,"Total P in soil, by species",kg/ha,0,1.12,0,1
+379,./HSPF90/PERLNDTS.SEQ,PERLND,PHOS,LAST,TPHO,5,1,5,1,1,0,11,0,0,7140,lb/ac,0,1,0,0.892,Total P stored in each layer (all species),kg/ha,0,1.12,0,1
+384,./HSPF90/PERLNDTS.SEQ,PERLND,PHOS,SUM,TSP4S,5,1,5,1,2,0,11,0,0,7335,lb/aciv,0,1,0,0.892,Fluxes of soln phosphate in the topsoil,kg/haiv,0,1.12,0,1
+374,./HSPF90/PERLNDTS.SEQ,PERLND,PHOS,LAST,UP,4,1,4,1,1,0,11,0,0,7123,lb/ac,0,1,0,0.892,P in upper layer princ storage,kg/ha,0,1.12,0,1
+283,./HSPF90/PERLNDTS.SEQ,PERLND,PQUAL,LAST,AOQC,7,1,-1749,1,1,0,7,0,0,3040,qty/ft3,0,3630,0,102833,Conc of QUALGW in interflow outflow,qty/l,0,3630,0,102833
+292,./HSPF90/PERLNDTS.SEQ,PERLND,PQUAL,SUM,AOQUAL,7,1,-1749,1,2,0,7,0,0,3560,qty/aciv,0,1,0,0.4047,Outflow of QUALGW in baseflow,qty/haiv,0,1,0,0.4047
+282,./HSPF90/PERLNDTS.SEQ,PERLND,PQUAL,LAST,IOQC,7,1,-1748,1,1,0,7,0,0,3030,qty/ft3,0,3630,0,102833,Conc of QUALIF in interflow outflow,qty/l,0,3630,0,102833
+291,./HSPF90/PERLNDTS.SEQ,PERLND,PQUAL,SUM,IOQUAL,7,1,-1748,1,2,0,7,0,0,3550,qty/aciv,0,1,0,0.4047,Outflow of QUALIF in interflow,qty/haiv,0,1,0,0.4047
+298,./HSPF90/PERLNDTS.SEQ,PERLND,PQUAL,SUM,ISQO,10,1,-1745,1,2,0,7,0,0,3620,qty/aciv,0,1,0,0.4047,Total input flux if QUALOF to PLS,qty/haiv,0,1,0,0.4047
+294,./HSPF90/PERLNDTS.SEQ,PERLND,PQUAL,LAST,POQC,10,1,-1745,1,2,0,7,0,0,3580,qty/ft3,0,3630,0,102833,Conc of QUAL in total outflow from PLS,qty/l,0,3630,0,102833
+293,./HSPF90/PERLNDTS.SEQ,PERLND,PQUAL,SUM,POQUAL,10,1,-1745,1,2,0,7,0,0,3570,qty/aciv,0,1,0,0.4047,Total flux of QUAL from the PLS,qty/haiv,0,1,0,0.4047
+295,./HSPF90/PERLNDTS.SEQ,PERLND,PQUAL,SUM,PQADDR,10,1,-1745,1,2,0,7,0,0,3590,qty/aciv,0,1,0,0.4047,Dry atmospheric deposition flux to PLS,qty/haiv,0,1,0,0.4047
+297,./HSPF90/PERLNDTS.SEQ,PERLND,PQUAL,SUM,PQADEP,10,1,-1745,1,2,0,7,0,0,3610,qty/aciv,0,1,0,0.4047,Total atmospheric deposition flux to PLS,qty/haiv,0,1,0,0.4047
+296,./HSPF90/PERLNDTS.SEQ,PERLND,PQUAL,SUM,PQADWT,10,1,-1745,1,2,0,7,0,0,3600,qty/aciv,0,1,0,0.4047,Wet atmospheric deposition flux to PLS,qty/haiv,0,1,0,0.4047
+285,./HSPF90/PERLNDTS.SEQ,PERLND,PQUAL,SUM,SCRQS,7,1,-1746,1,2,0,7,0,0,3490,qty/aciv,0,1,0,0.4047,Removal of QUALSD with matrix soil scour,qty/haiv,0,1,0,0.4047
+290,./HSPF90/PERLNDTS.SEQ,PERLND,PQUAL,LAST,SOQC,10,1,-1745,1,2,0,7,0,0,3540,qty/ft3,0,3630,0,102833,Conc of QUAL in surface outflow,qty/l,0,3630,0,102833
+287,./HSPF90/PERLNDTS.SEQ,PERLND,PQUAL,SUM,SOQO,7,1,-1747,1,2,0,7,0,0,3510,qty/aciv,0,1,0,0.4047,Washoff of QUALOF from surface,qty/haiv,0,1,0,0.4047
+288,./HSPF90/PERLNDTS.SEQ,PERLND,PQUAL,LAST,SOQOC,7,1,-1747,1,2,0,7,0,0,3520,qty/ft3,0,3630,0,102833,Conc of QUALOF in surface outflow,qty/l,0,3630,0,102833
+286,./HSPF90/PERLNDTS.SEQ,PERLND,PQUAL,SUM,SOQS,7,1,-1746,1,2,0,7,0,0,3500,qty/aciv,0,1,0,0.4047,Total outflow of QUALSD from surface,qty/aciv,0,1,0,0.4047
+281,./HSPF90/PERLNDTS.SEQ,PERLND,PQUAL,LAST,SOQSP,7,1,-1746,1,1,0,7,0,0,3020,qty/ton,0,1,0,0.9072,Pot factor of QUALSD on sediment outflow,qty/tonn,0,1,0,0.9072
+289,./HSPF90/PERLNDTS.SEQ,PERLND,PQUAL,SUM,SOQUAL,10,1,-1745,1,2,0,7,0,0,3530,qty/aciv,0,1,0,0.4047,Total outflow of QUAL from the surface,qty/haiv,0,1,0,0.4047
+280,./HSPF90/PERLNDTS.SEQ,PERLND,PQUAL,LAST,SQO,7,1,-1747,1,1,0,7,0,0,3010,qty/ac,0,1,0,0.4047,Storage of QUALOF on the surface,qty/ha,0,1,0,0.4047
+284,./HSPF90/PERLNDTS.SEQ,PERLND,PQUAL,SUM,WASHQS,7,1,-1746,1,2,0,7,0,0,3480,qty/aciv,0,1,0,0.4047,Removal of QUALSD with det. sed washoff,qty/haiv,0,1,0,0.4047
+255,./HSPF90/PERLNDTS.SEQ,PERLND,PSTEMP,LAST,AIRTC,1,1,1,1,2,0,5,0,0,1444,Deg F,-32,0.555,0,1,Air temp on the PLS,Deg C,-32,0.555,0,1
+258,./HSPF90/PERLNDTS.SEQ,PERLND,PSTEMP,LAST,LGTMP,1,1,1,1,2,0,5,1,0,1447,Deg F,-32,0.555,0,1,Lower and groundwater layer,Deg C,-32,0.555,0,1
+256,./HSPF90/PERLNDTS.SEQ,PERLND,PSTEMP,LAST,SLTMP,1,1,1,1,2,0,5,1,0,1445,Deg F,-32,0.555,0,1,Surface layer soil temp,Deg C,-32,0.555,0,1
+257,./HSPF90/PERLNDTS.SEQ,PERLND,PSTEMP,LAST,ULTMP,1,1,1,1,2,0,5,1,0,1446,Deg F,-32,0.555,0,1,Upper layer soil temp,Deg C,-32,0.555,0,1
+233,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,SUM,AGWET,1,1,1,1,2,0,3,0,0,1205,in/iv,0,1,0,0.0394,E-T from active groundwater storage,mm/iv,0,1,0,0.0394
+241,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,SUM,AGWI,1,1,1,1,2,0,3,1,0,1213,in/iv,0,1,0,0.0394,Act. groundwater inflow(no lateral flow),mm/iv,0,1,0,0.0394
+224,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,SUM,AGWO,1,1,1,1,2,0,3,1,0,1186,in/iv,0,1,0,0.0394,Active groundwater outflow,mm/iv,0,1,0,0.0394
+213,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,LAST,AGWS,1,1,1,1,1,0,3,1,0,984,in,0,1,0,0.0394,Active groundwater storage above base elev,mm,0,1,0,0.0394
+234,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,SUM,BASET,1,1,1,1,2,0,3,0,0,1206,in/iv,0,1,0,0.0394,E-T from active groundwater outflow,mm/iv,0,1,0,0.0394
+228,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,SUM,CEPE,5,1,5,1,2,0,3,0,0,1190,in/iv,0,1,0,0.0394,Evap from interception storage,mm/iv,0,1,0,0.0394
+229,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,SUM,CEPO,5,1,5,1,2,0,3,0,0,1197,in/iv,0,1,0,0.0394,Outflow from interception storage,mm/iv,0,1,0,0.0394
+208,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,LAST,CEPS,5,1,5,1,1,0,3,0,0,975,in,0,1,0,0.0394,Interception storage,mm,0,1,0,0.0394
+215,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,LAST,GWEL,1,1,1,1,1,0,3,1,0,986,ft,0,12,0,39.4,Groundwater elevation,m,0,12,0,39.4
+216,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,LAST,GWVS,1,1,1,1,1,0,3,1,0,987,in,0,1,0,0.0394,Groundwater slope index,mm,0,1,0,0.0394
+236,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,SUM,IFWI,1,1,1,1,2,0,3,1,0,1208,in/iv,0,1,0,0.0394,Interflow inflow(excluding lateral flow),mm/iv,0,1,0,0.0394
+223,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,SUM,IFWO,1,1,1,1,2,0,3,1,0,1185,in/iv,0,1,0,0.0394,Interflow outflow,mm/iv,0,1,0,0.0394
+211,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,LAST,IFWS,1,1,1,1,1,0,3,1,0,982,in,0,1,0,0.0394,Interflow storage,mm,0,1,0,0.0394
+226,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,SUM,IGWI,1,1,1,1,2,0,3,1,0,1188,in/iv,0,1,0,0.0394,Inflow to inactive (deep) groundwater,mm/iv,0,1,0,0.0394
+217,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,NONE,INFFAC,1,1,1,1,1,0,3,1,0,988,none,0,1,0,1,Infiltration adjustment factor,none,0,1,0,1
+238,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,SUM,INFIL,1,1,1,1,2,0,3,1,0,1210,in/iv,0,1,0,0.0394,Infiltration to the soil,mm/iv,0,1,0,0.0394
+245,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,SUM,IRDRAW,3,1,3,1,2,0,3,0,0,1217,in/iv,0,1,0,0.0394,Irrigation withdrawal by source,mm/iv,0,1,0,0.0394
+246,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,SUM,IRRAPP,6,1,6,1,2,0,3,0,0,1220,in/iv,0,1,0,0.0394,Irrigation application,mm/iv,0,1,0,0.0394
+243,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,SUM,IRRDEM,1,1,1,1,2,0,3,0,0,1215,in/iv,0,1,0,0.0394,Calculated irrigation demand,mm/iv,0,1,0,0.0394
+244,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,SUM,IRSHRT,1,1,1,1,2,0,3,0,0,1216,in/iv,0,1,0,0.0394,Irrigation shortfall,mm/iv,0,1,0,0.0394
+232,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,SUM,LZET,1,1,1,1,2,0,3,0,0,1204,in/iv,0,1,0,0.0394,E-T from lower zone,mm/iv,0,1,0,0.0394
+240,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,SUM,LZI,1,1,1,1,2,0,3,0,0,1212,in/iv,0,1,0,0.0394,Lower zone inflow,mm/iv,0,1,0,0.0394
+212,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,LAST,LZS,1,1,1,1,1,0,3,1,0,983,in,0,1,0,0.0394,Lower zone storage,mm,0,1,0,0.0394
+239,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,SUM,PERC,1,1,1,1,2,0,3,1,0,1211,in/iv,0,1,0,0.0394,Percolation from upper to lower zone,mm/iv,0,1,0,0.0394
+225,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,SUM,PERO,1,1,1,1,2,0,3,1,0,1187,in/iv,0,1,0,0.0394,Total outflow from PLS,mm/iv,0,1,0,0.0394
+207,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,LAST,PERS,1,1,1,1,1,0,3,0,0,974,in,0,1,0,0.0394,Total water stored in the PLS,mm,0,1,0,0.0394
+227,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,SUM,PET,1,1,1,1,2,0,3,0,0,1189,in/iv,0,1,0,0.0394,Potential E-T,mm/iv,0,1,0,0.0394
+218,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,NONE,PETADJ,1,1,1,1,1,0,3,1,0,989,none,0,1,0,1,Potential ET adjustment factor,none,0,1,0,1
+219,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,SUM,RPARM,1,1,1,1,2,0,3,0,0,990,in/iv,0,1,0,0.0394,Value of max lower zone E-T opportunity,mm/iv,0,1,0,0.0394
+220,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,LAST,RZWS,1,1,1,1,1,0,3,0,0,991,in,0,1,0,0.0394,Root zone water storage,mm,0,1,0,0.0394
+221,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,SUM,SUPY,1,1,1,1,2,0,3,1,0,1183,in/iv,0,1,0,0.0394,Moisture supply,mm/iv,0,1,0,0.0394
+230,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,SUM,SURET,1,1,1,1,2,0,3,0,0,1202,in/iv,0,1,0,0.0394,E-T from surface storage,mm/iv,0,1,0,0.0394
+242,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,SUM,SURI,1,1,1,1,2,0,3,1,0,1214,in/iv,0,1,0,0.0394,Surface inflow(including lateral inflow),mm/iv,0,1,0,0.0394
+222,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,SUM,SURO,1,1,1,1,2,0,3,1,0,1184,in/iv,0,1,0,0.0394,Surface outflow,mm/iv,0,1,0,0.0394
+209,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,LAST,SURS,1,1,1,1,1,0,3,1,0,980,in,0,1,0,0.0394,Surface (overland flow) storage,mm,0,1,0,0.0394
+235,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,SUM,TAET,1,1,1,1,2,0,3,0,0,1207,in/iv,0,1,0,0.0394,Total simulated E-T,mm/iv,0,1,0,0.0394
+214,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,LAST,TGWS,1,1,1,1,1,0,3,1,0,985,in,0,1,0,0.0394,Total groundwater storage above datum,mm,0,1,0,0.0394
+231,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,SUM,UZET,1,1,1,1,2,0,3,0,0,1203,in/iv,0,1,0,0.0394,E-T from upper zone,mm/iv,0,1,0,0.0394
+237,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,SUM,UZI,1,1,1,1,2,0,3,1,0,1209,in/iv,0,1,0,0.0394,Upper zone inflow,mm/iv,0,1,0,0.0394
+210,./HSPF90/PERLNDTS.SEQ,PERLND,PWATER,LAST,UZS,1,1,1,1,1,0,3,1,0,981,in,0,1,0,0.0394,Upper zone storage,mm,0,1,0,0.0394
+267,./HSPF90/PERLNDTS.SEQ,PERLND,PWTGAS,LAST,AOCO2,1,1,1,1,1,0,6,0,0,1544,mg/l,0,1,0,1,CO2 conc in active groundwater outflow,mg/l,0,1,0,1
+277,./HSPF90/PERLNDTS.SEQ,PERLND,PWTGAS,SUM,AOCO2M,1,1,1,1,2,0,6,0,0,1602,lb/aciv,0,4.411,0,3.937,Flux of CO2 in act. groundwater outflow,kg/haiv,0,4.411,0,3.937
+266,./HSPF90/PERLNDTS.SEQ,PERLND,PWTGAS,LAST,AODOX,1,1,1,1,1,0,6,0,0,1543,mg/l,0,1,0,1,DO conc in active groundwater outflow,mg/l,0,1,0,1
+276,./HSPF90/PERLNDTS.SEQ,PERLND,PWTGAS,SUM,AODOXM,1,1,1,1,2,0,6,0,0,1601,lb/aciv,0,4.411,0,3.937,Flux of DO in active groundwater outflow,kg/haiv,0,4.411,0,3.937
+270,./HSPF90/PERLNDTS.SEQ,PERLND,PWTGAS,SUM,AOHT,1,1,1,1,2,0,6,0,0,1595,BTU/aciv,0,0.000002455,0,0.000003942,Heat energy in act. groundwater outflow,kcl/haiv,0,0.000002455,0,0.000003942
+261,./HSPF90/PERLNDTS.SEQ,PERLND,PWTGAS,LAST,AOTMP,1,1,1,1,1,0,6,0,0,1538,Deg F,-32,0.555,0,1,Temp of active groundwater outflow,Deg C,-32,0.555,0,1
+265,./HSPF90/PERLNDTS.SEQ,PERLND,PWTGAS,LAST,IOCO2,1,1,1,1,1,0,6,0,0,1542,mg/l,0,1,0,1,CO2 conc in interflow outflow,mg/l,0,1,0,1
+275,./HSPF90/PERLNDTS.SEQ,PERLND,PWTGAS,SUM,IOCO2M,1,1,1,1,2,0,6,0,0,1600,lb/aciv,0,4.411,0,3.937,Flux of CO2 in interflow outflow,kg/haiv,0,4.411,0,3.937
+264,./HSPF90/PERLNDTS.SEQ,PERLND,PWTGAS,LAST,IODOX,1,1,1,1,1,0,6,0,0,1541,mg/l,0,1,0,1,DO conc in interflow outflow,mg/l,0,1,0,1
+274,./HSPF90/PERLNDTS.SEQ,PERLND,PWTGAS,SUM,IODOXM,1,1,1,1,2,0,6,0,0,1599,lb/aciv,0,4.411,0,3.937,Flux of DO in interflow outflow,kg/haiv,0,4.411,0,3.937
+269,./HSPF90/PERLNDTS.SEQ,PERLND,PWTGAS,SUM,IOHT,1,1,1,1,2,0,6,0,0,1594,BTU/aciv,0,0.000002455,0,0.000003942,Heat energy in interflow outflow,kcl/haiv,0,0.000002455,0,0.000003942
+260,./HSPF90/PERLNDTS.SEQ,PERLND,PWTGAS,LAST,IOTMP,1,1,1,1,1,0,6,0,0,1537,Deg F,-32,0.555,0,1,Temp of interflow outflow,Deg C,-32,0.555,0,1
+279,./HSPF90/PERLNDTS.SEQ,PERLND,PWTGAS,SUM,POCO2M,1,1,1,1,2,0,6,0,0,1604,lb/aciv,0,4.411,0,3.937,CO2 in total outflow from PLS,kg/haiv,0,4.411,0,3.937
+278,./HSPF90/PERLNDTS.SEQ,PERLND,PWTGAS,SUM,PODOXM,1,1,1,1,2,0,6,0,0,1603,lb/aciv,0,4.411,0,3.937,DO in total outflow from PLS,kg/haiv,0,4.411,0,3.937
+271,./HSPF90/PERLNDTS.SEQ,PERLND,PWTGAS,SUM,POHT,1,1,1,1,2,0,6,0,0,1596,BTU/aciv,0,0.000002455,0,0.000003942,Heat energy in total outflow from PLS,kcl/haiv,0,0.000002455,0,0.000003942
+263,./HSPF90/PERLNDTS.SEQ,PERLND,PWTGAS,LAST,SOCO2,1,1,1,1,1,0,6,0,0,1540,mg/l,0,1,0,1,CO2 conc in surface outflow,mg/l,0,1,0,1
+273,./HSPF90/PERLNDTS.SEQ,PERLND,PWTGAS,SUM,SOCO2M,1,1,1,1,2,0,6,0,0,1598,lb/aciv,0,4.411,0,3.937,Flux of CO2 in surface outflow,kg/haiv,0,4.411,0,3.937
+262,./HSPF90/PERLNDTS.SEQ,PERLND,PWTGAS,LAST,SODOX,1,1,1,1,1,0,6,0,0,1539,mg/l,0,1,0,1,DO conc in surface outflow,mg/l,0,1,0,1
+272,./HSPF90/PERLNDTS.SEQ,PERLND,PWTGAS,SUM,SODOXM,1,1,1,1,2,0,6,0,0,1597,lb/aciv,0,4.411,0,3.937,Flux of DO in surface outflow,kg/haiv,0,4.411,0,3.937
+268,./HSPF90/PERLNDTS.SEQ,PERLND,PWTGAS,SUM,SOHT,1,1,1,1,2,0,6,0,0,1593,BTU/aciv,0,0.000002455,0,0.000003942,Heat energy in surface outflow,kcl/haiv,0,0.000002455,0,0.000003942
+259,./HSPF90/PERLNDTS.SEQ,PERLND,PWTGAS,LAST,SOTMP,1,1,1,1,1,0,6,0,0,1536,Deg F,-32,0.555,0,1,Temp of surface outflow,Deg C,-32,0.555,0,1
+249,./HSPF90/PERLNDTS.SEQ,PERLND,SEDMNT,NONE,COVER,1,1,1,1,1,0,4,0,0,1330,none,0,1,0,1,Cover fraction for PLS,none,0,1,0,1
+253,./HSPF90/PERLNDTS.SEQ,PERLND,SEDMNT,SUM,DET,1,1,1,1,2,0,4,0,0,1355,tn/aciv,0,1,0,0.4462,Sediment detached by rainfall impact,tne/haiv,0,1,0,0.4462
+247,./HSPF90/PERLNDTS.SEQ,PERLND,SEDMNT,LAST,DETS,1,1,1,1,1,0,4,0,0,1328,tn/ac,0,1,0,0.4462,Storage of detached sediment,tne/ha,0,1,0,0.4462
+254,./HSPF90/PERLNDTS.SEQ,PERLND,SEDMNT,SUM,NVSI,1,1,1,1,2,0,4,0,0,1356,tn/aciv,0,1,0,0.4462,Net vertical sediment input,tne/haiv,0,1,0,0.4462
+251,./HSPF90/PERLNDTS.SEQ,PERLND,SEDMNT,SUM,SCRSD,1,1,1,1,2,0,4,1,0,1353,tn/aciv,0,1,0,0.4462,Scour of matrix (attached) soil,tne/haiv,0,1,0,0.4462
+252,./HSPF90/PERLNDTS.SEQ,PERLND,SEDMNT,SUM,SOSED,1,1,1,1,2,0,4,1,0,1354,tn/aciv,0,1,0,0.4462,Total removal of soil and sediment,tne/haiv,0,1,0,0.4462
+248,./HSPF90/PERLNDTS.SEQ,PERLND,SEDMNT,SUM,STCAP,1,1,1,1,1,0,4,0,0,1329,tn/aciv,0,1,0,0.4462,Sed. transport capacity by surf. runoff,tne/haiv,0,1,0,0.4462
+250,./HSPF90/PERLNDTS.SEQ,PERLND,SEDMNT,SUM,WSSD,1,1,1,1,2,0,4,1,0,1352,tn/aciv,0,1,0,0.4462,Washoff of detached sediment,tne/haiv,0,1,0,0.4462
+197,./HSPF90/PERLNDTS.SEQ,PERLND,SNOW,NONE,ALBEDO,1,1,1,1,1,0,2,0,0,274,none,0,1,0,1,Albedo of the pack,none,0,1,0,1
+190,./HSPF90/PERLNDTS.SEQ,PERLND,SNOW,LAST,COVINX,1,1,1,1,1,0,2,0,0,267,in,0,1,0,0.0394,Snowfall cover index for complete cover,mm,0,1,0,0.0394
+199,./HSPF90/PERLNDTS.SEQ,PERLND,SNOW,LAST,DEWTMP,1,1,1,1,1,0,2,0,0,276,Deg F,0,1,17.8,1.8,Effective dewpoint temp,Deg C,0,1,17.8,1.8
+196,./HSPF90/PERLNDTS.SEQ,PERLND,SNOW,NONE,DULL,1,1,1,1,1,0,2,0,0,273,none,0,1,0,1,Dullness index of the pack,none,0,1,0,1
+205,./HSPF90/PERLNDTS.SEQ,PERLND,SNOW,SUM,MELT,1,1,1,1,2,0,2,0,0,318,in/iv,0,1,0,0.0394,Quantity of melt from PACKF(water equiv),mm/iv,0,1,0,0.0394
+191,./HSPF90/PERLNDTS.SEQ,PERLND,SNOW,LAST,NEGHTS,1,1,1,1,1,0,2,0,0,268,in,0,1,0,0.0394,Negative heat storage of pack (water eq),mm,0,1,0,0.0394
+185,./HSPF90/PERLNDTS.SEQ,PERLND,SNOW,LAST,PACK,1,1,1,1,1,0,2,0,0,262,in,0,1,0,0.0394,Total contents of pack(water equiv),mm,0,1,0,0.0394
+186,./HSPF90/PERLNDTS.SEQ,PERLND,SNOW,LAST,PACKF,1,1,1,1,1,0,2,1,0,263,in,0,1,0,0.0394,Frozen contents of pack (water equiv),mm,0,1,0,0.0394
+188,./HSPF90/PERLNDTS.SEQ,PERLND,SNOW,LAST,PACKI,1,1,1,1,1,0,2,1,0,265,in,0,1,0,0.0394,Ice in pack (water equiv),mm,0,1,0,0.0394
+187,./HSPF90/PERLNDTS.SEQ,PERLND,SNOW,LAST,PACKW,1,1,1,1,1,0,2,0,0,264,in,0,1,0,0.0394,Liquid water in pack,mm,0,1,0,0.0394
+198,./HSPF90/PERLNDTS.SEQ,PERLND,SNOW,LAST,PAKTMP,1,1,1,1,1,0,2,0,0,275,Deg F,0,1,17.8,1.8,Mean temp of the pack,Deg C,0,1,17.8,1.8
+189,./HSPF90/PERLNDTS.SEQ,PERLND,SNOW,LAST,PDEPTH,1,1,1,1,1,0,2,0,0,266,in,0,1,0,0.0394,Pack depth,mm,0,1,0,0.0394
+202,./HSPF90/PERLNDTS.SEQ,PERLND,SNOW,SUM,PRAIN,1,1,1,1,2,0,2,0,0,315,in/iv,0,1,0,0.0394,Rainfall on pack,mm/iv,0,1,0,0.0394
+206,./HSPF90/PERLNDTS.SEQ,PERLND,SNOW,SUM,RAINF,1,1,1,1,2,0,2,1,0,319,in/iv,0,1,0,0.0394,Rainfall,mm/iv,0,1,0,0.0394
+193,./HSPF90/PERLNDTS.SEQ,PERLND,SNOW,NONE,RDENPF,1,1,1,1,1,0,2,0,0,270,none,0,1,0,1,Rel density of frozen contents of pack,none,0,1,0,1
+194,./HSPF90/PERLNDTS.SEQ,PERLND,SNOW,NONE,SKYCLR,1,1,1,1,1,0,2,0,0,271,none,0,1,0,1,Fraction of sky assumed clear,none,0,1,0,1
+195,./HSPF90/PERLNDTS.SEQ,PERLND,SNOW,NONE,SNOCOV,1,1,1,1,1,0,2,1,0,272,none,0,1,0,1,Fraction of PLS covered by pack,none,0,1,0,1
+200,./HSPF90/PERLNDTS.SEQ,PERLND,SNOW,LAST,SNOTMP,1,1,1,1,1,0,2,0,0,277,Deg F,0,1,17.8,1.8,Current max temp for precip as snowfall,Deg C,0,1,17.8,1.8
+203,./HSPF90/PERLNDTS.SEQ,PERLND,SNOW,SUM,SNOWE,1,1,1,1,2,0,2,0,0,316,in/iv,0,1,0,0.0394,Evap from PACKF (sublimation),mm/iv,0,1,0,0.0394
+201,./HSPF90/PERLNDTS.SEQ,PERLND,SNOW,SUM,SNOWF,1,1,1,1,2,0,2,0,0,314,in/iv,0,1,0,0.0394,"Snowfall, water equivalent",mm/iv,0,1,0,0.0394
+204,./HSPF90/PERLNDTS.SEQ,PERLND,SNOW,SUM,WYIELD,1,1,1,1,2,0,2,1,0,317,in/iv,0,1,0,0.0394,Water yielded by pack (to land-surface),mm/iv,0,1,0,0.0394
+192,./HSPF90/PERLNDTS.SEQ,PERLND,SNOW,LAST,XLNMLT,1,1,1,1,1,0,2,0,0,269,in,0,1,0,0.0394,Curr max increment to ice in pack,mm,0,1,0,0.0394
+397,./HSPF90/PERLNDTS.SEQ,PERLND,TRACER,LAST,ATRSU,1,1,1,1,1,0,12,0,0,7473,lb/ac,0,1,0,0.892,Tracer in groundwater layer storage,kg/ha,0,1.12,0,1
+395,./HSPF90/PERLNDTS.SEQ,PERLND,TRACER,LAST,ITRSU,1,1,1,1,1,0,12,0,0,7471,lb/ac,0,1,0,0.892,Tracer in upper layer auxil storage,kg/ha,0,1.12,0,1
+396,./HSPF90/PERLNDTS.SEQ,PERLND,TRACER,LAST,LTRSU,1,1,1,1,1,0,12,0,0,7472,lb/ac,0,1,0,0.892,Tracer in lower layer storage,kg/ha,0,1.12,0,1
+401,./HSPF90/PERLNDTS.SEQ,PERLND,TRACER,SUM,POTRS,1,1,1,1,2,0,12,0,0,7546,lb/aciv,0,1,0,0.892,Total outflow of tracer from the PLS,kg/haiv,0,1.12,0,1
+400,./HSPF90/PERLNDTS.SEQ,PERLND,TRACER,SUM,SSTRS,3,1,3,1,2,0,12,0,0,7543,lb/aciv,0,1,0,0.892,Fluxes of tracer in subsoil,kg/haiv,0,1.12,0,1
+393,./HSPF90/PERLNDTS.SEQ,PERLND,TRACER,LAST,STRSU,1,1,1,1,1,0,12,0,0,7469,lb/ac,0,1,0,0.892,Tracer in surface layer storage,kg/ha,0,1.12,0,1
+402,./HSPF90/PERLNDTS.SEQ,PERLND,TRACER,SUM,TRADDR,2,1,2,1,2,0,12,0,0,7547,lb/aciv,0,1,0,0.892,Dry atmospheric deposition to PLS,kg/haiv,0,1.12,0,1
+404,./HSPF90/PERLNDTS.SEQ,PERLND,TRACER,SUM,TRADEP,2,1,2,1,2,0,12,0,0,7551,lb/aciv,0,1,0,0.892,Total atmospheric deposition to PLS,kg/haiv,0,1.12,0,1
+403,./HSPF90/PERLNDTS.SEQ,PERLND,TRACER,SUM,TRADWT,2,1,2,1,2,0,12,0,0,7549,lb/aciv,0,1,0,0.892,Wet atmospheric deposition to PLS,kg/haiv,0,1.12,0,1
+398,./HSPF90/PERLNDTS.SEQ,PERLND,TRACER,LAST,TRSU,1,1,1,1,1,0,12,0,0,7474,lb/ac,0,1,0,0.892,Total tracer stored in the PLS,kg/ha,0,1.12,0,1
+399,./HSPF90/PERLNDTS.SEQ,PERLND,TRACER,SUM,TSTRS,5,1,5,1,2,0,12,0,0,7538,lb/aciv,0,1,0,0.892,Fluxes of tracer in topsoil,kg/haiv,0,1.12,0,1
+394,./HSPF90/PERLNDTS.SEQ,PERLND,TRACER,LAST,UTRSU,1,1,1,1,1,0,12,0,0,7470,lb/ac,0,1,0,0.892,Tracer in upper layer princ storage,kg/ha,0,1.12,0,1
+406,./HSPF90/PLTGENTS.SEQ,PLTGEN,INPUT,ANY,MEAN,99,1,-3,1,2,0,0,2,0,1084,any,0,1,0,1,Mean-valued input time series,any,0,1,0,1
+405,./HSPF90/PLTGENTS.SEQ,PLTGEN,INPUT,ANY,POINT,20,1,-2,1,1,0,0,2,0,1064,any,0,1,0,1,Point-valued input time series,any,0,1,0,1
+575,./HSPF90/RCHRESTS.SEQ,RCHRES,ACID,LAST,ACCONC,7,1,-22052,1,1,0,11,0,0,22098,mol/l,0,1,0,1,Concentrations (Group ACIDPH),mol/l,0,1,0,1
+577,./HSPF90/RCHRESTS.SEQ,RCHRES,ACID,SUM,ACFLX1,7,1,-22052,1,2,0,11,0,0,22231,lb/iv,0,16.02,0,35.31,Total outflows  (Group ACIDPH),kg/iv,0,0.4537,0,1
+578,./HSPF90/RCHRESTS.SEQ,RCHRES,ACID,SUM,ACFLX2,5,7,-75,-22052,2,0,11,0,0,22413,lb/iv,0,16.02,0,35.31,Outflows thru indiv exits (Group ACIDPH),kg/iv,0,0.4537,0,1
+579,./HSPF90/RCHRESTS.SEQ,RCHRES,ACID,SUM,ACFLXC,10,1,-13498,1,2,0,11,0,0,22498,qty/iv,0,1,0,1,Net fluxes of conservatives (ACIDPH),qty/iv,0,1,0,1
+580,./HSPF90/RCHRESTS.SEQ,RCHRES,ACID,SUM,ACFLXG,3,1,-15455,1,2,0,11,0,0,22543,qty/iv,0,1,0,1,Net fluxes of GQUALS (Group ACIDPH),qty/iv,0,1,0,1
+574,./HSPF90/RCHRESTS.SEQ,RCHRES,ACID,SUM,ACINFL,7,1,-22052,1,2,0,11,0,0,22189,lb/iv,0,16.02,0,35.31,Inflows of acid chemicals (Group ACIDPH),kg/iv,0,0.4537,0,1
+581,./HSPF90/RCHRESTS.SEQ,RCHRES,ACID,LAST,ACPH,1,1,1,1,1,0,11,0,0,22586,pH units,0,1,0,1,pH  (Group ACIDPH),pH units,0,1,0,1
+576,./HSPF90/RCHRESTS.SEQ,RCHRES,ACID,LAST,ACSTOR,7,1,-22052,1,1,0,11,0,0,22140,lb,0,16.02,0,35.31,Storages (Group ACIDPH),kg,0,0.4537,0,1
+468,./HSPF90/RCHRESTS.SEQ,RCHRES,CONS,SUM,COADDR,10,1,-13498,1,2,0,3,0,0,14469,qty/iv,0,1,0,1,Dry deposition flux to reach,qty/iv,0,1,0,1
+470,./HSPF90/RCHRESTS.SEQ,RCHRES,CONS,SUM,COADEP,10,1,-13498,1,2,0,3,0,0,14489,qty/iv,0,1,0,1,Total deposition flux to reach,qty/iv,0,1,0,1
+469,./HSPF90/RCHRESTS.SEQ,RCHRES,CONS,SUM,COADWT,10,1,-13498,1,2,0,3,0,0,14479,qty/iv,0,1,0,1,Wet deposition flux to reach,qty/iv,0,1,0,1
+465,./HSPF90/RCHRESTS.SEQ,RCHRES,CONS,LAST,CON,10,1,-13498,1,1,0,3,1,0,13989,concid,0,1,0,1,Concentration of conservative constits,concid,0,1,0,1
+464,./HSPF90/RCHRESTS.SEQ,RCHRES,CONS,SUM,ICON,10,1,-13498,1,2,0,3,0,0,13468,qty/iv,0,1,0,1,Inflow of conservative constits.,qty/iv,0,1,0,1
+467,./HSPF90/RCHRESTS.SEQ,RCHRES,CONS,SUM,OCON,5,10,-75,-13498,2,0,3,0,0,14309,qty/iv,0,1,0,1,Outflow of conserv through indiv exits,qty/iv,0,1,0,1
+466,./HSPF90/RCHRESTS.SEQ,RCHRES,CONS,SUM,ROCON,10,1,-13498,1,2,0,3,0,0,14049,qty/iv,0,1,0,1,Outflow of conservatives from RCHRES,qty/iv,0,1,0,1
+433,./HSPF90/RCHRESTS.SEQ,RCHRES,EXTNL,LAST,BINV,1,1,1,1,2,0,0,2,0,21169,mg/l,0,1,0,1,Benthic invertebrate density for grazing,mg/l,0,1,0,1
+426,./HSPF90/RCHRESTS.SEQ,RCHRES,EXTNL,LAST,BIO,3,1,-15455,1,2,0,0,2,0,15434,mgbio/l,0,1,0,1,Biomass active in biodeg (section GQUAL),mgbio/l,0,1,0,1
+408,./HSPF90/RCHRESTS.SEQ,RCHRES,EXTNL,SUM,CIVOL,100,1,-2347,1,2,0,0,2,0,625,acft/iv,0,43560,0,35310000,Inflow of water to the RCHRES by comp.,Mm3/iv,0,1233.6,0,1000000
+418,./HSPF90/RCHRESTS.SEQ,RCHRES,EXTNL,LAST,CLOUD,1,1,1,1,2,0,0,2,0,14513,tenths,0,1,0,1,Cloud cover (range 0 thru 10),tenths,0,1,0,1
+416,./HSPF90/RCHRESTS.SEQ,RCHRES,EXTNL,LAST,COADCN,10,1,-13498,1,2,0,0,2,0,13488,conc,0,1,0,1,Concentration of CONS in precip to RCHRES,conc,0,1,0,1
+415,./HSPF90/RCHRESTS.SEQ,RCHRES,EXTNL,SUM,COADFX,10,1,-13498,1,2,0,0,2,0,13478,qty/aciv,0,0.00002296,0,0.000009291,Atmospheric deposition of CONS to RCHRES,qty/haiv,0,0.0002471,0,0.0001
+411,./HSPF90/RCHRESTS.SEQ,RCHRES,EXTNL,NONE,COLIND,5,1,-75,1,2,0,0,2,0,1837,none,0,1,0,1,See documentation,none,0,1,0,1
+413,./HSPF90/RCHRESTS.SEQ,RCHRES,EXTNL,LAST,COTDGT,5,100,-75,-2347,2,0,0,2,0,1847,ft3/s,0,1,0,35.31,g(t) component of category outflow demand,m3/s,0,0.0283,0,1
+419,./HSPF90/RCHRESTS.SEQ,RCHRES,EXTNL,LAST,DEWTMP,1,1,1,1,2,0,0,2,0,14514,DegF,-32,0.555,0,1,Dewpoint,DegC,-32,0.555,0,1
+422,./HSPF90/RCHRESTS.SEQ,RCHRES,EXTNL,SUM,DSOLAR,1,1,1,1,2,0,0,2,0,14517,miles/iv,0,1,0,1,Daily solar radiation every ivl,km/iv,0,1,0,1
+420,./HSPF90/RCHRESTS.SEQ,RCHRES,EXTNL,LAST,GATMP,1,1,1,1,2,0,0,2,0,14515,DegF,-32,0.555,0,1,Air temp at meteorologic station,DegC,-32,0.555,0,1
+428,./HSPF90/RCHRESTS.SEQ,RCHRES,EXTNL,LAST,GQADCN,3,1,-15455,1,2,0,0,2,0,15448,concu/l,0,1,0,1,Concentration of QUAL in precip to RCHRES,concu/l,0,1,0,1
+427,./HSPF90/RCHRESTS.SEQ,RCHRES,EXTNL,SUM,GQADFX,3,1,-15455,1,2,0,0,2,0,15441,qty/aciv,0,0.00002296,0,0.000009291,Atmospheric deposition of QUAL to RCHRES,qty/haiv,0,0.0002471,0,0.0001
+414,./HSPF90/RCHRESTS.SEQ,RCHRES,EXTNL,SUM,ICON,10,1,-13498,1,2,0,0,2,0,13458,qty/iv,0,1,0,1,Inflow of conservative constits.,qty/iv,0,1,0,1
+435,./HSPF90/RCHRESTS.SEQ,RCHRES,EXTNL,LAST,IDWWQ,100,1,100,1,2,0,1,2,0,11597,concu/l,0,1,0,1,Inflow conc of DW WQ const by node,concu/l,0,1,0,1
+407,./HSPF90/RCHRESTS.SEQ,RCHRES,EXTNL,SUM,IVOL,1,1,1,1,2,0,0,2,0,623,acft/iv,0,43560,0,35310000,Inflow of water to the RCHRES,Mm3/iv,0,1233.6,0,1000000
+434,./HSPF90/RCHRESTS.SEQ,RCHRES,EXTNL,SUM,IVOLDW,100,1,100,1,2,0,1,2,0,11197,acft/iv,0,43560,0,35310000,Inflow of water to DW RCHRES by node,Mm3/iv,0,1233.6,0,1000000
+430,./HSPF90/RCHRESTS.SEQ,RCHRES,EXTNL,LAST,NUADCN,3,1,3,1,2,0,0,2,0,19913,mg/l,0,1,0,1,Concentration of nutrient in precip,mg/l,0,1,0,1
+429,./HSPF90/RCHRESTS.SEQ,RCHRES,EXTNL,SUM,NUADFX,3,1,3,1,2,0,0,2,0,19910,lb/aciv,0,0.3677,0,0.3281,Atmospheric deposition of nutrient,kg/haiv,0,0.1121,0,0.1
+412,./HSPF90/RCHRESTS.SEQ,RCHRES,EXTNL,LAST,OUTDGT,5,1,-75,1,2,0,0,2,0,1842,ft3/s,0,1,0,35.31,g(t) component of outflow demand,m3/s,0,0.0283,0,1
+424,./HSPF90/RCHRESTS.SEQ,RCHRES,EXTNL,LAST,PHVAL,1,1,1,1,2,0,0,2,0,15432,,0,1,0,1,pH of RCHRES (used in Section GQUAL),,0,1,0,1
+432,./HSPF90/RCHRESTS.SEQ,RCHRES,EXTNL,LAST,PLADCN,3,1,3,1,2,0,0,2,0,20967,mg/l,0,1,0,1,Concentration of constituent in precip,mg/l,0,1,0,1
+431,./HSPF90/RCHRESTS.SEQ,RCHRES,EXTNL,SUM,PLADFX,3,1,3,1,2,0,0,2,0,20964,lb/aciv,0,0.3677,0,0.3281,Atmospheric deposition of constituent,kg/haiv,0,0.1121,0,0.1
+410,./HSPF90/RCHRESTS.SEQ,RCHRES,EXTNL,SUM,POTEV,1,1,1,1,2,0,0,2,0,826,in/iv,0,0.0833,0,0.00328,Potential evap from the surface,mm/iv,0,0.0254,0,0.001
+409,./HSPF90/RCHRESTS.SEQ,RCHRES,EXTNL,SUM,PREC,1,1,1,1,2,0,0,2,0,825,in/iv,0,0.0833,0,0.00328,Precip on surface of the RCHRES,mm/iv,0,0.0254,0,0.001
+425,./HSPF90/RCHRESTS.SEQ,RCHRES,EXTNL,LAST,ROC,1,1,1,1,2,0,0,2,0,15433,moles/l,0,1,0,1,Free radical oxygen conc (section GQUAL),moles/l,0,1,0,1
+417,./HSPF90/RCHRESTS.SEQ,RCHRES,EXTNL,SUM,SOLRAD,1,1,1,1,2,0,0,2,0,14512,Ly/iv,0,1,0,1,Solar radiation,Ly/iv,0,1,0,1
+423,./HSPF90/RCHRESTS.SEQ,RCHRES,EXTNL,LAST,TGRND,1,1,1,1,2,0,0,2,0,14668,DegF,-32,0.555,0,1,Ground (bed) temperature,DegC,-32,0.555,0,1
+421,./HSPF90/RCHRESTS.SEQ,RCHRES,EXTNL,SUM,WIND,1,1,1,1,2,0,0,2,0,14516,miles/iv,0,1609,0,1000,Wind movement,km/iv,0,1609,0,1000
+502,./HSPF90/RCHRESTS.SEQ,RCHRES,GQUAL,SUM,ADQAL,7,3,7,-15455,2,0,6,0,0,19306,qty/iv,0,1,0,1,Ads/des between diss state and sediments,qty/iv,0,1,0,1
+496,./HSPF90/RCHRESTS.SEQ,RCHRES,GQUAL,SUM,DDQAL,7,3,7,-15455,2,0,6,0,0,19138,qty/iv,0,1,0,1,Decay of diss qual by specific processes,qty/iv,0,1,0,1
+490,./HSPF90/RCHRESTS.SEQ,RCHRES,GQUAL,LAST,DQAL,3,1,-15455,1,1,0,6,0,0,17045,concu/l,0,1,0,1,Dissolved concentration of qual.,concu/l,0,1,0,1
+498,./HSPF90/RCHRESTS.SEQ,RCHRES,GQUAL,SUM,DSQAL,4,3,4,-15455,2,0,6,0,0,19194,qty/iv,0,1,0,1,Deposition/scour of sed-assoc. qual,qty/iv,0,1,0,1
+507,./HSPF90/RCHRESTS.SEQ,RCHRES,GQUAL,SUM,GQADDR,3,1,-15455,1,2,0,6,0,0,19565,qty/iv,0,1,0,1,Dry atmoshpheric deposition to reach,qty/iv,0,1,0,1
+509,./HSPF90/RCHRESTS.SEQ,RCHRES,GQUAL,SUM,GQADEP,3,1,-15455,1,2,0,6,0,0,19579,qty/iv,0,1,0,1,Total atmoshpheric deposition to reach,qty/iv,0,1,0,1
+508,./HSPF90/RCHRESTS.SEQ,RCHRES,GQUAL,SUM,GQADWT,3,1,-15455,1,2,0,6,0,0,19572,qty/iv,0,1,0,1,Wet atmoshpheric deposition to reach,qty/iv,0,1,0,1
+487,./HSPF90/RCHRESTS.SEQ,RCHRES,GQUAL,SUM,IDQAL,3,1,-15455,1,2,0,6,0,0,15369,qty/iv,0,1,0,1,Inflow of dissolved qual to RCHRES,qty/iv,0,1,0,1
+488,./HSPF90/RCHRESTS.SEQ,RCHRES,GQUAL,SUM,ISQAL,4,3,4,-15455,2,0,6,0,0,15397,qty/iv,0,1,0,1,Inflows of sed-assoc qual to RCHRES,qty/iv,0,1,0,1
+503,./HSPF90/RCHRESTS.SEQ,RCHRES,GQUAL,SUM,ODQAL,5,3,-75,-15455,2,0,6,0,0,19355,qty/iv,0,1,0,1,Outflow of diss qual through indiv exits,qty/iv,0,1,0,1
+504,./HSPF90/RCHRESTS.SEQ,RCHRES,GQUAL,SUM,OSQAL,5,9,-75,-15602,2,0,6,0,0,19390,qty/iv,0,1,0,1,Sed-assoc qual outflow thru indiv exits,qty/iv,0,1,0,1
+495,./HSPF90/RCHRESTS.SEQ,RCHRES,GQUAL,SUM,PDQAL,3,1,-15455,1,2,0,6,0,0,19131,qty/iv,0,1,0,1,"Input to qual, from decay of parent qual",qty/iv,0,1,0,1
+492,./HSPF90/RCHRESTS.SEQ,RCHRES,GQUAL,LAST,RDQAL,3,1,-15455,1,1,0,6,0,0,17094,qty,0,1,0,1,Total storage of qual in dissolved form,qty,0,1,0,1
+497,./HSPF90/RCHRESTS.SEQ,RCHRES,GQUAL,SUM,RODQAL,3,1,-15455,1,2,0,6,0,0,19187,qty/iv,0,1,0,1,Outflow of dissolved qual from RCHRES,qty/iv,0,1,0,1
+499,./HSPF90/RCHRESTS.SEQ,RCHRES,GQUAL,SUM,ROSQAL,4,3,4,-15455,2,0,6,0,0,19222,qty/iv,0,1,0,1,Outflow of sed-assoc qual from RCHRES,qty/iv,0,1,0,1
+494,./HSPF90/RCHRESTS.SEQ,RCHRES,GQUAL,LAST,RRQAL,3,1,-15455,1,1,0,6,0,0,17185,qty,0,1,0,1,Total storage of qual in the RCHRES,qty,0,1,0,1
+493,./HSPF90/RCHRESTS.SEQ,RCHRES,GQUAL,LAST,RSQAL,12,3,12,-15455,1,0,6,0,0,17101,qty,0,1,0,1,Storage of sediment-associated qual,qty,0,1,0,1
+491,./HSPF90/RCHRESTS.SEQ,RCHRES,GQUAL,LAST,SQAL,6,3,6,-15455,1,0,6,0,0,17052,concu/mg,0,1,0,1,Concentrations of qual on sediment,concu/mg,0,1,0,1
+501,./HSPF90/RCHRESTS.SEQ,RCHRES,GQUAL,SUM,SQDEC,7,3,7,-15455,2,0,6,0,0,19257,qty/iv,0,1,0,1,Decay of sediment-associated qual,qty/iv,0,1,0,1
+489,./HSPF90/RCHRESTS.SEQ,RCHRES,GQUAL,SUM,TIQAL,3,1,-15455,1,2,0,6,0,0,15425,qty/iv,0,1,0,1,Total inflow of qual.,qty/iv,0,1,0,1
+506,./HSPF90/RCHRESTS.SEQ,RCHRES,GQUAL,SUM,TOQAL,5,3,-75,-15455,2,0,6,0,0,19530,qty/iv,0,1,0,1,Outflow of total qual through indiv exits,qty/iv,0,1,0,1
+505,./HSPF90/RCHRESTS.SEQ,RCHRES,GQUAL,SUM,TOSQAL,5,3,-75,-15455,2,0,6,0,0,19495,qty/iv,0,1,0,1,Tot sed-assoc qual outflow by exit,qty/iv,0,1,0,1
+500,./HSPF90/RCHRESTS.SEQ,RCHRES,GQUAL,SUM,TROQAL,3,1,-15455,1,2,0,6,0,0,19250,qty/iv,0,1,0,1,Total outflow of qual from RCHRES,qty/iv,0,1,0,1
+473,./HSPF90/RCHRESTS.SEQ,RCHRES,HTRCH,LAST,AIRTMP,1,1,1,1,1,0,4,0,0,14786,DegF,-32,0.555,0,1,"Air temp, adjusted for elev difference",DegC,-32,0.555,0,1
+478,./HSPF90/RCHRESTS.SEQ,RCHRES,HTRCH,SUM,HTCF4,7,1,7,1,2,0,4,0,0,14866,BT/f2.iv,0,0.36866,0,1,Areal heat flux rates,kc/m2.iv,0,0.36866,0,1
+475,./HSPF90/RCHRESTS.SEQ,RCHRES,HTRCH,SUM,HTEXCH,1,1,1,1,2,0,4,0,0,14799,BTU/iv,0,0.0089,0,0.0353,Net heat exchanged with atmosphere,kcl/iv,0,0.000252,0,0.001
+471,./HSPF90/RCHRESTS.SEQ,RCHRES,HTRCH,SUM,IHEAT,1,1,1,1,2,0,4,0,0,14511,BTU/iv,0,0.0089,0,0.0353,Inflow of heat to RCHRES,kcl/iv,0,0.000252,0,0.001
+477,./HSPF90/RCHRESTS.SEQ,RCHRES,HTRCH,SUM,OHEAT,5,1,-75,1,2,0,4,0,0,14826,BTU/iv,0,0.0089,0,0.0353,Outflow of heat through individual exits,kcl/iv,0,0.000252,0,0.001
+476,./HSPF90/RCHRESTS.SEQ,RCHRES,HTRCH,SUM,ROHEAT,1,1,1,1,2,0,4,0,0,14800,BTU/iv,0,0.0089,0,0.0353,Outflow of heat through active exits,kcl/iv,0,0.000252,0,0.001
+474,./HSPF90/RCHRESTS.SEQ,RCHRES,HTRCH,LAST,SHDFAC,1,1,1,1,1,0,4,0,0,14788,DegF,0,1,0,1,Shading factor from topog and vegetation,DegC,0,1,0,1
+472,./HSPF90/RCHRESTS.SEQ,RCHRES,HTRCH,LAST,TW,1,1,1,1,1,0,4,1,0,14785,DegF,-32,0.555,0,1,Simulated water temperature in RCHRES,DegC,-32,0.555,0,1
+443,./HSPF90/RCHRESTS.SEQ,RCHRES,HYDR,LAST,AVDEP,1,1,1,1,1,0,1,1,0,5307,ft,0,1,0,3.281,RCHRES Average depth (volume/surf area),m,0,0.3048,0,1
+448,./HSPF90/RCHRESTS.SEQ,RCHRES,HYDR,LAST,AVSECT,1,1,1,1,1,0,1,0,0,5312,ft2,0,1,0,10.76,Average cross-sectional area of RCHRES,m2,0,0.0929,0,1
+447,./HSPF90/RCHRESTS.SEQ,RCHRES,HYDR,LAST,AVVEL,1,1,1,1,1,0,1,1,0,5311,ft/s,0,1,0,3.281,Average flow velocity (RO/VOL),m/s,0,0.3048,0,1
+440,./HSPF90/RCHRESTS.SEQ,RCHRES,HYDR,LAST,CDFVOL,5,100,-75,-2347,1,0,1,0,0,4805,acft,0,43560,0,35310000,Deficit in category demand from an exit,Mm3,0,1233.6,0,1000000
+437,./HSPF90/RCHRESTS.SEQ,RCHRES,HYDR,SUM,CIVOL,100,1,-2347,1,2,0,0,0,0,725,acft/iv,0,43560,0,35310000,Inflow of water to the RCHRES by comp.,Mm3/iv,0,1233.6,0,1000000
+454,./HSPF90/RCHRESTS.SEQ,RCHRES,HYDR,LAST,CO,5,100,-75,-2347,1,0,1,0,0,5931,ft3/s,0,1,0,35.31,Outflow rates thru indiv RCHRES exits by c,m3/s,0,0.0283,0,1
+460,./HSPF90/RCHRESTS.SEQ,RCHRES,HYDR,SUM,COVOL,5,100,-75,-2347,2,0,0,0,0,9579,acft/iv,0,43560,0,35310000,Outflow of water through indiv exits by c,Mm3/iv,0,1233.6,0,1000000
+452,./HSPF90/RCHRESTS.SEQ,RCHRES,HYDR,LAST,CRO,100,1,-2347,1,1,0,1,0,0,5316,ft3/s,0,1,0,35.31,Total rate of outflow from RCHRES by comp,m3/s,0,0.0283,0,1
+458,./HSPF90/RCHRESTS.SEQ,RCHRES,HYDR,SUM,CROVOL,100,1,-2347,1,2,0,1,0,0,6949,acft/iv,0,43560,0,35310000,Total outflow of water from RCHRES by com,Mm3/iv,0,1233.6,0,1000000
+439,./HSPF90/RCHRESTS.SEQ,RCHRES,HYDR,LAST,CVOL,100,1,-2347,1,1,0,1,0,0,4705,acft,0,43560,0,35310000,Volume of water in the RCHRES by category,Mm3,0,1233.6,0,1000000
+441,./HSPF90/RCHRESTS.SEQ,RCHRES,HYDR,LAST,DEP,1,1,1,1,1,0,1,0,0,5305,ft,0,1,0,3.281,RCHRES Depth at specified location,m,0,0.3048,0,1
+445,./HSPF90/RCHRESTS.SEQ,RCHRES,HYDR,LAST,HRAD,1,1,1,1,1,0,1,1,0,5309,ft,0,1,0,3.281,RCHRES Hydraulic radius,m,0,0.3048,0,1
+436,./HSPF90/RCHRESTS.SEQ,RCHRES,HYDR,SUM,IVOL,1,1,1,1,2,0,1,0,0,624,acft/iv,0,43560,0,35310000,Inflow of water to the RCHRES,Mm3/iv,0,1233.6,0,1000000
+453,./HSPF90/RCHRESTS.SEQ,RCHRES,HYDR,LAST,O,5,1,-75,1,1,0,1,1,0,5926,ft3/s,0,1,0,35.31,Outflow rates thru indiv RCHRES exits,m3/s,0,0.0283,0,1
+459,./HSPF90/RCHRESTS.SEQ,RCHRES,HYDR,SUM,OVOL,5,1,-75,1,2,0,1,0,0,9574,acft/iv,0,43560,0,35310000,Outflow of water through indiv exits,Mm3/iv,0,1233.6,0,1000000
+455,./HSPF90/RCHRESTS.SEQ,RCHRES,HYDR,SUM,PRSUPY,1,1,1,1,2,0,1,0,0,6946,acft/iv,0,43560,0,35310000,Water contrib to RCHRES by precip on sur,Mm3/iv,0,1233.6,0,1000000
+461,./HSPF90/RCHRESTS.SEQ,RCHRES,HYDR,SUM,RIRDEM,1,1,1,1,2,0,0,0,0,10089,acft/iv,0,43560,0,35310000,Irrigation withdrawal demanded by all PLS,Mm3/iv,0,1233.6,0,1000000
+462,./HSPF90/RCHRESTS.SEQ,RCHRES,HYDR,SUM,RIRSHT,1,1,1,1,2,0,0,0,0,10090,acft/iv,0,43560,0,35310000,Irrigation shortage relative to demand,Mm3/iv,0,1233.6,0,1000000
+451,./HSPF90/RCHRESTS.SEQ,RCHRES,HYDR,LAST,RO,1,1,1,1,1,0,1,1,0,5315,ft3/s,0,1,0,35.31,Total rate of outflow from RCHRES,m3/s,0,0.0283,0,1
+463,./HSPF90/RCHRESTS.SEQ,RCHRES,HYDR,SUM,RODWWQ,1,1,1,1,1,0,1,1,0,11698,qty/iv,0,1,0,1,Outflow of dissolved dw qual from RCHRES,qty/iv,0,1,0,1
+457,./HSPF90/RCHRESTS.SEQ,RCHRES,HYDR,SUM,ROVOL,1,1,1,1,2,0,1,0,0,6948,acft/iv,0,43560,0,35310000,Total outflow of water from RCHRES,Mm3/iv,0,1233.6,0,1000000
+446,./HSPF90/RCHRESTS.SEQ,RCHRES,HYDR,LAST,SAREA,1,1,1,1,1,0,1,0,0,5310,ac,0,43560,0,107640,RCHRES Surface area,ha,0,4046.8,0,10000
+442,./HSPF90/RCHRESTS.SEQ,RCHRES,HYDR,LAST,STAGE,1,1,1,1,1,0,1,0,0,5306,ft,0,1,0,3.281,RCHRES Stage (DEP+STCOR),m,0,0.3048,0,1
+450,./HSPF90/RCHRESTS.SEQ,RCHRES,HYDR,LAST,TAU,1,1,1,1,1,0,1,1,0,5314,lb/ft2,0,1,0,0.2048,Bed shear stress of flow in RCHRES,kg/m2,0,4.883,0,1
+444,./HSPF90/RCHRESTS.SEQ,RCHRES,HYDR,LAST,TWID,1,1,1,1,1,0,1,1,0,5308,ft,0,1,0,3.281,RCHRES Mean topwidth (surf area/length),m,0,0.3048,0,1
+449,./HSPF90/RCHRESTS.SEQ,RCHRES,HYDR,LAST,USTAR,1,1,1,1,1,0,1,0,0,5313,ft/s,0,1,0,3.281,Shear velocity of flow in RCHRES,m/s,0,0.3048,0,1
+438,./HSPF90/RCHRESTS.SEQ,RCHRES,HYDR,LAST,VOL,1,1,1,1,1,0,1,1,0,4704,acft,0,43560,0,35310000,Volume of water in the RCHRES,Mm3,0,1233.6,0,1000000
+456,./HSPF90/RCHRESTS.SEQ,RCHRES,HYDR,SUM,VOLEV,1,1,1,1,2,0,1,0,0,6947,acft/iv,0,43560,0,35310000,Water lost to RCHRES by evap,Mm3/iv,0,1233.6,0,1000000
+607,./HSPF90/RCHRESTS.SEQ,RCHRES,INFLOW,SUM,ACINFL,7,1,-22052,1,2,0,11,2,0,22182,lb/iv,0,16.02,0,35.31,Inflows of acid chemicals (Group ACIDPH),kg/iv,0,0.4537,0,1
+596,./HSPF90/RCHRESTS.SEQ,RCHRES,INFLOW,SUM,CIVOL,100,1,-2347,1,2,0,0,2,0,625,acft/iv,0,43560,0,35310000,Inflow of water to the RCHRES by comp.,Mm3/iv,0,1233.6,0,1000000
+597,./HSPF90/RCHRESTS.SEQ,RCHRES,INFLOW,SUM,ICON,10,1,-13498,1,2,0,3,2,0,13458,qty/iv,0,1,0,1,Inflow of conservative constits.,qty/iv,0,1,0,1
+600,./HSPF90/RCHRESTS.SEQ,RCHRES,INFLOW,SUM,IDQAL,3,1,-15455,1,2,0,6,2,0,15362,qty/iv,0,1,0,1,Inflow of dissolved qual to RCHRES,qty/iv,0,1,0,1
+609,./HSPF90/RCHRESTS.SEQ,RCHRES,INFLOW,LAST,IDWWQ,100,1,100,1,2,0,1,2,0,11597,concu/l,0,1,0,1,Inflow conc of DW WQ const by node,concu/l,0,1,0,1
+598,./HSPF90/RCHRESTS.SEQ,RCHRES,INFLOW,SUM,IHEAT,1,1,1,1,2,0,4,2,0,14510,BTU/iv,0,0.0089,0,0.0353,Inflow of heat to RCHRES,kcl/iv,0,0.000252,0,0.001
+599,./HSPF90/RCHRESTS.SEQ,RCHRES,INFLOW,SUM,ISED,3,1,3,1,2,0,5,2,0,14893,tn/iv,0,32040000,0,35310000,Inflows of sediments to RCHRES,tne/iv,0,907400,0,1000000
+601,./HSPF90/RCHRESTS.SEQ,RCHRES,INFLOW,SUM,ISQAL,3,3,3,-15455,2,0,6,2,0,15376,qty/iv,0,1,0,1,Inflows of sed-assoc qual to RCHRES,qty/iv,0,1,0,1
+595,./HSPF90/RCHRESTS.SEQ,RCHRES,INFLOW,SUM,IVOL,1,1,1,1,2,0,1,2,0,623,acft/iv,0,43560,0,35310000,Inflow of water to the RCHRES,Mm3/iv,0,1233.6,0,1000000
+608,./HSPF90/RCHRESTS.SEQ,RCHRES,INFLOW,SUM,IVOLDW,100,1,100,1,2,0,1,2,0,11197,acft/iv,0,43560,0,35310000,Inflow of water to DW RCHRES by node,Mm3/iv,0,1233.6,0,1000000
+603,./HSPF90/RCHRESTS.SEQ,RCHRES,INFLOW,SUM,NUIF1,4,1,4,1,2,0,8,2,0,19884,lb/iv,0,16020,0,35310,Inflows of dissolved nutrients,kg/iv,0,453.7,0,1000
+604,./HSPF90/RCHRESTS.SEQ,RCHRES,INFLOW,SUM,NUIF2,3,2,3,2,2,0,8,2,0,19892,lb/iv,0,16020,0,35310,Inflows of adsorbed NH4 and PO4,kg/iv,0,453.7,0,1000
+602,./HSPF90/RCHRESTS.SEQ,RCHRES,INFLOW,SUM,OXIF,2,1,2,1,2,0,7,2,0,19605,lb/iv,0,16020,0,35310,Inflows of DO and BOD to RCHRES,kg/iv,0,453.7,0,1000
+606,./HSPF90/RCHRESTS.SEQ,RCHRES,INFLOW,SUM,PHIF,2,1,2,1,2,0,10,2,0,21898,lb/iv,0,16020,0,35310,Inflows of TIC and CO2 to RCHRES,kg/iv,0,453.7,0,1000
+605,./HSPF90/RCHRESTS.SEQ,RCHRES,INFLOW,SUM,PKIF,5,1,5,1,2,0,9,2,0,20924,lb/iv,0,16020,0,35310,Inflows of plankton related constituents,kg/iv,0,453.7,0,1000
+521,./HSPF90/RCHRESTS.SEQ,RCHRES,NUTRX,LAST,DNUST,6,1,6,1,1,0,8,0,0,20102,mg/l,0,1,0,1,Dissolved nutrient concentrations,mg/l,0,1,0,1
+524,./HSPF90/RCHRESTS.SEQ,RCHRES,NUTRX,LAST,DNUST2,6,1,6,1,1,0,8,0,0,20114,lb,0,16020,0,35310,Dissolved nutrient storages,kg,0,453.7,0,1000
+541,./HSPF90/RCHRESTS.SEQ,RCHRES,NUTRX,SUM,NUADDR,3,1,3,1,2,0,8,0,0,20890,lb/iv,0,16020,0,35310,Dry atmospheric deposition to reach,kg/iv,0,453.7,0,1000
+543,./HSPF90/RCHRESTS.SEQ,RCHRES,NUTRX,SUM,NUADEP,3,1,3,1,2,0,8,0,0,20896,lb/iv,0,16020,0,35310,Total atmospheric deposition to reach,kg/iv,0,453.7,0,1000
+542,./HSPF90/RCHRESTS.SEQ,RCHRES,NUTRX,SUM,NUADWT,3,1,3,1,2,0,8,0,0,20893,lb/iv,0,16020,0,35310,Wet atmospheric deposition to reach,kg/iv,0,453.7,0,1000
+528,./HSPF90/RCHRESTS.SEQ,RCHRES,NUTRX,SUM,NUCF1,4,1,4,1,2,0,8,0,0,20756,lb/iv,0,16020,0,35310,Total outflows of dissolved nutrients,kg/iv,0,453.7,0,1000
+529,./HSPF90/RCHRESTS.SEQ,RCHRES,NUTRX,SUM,NUCF2,4,2,4,2,2,0,8,0,0,20760,lb/iv,0,16020,0,35310,Total outflows of adsorbed NH4 and PO4,kg/iv,0,453.7,0,1000
+531,./HSPF90/RCHRESTS.SEQ,RCHRES,NUTRX,SUM,NUCF3,4,2,4,2,2,0,8,0,0,20772,lb/iv,0,16020,0,35310,Scour/deposition of adsorbed NH4 and PO4,kg/iv,0,453.7,0,1000
+532,./HSPF90/RCHRESTS.SEQ,RCHRES,NUTRX,SUM,NUCF4,7,1,7,1,2,0,8,0,0,20780,lb/iv,0,16020,0,35310,NO3 process fluxes,kg/iv,0,453.7,0,1000
+533,./HSPF90/RCHRESTS.SEQ,RCHRES,NUTRX,SUM,NUCF5,8,1,8,1,2,0,8,0,0,20787,lb/iv,0,16020,0,35310,TAM process fluxes,kg/iv,0,453.7,0,1000
+534,./HSPF90/RCHRESTS.SEQ,RCHRES,NUTRX,SUM,NUCF6,1,1,1,1,2,0,8,0,0,20795,lb/iv,0,16020,0,35310,NO2 process fluxes,kg/iv,0,453.7,0,1000
+535,./HSPF90/RCHRESTS.SEQ,RCHRES,NUTRX,SUM,NUCF7,6,1,6,1,2,0,8,0,0,20796,lb/iv,0,16020,0,35310,PO4 process fluxes,kg/iv,0,453.7,0,1000
+536,./HSPF90/RCHRESTS.SEQ,RCHRES,NUTRX,SUM,NUCF8,4,2,4,2,2,0,8,0,0,20802,lb/iv,0,16020,0,35310,Adsorption/desorption of NH4 and PO4,kg/iv,0,453.7,0,1000
+537,./HSPF90/RCHRESTS.SEQ,RCHRES,NUTRX,SUM,NUCF9,5,4,-75,4,2,0,8,0,0,20810,lb/iv,0,16020,0,35310,Outflows of dissolved nutrients via exits,kg/iv,0,453.7,0,1000
+518,./HSPF90/RCHRESTS.SEQ,RCHRES,NUTRX,SUM,NUIF1,4,1,4,1,2,0,8,0,0,19888,lb/iv,0,16020,0,35310,Inflows of dissolved nutrients,kg/iv,0,453.7,0,1000
+519,./HSPF90/RCHRESTS.SEQ,RCHRES,NUTRX,SUM,NUIF2,4,2,4,2,2,0,8,0,0,19898,lb/iv,0,16020,0,35310,Inflows of adsorbed NH4 and PO4,kg/iv,0,453.7,0,1000
+527,./HSPF90/RCHRESTS.SEQ,RCHRES,NUTRX,LAST,NUST,4,1,4,1,1,0,8,0,0,20144,lb,0,16020,0,35310,Total nutrient storages in RCHRES,kg,0,453.7,0,1000
+538,./HSPF90/RCHRESTS.SEQ,RCHRES,NUTRX,SUM,OSNH4,5,4,-75,4,2,0,8,0,0,20830,lb/iv,0,16020,0,35310,Outflows of adsorbed NH4 via exits,kg/iv,0,453.7,0,1000
+539,./HSPF90/RCHRESTS.SEQ,RCHRES,NUTRX,SUM,OSPO4,5,4,-75,4,2,0,8,0,0,20850,lb/iv,0,16020,0,35310,Outflows of adsorbed PO4 via exits,kg/iv,0,453.7,0,1000
+525,./HSPF90/RCHRESTS.SEQ,RCHRES,NUTRX,LAST,RSNH4,12,1,12,1,1,0,8,0,0,20120,lb,0,16020,0,35310,Adsorbed NH4 storages,kg,0,453.7,0,1000
+526,./HSPF90/RCHRESTS.SEQ,RCHRES,NUTRX,LAST,RSPO4,12,1,12,1,1,0,8,0,0,20132,lb,0,16020,0,35310,Adsorbed PO4 storages,kg,0,453.7,0,1000
+522,./HSPF90/RCHRESTS.SEQ,RCHRES,NUTRX,LAST,SNH4,3,1,3,1,1,0,8,0,0,20108,mg/kg,0,0.000001,0,0.000001,Adsorbed NH4 concentrations,mg/kg,0,0.000001,0,0.000001
+523,./HSPF90/RCHRESTS.SEQ,RCHRES,NUTRX,LAST,SPO4,3,1,3,1,1,0,8,0,0,20111,mg/kg,0,0.000001,0,0.000001,Adsorbed PO4 concentrations,mg/kg,0,0.000001,0,0.000001
+530,./HSPF90/RCHRESTS.SEQ,RCHRES,NUTRX,SUM,TNUCF1,4,1,4,1,2,0,8,0,0,20768,lb/iv,0,16020,0,35310,Total outflows of nutrients,kg/iv,0,453.7,0,1000
+540,./HSPF90/RCHRESTS.SEQ,RCHRES,NUTRX,SUM,TNUCF2,5,4,-75,4,2,0,8,0,0,20870,lb/iv,0,16020,0,35310,Outflows of nutrients via exits,kg/iv,0,453.7,0,1000
+520,./HSPF90/RCHRESTS.SEQ,RCHRES,NUTRX,SUM,TNUIF,4,1,4,1,2,0,8,0,0,19906,lb/iv,0,16020,0,35310,Total inflows of nutrients,kg/iv,0,453.7,0,1000
+623,./HSPF90/RCHRESTS.SEQ,RCHRES,OFLOW,SUM,ACFLX2,5,7,-75,-22052,2,0,11,0,0,22413,lb/iv,0,16.02,0,35.31,Outflows thru indiv exits (Group ACIDPH),lb/iv,0,0.4537,0,1
+611,./HSPF90/RCHRESTS.SEQ,RCHRES,OFLOW,SUM,COVOL,5,100,-75,-2347,2,0,1,0,0,9579,acft/iv,0,43560,0,35310000,Outflow of water through indiv exits by c,Mm3/iv,0,1233.6,0,1000000
+618,./HSPF90/RCHRESTS.SEQ,RCHRES,OFLOW,SUM,NUCF9,5,4,-75,4,2,0,8,0,0,20810,lb/iv,0,16020,0,35310,Outflows of dissolved nutrients via exits,kg/iv,0,453.7,0,1000
+612,./HSPF90/RCHRESTS.SEQ,RCHRES,OFLOW,SUM,OCON,5,10,-75,-13498,2,0,3,0,0,14309,qty/iv,0,1,0,1,Outflow of conserv through indiv exits,qty/iv,0,1,0,1
+615,./HSPF90/RCHRESTS.SEQ,RCHRES,OFLOW,SUM,ODQAL,5,3,-75,-15455,2,0,6,0,0,19355,qty/iv,0,1,0,1,Outflow of diss qual through indiv exits,qty/iv,0,1,0,1
+613,./HSPF90/RCHRESTS.SEQ,RCHRES,OFLOW,SUM,OHEAT,5,1,-75,1,2,0,4,0,0,14826,BTU/iv,0,0.0089,0,0.0353,Outflow of heat through individual exits,kcl/iv,0,0.000252,0,0.001
+614,./HSPF90/RCHRESTS.SEQ,RCHRES,OFLOW,SUM,OSED,5,4,-75,3,2,0,5,0,0,15151,tn/iv,0,32040000,0,35310000,Outflows of sediment through indiv exits,tne/iv,0,907400,0,1000000
+619,./HSPF90/RCHRESTS.SEQ,RCHRES,OFLOW,SUM,OSNH4,5,4,-75,3,2,0,8,0,0,20830,lb/iv,0,16020,0,35310,Outflows of adsorbed NH4 thru indiv exits,kg/iv,0,453.7,0,1000
+620,./HSPF90/RCHRESTS.SEQ,RCHRES,OFLOW,SUM,OSPO4,5,4,-75,3,2,0,8,0,0,20850,lb/iv,0,16020,0,35310,Outflows of adsorbed PO4 thru indiv exits,kg/iv,0,453.7,0,1000
+616,./HSPF90/RCHRESTS.SEQ,RCHRES,OFLOW,SUM,OSQAL,5,9,-75,-15602,2,0,6,0,0,19390,qty/iv,0,1,0,1,Sed-assoc qual outflow thru indiv exits,qty/iv,0,1,0,1
+610,./HSPF90/RCHRESTS.SEQ,RCHRES,OFLOW,SUM,OVOL,5,1,-75,1,2,0,1,0,0,9574,acft/iv,0,43560,0,35310000,Outflow of water through indiv exits,Mm3/iv,0,1233.6,0,1000000
+617,./HSPF90/RCHRESTS.SEQ,RCHRES,OFLOW,SUM,OXCF2,5,2,-75,2,2,0,7,0,0,19708,lb/iv,0,16020,0,35310,Outflows of DO and BOD thru indiv exits,kg/iv,0,453.7,0,1000
+622,./HSPF90/RCHRESTS.SEQ,RCHRES,OFLOW,SUM,PHCF2,5,3,-75,2,2,0,10,0,0,21979,lb/iv,0,16020,0,35310,Outflows of TIC and CO2 thru indiv exits,kg/iv,0,453.7,0,1000
+621,./HSPF90/RCHRESTS.SEQ,RCHRES,OFLOW,SUM,PKCF2,5,10,-75,5,2,0,9,0,0,21791,lb/iv,0,16020,0,35310,Outflows thru indiv exits (Group PLANK),kg/iv,0,453.7,0,1000
+512,./HSPF90/RCHRESTS.SEQ,RCHRES,OXRX,LAST,BOD,1,1,1,1,1,0,7,0,0,19642,mg/l,0,1,0,1,BOD concentration in RCHRES,mg/l,0,1,0,1
+511,./HSPF90/RCHRESTS.SEQ,RCHRES,OXRX,LAST,DOX,1,1,1,1,1,0,7,0,0,19641,mg/l,0,1,0,1,DO concentration in RCHRES,mg/l,0,1,0,1
+514,./HSPF90/RCHRESTS.SEQ,RCHRES,OXRX,SUM,OXCF1,2,1,2,1,2,0,7,0,0,19654,lb/iv,0,16020,0,35310,Outflows of DO and BOD from the RCHRES,kg/iv,0,453.7,0,1000
+515,./HSPF90/RCHRESTS.SEQ,RCHRES,OXRX,SUM,OXCF2,5,2,-75,2,2,0,7,0,0,19708,lb/iv,0,16020,0,35310,Outflows of DO and BOD thru indiv exits,kg/iv,0,453.7,0,1000
+516,./HSPF90/RCHRESTS.SEQ,RCHRES,OXRX,SUM,OXCF3,8,1,8,1,2,0,7,0,0,19803,lb/iv,0,16020,0,35310,DO process fluxes,kg/iv,0,453.7,0,1000
+517,./HSPF90/RCHRESTS.SEQ,RCHRES,OXRX,SUM,OXCF4,8,1,8,1,2,0,7,0,0,19812,lb/iv,0,16020,0,35310,BOD process fluxes,kg/iv,0,453.7,0,1000
+510,./HSPF90/RCHRESTS.SEQ,RCHRES,OXRX,SUM,OXIF,2,1,2,1,2,0,7,0,0,19607,lb/iv,0,16020,0,35310,Inflows of DO and BOD to RCHRES,kg/iv,0,453.7,0,1000
+513,./HSPF90/RCHRESTS.SEQ,RCHRES,OXRX,LAST,SATDO,1,1,1,1,1,0,7,0,0,19643,mg/l,0,1,0,1,Saturation DO concentration in RCHRES,mg/l,0,1,0,1
+571,./HSPF90/RCHRESTS.SEQ,RCHRES,PHCARB,SUM,PHCF1,2,1,2,1,2,0,10,0,0,21927,lb/iv,0,16020,0,35310,Outflows of TIC and CO2 from RCHRES,kg/iv,0,453.7,0,1000
+572,./HSPF90/RCHRESTS.SEQ,RCHRES,PHCARB,SUM,PHCF2,5,2,-75,2,2,0,10,0,0,21979,lb/iv,0,16020,0,35310,Outflows of TIC and CO2 thru indiv exits,kg/iv,0,453.7,0,1000
+573,./HSPF90/RCHRESTS.SEQ,RCHRES,PHCARB,SUM,PHCF3,7,1,7,1,2,0,10,0,0,22024,lb/iv,0,16020,0,35310,Inorganic carbon reaction fluxes,kg/iv,0,453.7,0,1000
+568,./HSPF90/RCHRESTS.SEQ,RCHRES,PHCARB,SUM,PHIF,2,1,2,1,2,0,10,0,0,21900,lb/iv,0,16020,0,35310,Inflows of TIC and CO2 to RCHRES,kg/iv,0,453.7,0,1000
+569,./HSPF90/RCHRESTS.SEQ,RCHRES,PHCARB,LAST,PHST,3,1,3,1,1,0,10,0,0,21912,mg/l;pH,0,1,0,1,"TIC and CO2 concs, and pH,",mg/l;pH,0,1,0,1
+570,./HSPF90/RCHRESTS.SEQ,RCHRES,PHCARB,LAST,SATCO2,1,1,3,1,1,0,10,0,0,21916,mg/l,0,1,0,1,Saturation CO2 concentration,mg/l,0,1,0,1
+551,./HSPF90/RCHRESTS.SEQ,RCHRES,PLANK,LAST,BALCLA,4,1,-20985,1,1,0,9,0,0,21247,ug/m2,0,1,0,1,Benthic algae as chlorophyll a by species,ug/m2,0,1,0,1
+549,./HSPF90/RCHRESTS.SEQ,RCHRES,PLANK,LAST,BENAL,4,1,-20985,1,1,0,9,0,0,21242,mg/m2,0,1,0,1,Benthic algae as biomass by species,mg/m2,0,1,0,1
+550,./HSPF90/RCHRESTS.SEQ,RCHRES,PLANK,LAST,PHYCLA,1,1,1,1,1,0,9,0,0,21246,ug/l,0,1,0,1,Phytoplankton conc. as chlorophyll a,ug/l,0,1,0,1
+547,./HSPF90/RCHRESTS.SEQ,RCHRES,PLANK,LAST,PHYTO,1,1,1,1,1,0,9,1,0,21240,mg/l,0,1,0,1,Phytoplankton concentration in RCHRES,mg/l,0,1,0,1
+554,./HSPF90/RCHRESTS.SEQ,RCHRES,PLANK,SUM,PKCF1,5,1,5,1,2,0,9,0,0,21781,lb/iv,0,16020,0,35310,Total outflows from RCHRES (Group PLANK),kg/iv,0,453.7,0,1000
+567,./HSPF90/RCHRESTS.SEQ,RCHRES,PLANK,SUM,PKCF10,5,1,5,1,2,0,9,0,0,21883,lb/iv,0,16020,0,35310,Dead refractory organic C fluxes,kg/iv,0,453.7,0,1000
+556,./HSPF90/RCHRESTS.SEQ,RCHRES,PLANK,SUM,PKCF2,5,5,-75,5,2,0,9,0,0,21791,lb/iv,0,16020,0,35310,Outflows thru indiv exits (Group PLANK),kg/iv,0,453.7,0,1000
+561,./HSPF90/RCHRESTS.SEQ,RCHRES,PLANK,SUM,PKCF5,5,1,5,1,2,0,9,0,0,21850,lb/iv,0,16020,0,35310,Phytoplankton reaction fluxes,kg/iv,0,453.7,0,1000
+562,./HSPF90/RCHRESTS.SEQ,RCHRES,PLANK,SUM,PKCF6,3,1,3,1,2,0,9,0,0,21855,lb/iv,0,16020,0,35310,Zooplankton reaction fluxes,kg/iv,0,453.7,0,1000
+563,./HSPF90/RCHRESTS.SEQ,RCHRES,PLANK,SUM,PKCF7,3,4,3,-20985,2,0,9,0,0,21858,mg/m2.iv,0,1,0,1,Benthic algae reaction fluxes,mg/m2.iv,0,1,0,1
+565,./HSPF90/RCHRESTS.SEQ,RCHRES,PLANK,SUM,PKCF8,5,1,5,1,2,0,9,0,0,21873,lb/iv,0,16020,0,35310,Dead refractory organic N fluxes,kg/iv,0,453.7,0,1000
+566,./HSPF90/RCHRESTS.SEQ,RCHRES,PLANK,SUM,PKCF9,5,1,5,1,2,0,9,0,0,21878,lb/iv,0,16020,0,35310,Dead refractory organic P fluxes,kg/iv,0,453.7,0,1000
+544,./HSPF90/RCHRESTS.SEQ,RCHRES,PLANK,SUM,PKIF,5,1,5,1,2,0,9,0,0,20929,lb/iv,0,16020,0,35310,Inflows of plankton related constituents,kg/iv,0,453.7,0,1000
+546,./HSPF90/RCHRESTS.SEQ,RCHRES,PLANK,LAST,PKST3,7,1,7,1,1,0,9,0,0,21233,mg/l,0,1,0,1,Concentrations in Group PLANK (RCHRES),mg/l,0,1,0,1
+553,./HSPF90/RCHRESTS.SEQ,RCHRES,PLANK,LAST,PKST4,2,1,2,1,1,0,9,0,0,21253,mg/l,0,1,0,1,Total nitrogen and phosphorus concs.,mg/l,0,1,0,1
+558,./HSPF90/RCHRESTS.SEQ,RCHRES,PLANK,SUM,PLADDR,3,1,3,1,2,0,9,0,0,21841,lb/iv,0,16020,0,35310,Dry atmospheric deposition to reach,kg/iv,0,453.7,0,1000
+560,./HSPF90/RCHRESTS.SEQ,RCHRES,PLANK,SUM,PLADEP,3,1,3,1,2,0,9,0,0,21847,lb/iv,0,16020,0,35310,Total atmospheric deposition to reach,kg/iv,0,453.7,0,1000
+559,./HSPF90/RCHRESTS.SEQ,RCHRES,PLANK,SUM,PLADWT,3,1,3,1,2,0,9,0,0,21844,lb/iv,0,16020,0,35310,Wet atmospheric deposition to reach,kg/iv,0,453.7,0,1000
+552,./HSPF90/RCHRESTS.SEQ,RCHRES,PLANK,LAST,TBENAL,2,1,1,1,1,0,9,0,0,21251,mg/m2,0,1,0,1,Total benthic algae in RCHRES,mg/m2,0,1,0,1
+555,./HSPF90/RCHRESTS.SEQ,RCHRES,PLANK,SUM,TPKCF1,5,1,5,1,2,0,9,0,0,21786,lb/iv,0,16020,0,35310,"Summary outflows of org & total N, P, & C",kg/iv,0,453.7,0,1000
+557,./HSPF90/RCHRESTS.SEQ,RCHRES,PLANK,SUM,TPKCF2,5,5,-75,5,2,0,9,0,0,21816,lb/iv,0,16020,0,35310,Summary outflows thru indiv exits,kg/iv,0,453.7,0,1000
+564,./HSPF90/RCHRESTS.SEQ,RCHRES,PLANK,SUM,TPKCF7,3,1,3,1,2,0,9,0,0,21870,mg/m2.iv,0,1,0,1,Benthic algae reaction fluxes,mg/m2.iv,0,1,0,1
+545,./HSPF90/RCHRESTS.SEQ,RCHRES,PLANK,SUM,TPKIF,5,1,5,1,2,0,9,0,0,20959,lb/iv,0,16020,0,35310,"Summary inflows of org & total N, P, & C",kg/iv,0,453.7,0,1000
+548,./HSPF90/RCHRESTS.SEQ,RCHRES,PLANK,LAST,ZOO,1,1,1,1,1,0,9,0,0,21241,org/l,0,1,0,1,Zooplankton population in RCHRES,org/l,0,1,0,1
+594,./HSPF90/RCHRESTS.SEQ,RCHRES,ROFLOW,SUM,ACFLX1,7,1,-22052,1,2,0,11,0,0,22231,lb/iv,0,16.02,0,35.31,Total outflows  (Group ACIDPH),kg/iv,0,0.4537,0,1
+583,./HSPF90/RCHRESTS.SEQ,RCHRES,ROFLOW,SUM,CROVOL,100,1,-2347,1,2,0,1,0,0,6949,acft/iv,0,43560,0,35310000,Total outflow of water from RCHRES by com,Mm3/iv,0,1233.6,0,1000000
+590,./HSPF90/RCHRESTS.SEQ,RCHRES,ROFLOW,SUM,NUCF1,4,1,4,1,2,0,8,0,0,20756,lb/iv,0,16020,0,35310,Total outflows of dissolved nutrients,kg/iv,0,453.7,0,1000
+591,./HSPF90/RCHRESTS.SEQ,RCHRES,ROFLOW,SUM,NUCF2,4,2,3,2,2,0,8,0,0,20760,lb/iv,0,16020,0,35310,Total outflows of adsorbed NH4 and PO4,kg/iv,0,453.7,0,1000
+589,./HSPF90/RCHRESTS.SEQ,RCHRES,ROFLOW,SUM,OXCF1,2,1,2,1,2,0,7,0,0,19654,lb/iv,0,16020,0,35310,Outflows of DO and BOD from the RCHRES,kg/iv,0,453.7,0,1000
+593,./HSPF90/RCHRESTS.SEQ,RCHRES,ROFLOW,SUM,PHCF1,2,1,2,1,2,0,10,0,0,21927,lb/iv,0,16020,0,35310,"PHCARB     TIC, CO2",kg/iv,0,453.7,0,1000
+592,./HSPF90/RCHRESTS.SEQ,RCHRES,ROFLOW,SUM,PKCF1,5,1,5,1,2,0,9,0,0,21781,lb/iv,0,16020,0,35310,Total outflows from RCHRES (Group PLANK),kg/iv,0,453.7,0,1000
+584,./HSPF90/RCHRESTS.SEQ,RCHRES,ROFLOW,SUM,ROCON,10,1,-13498,1,2,0,3,0,0,14049,qty/iv,0,1,0,1,Outflow of conservatives from RCHRES,qty/iv,0,1,0,1
+587,./HSPF90/RCHRESTS.SEQ,RCHRES,ROFLOW,SUM,RODQAL,3,1,-15455,1,2,0,6,0,0,19187,qty/iv,0,1,0,1,Outflow of dissolved qual from RCHRES,qty/iv,0,1,0,1
+585,./HSPF90/RCHRESTS.SEQ,RCHRES,ROFLOW,SUM,ROHEAT,1,1,1,1,2,0,4,0,0,14800,BTU/iv,0,0.0089,0,0.0353,Outflow of heat through active exits,kcl/iv,0,0.000252,0,0.001
+586,./HSPF90/RCHRESTS.SEQ,RCHRES,ROFLOW,SUM,ROSED,4,1,3,1,2,0,5,0,0,15047,tn/iv,0,32040000,0,35310000,Total outflows of sediment from RCHRES,tne/iv,0,907400,0,1000000
+588,./HSPF90/RCHRESTS.SEQ,RCHRES,ROFLOW,SUM,ROSQAL,4,3,3,-15455,2,0,6,0,0,19222,qty/iv,0,1,0,1,Outflow of sed-assoc qual from RCHRES,qty/iv,0,1,0,1
+582,./HSPF90/RCHRESTS.SEQ,RCHRES,ROFLOW,SUM,ROVOL,1,1,1,1,2,0,1,0,0,6948,acft/iv,0,43560,0,35310000,Total outflow of water from RCHRES,Mm3/iv,0,1233.6,0,1000000
+483,./HSPF90/RCHRESTS.SEQ,RCHRES,SEDTRN,LAST,BEDDEP,1,1,1,1,1,0,5,0,0,15002,ft,0,1,0,3.281,Bed depth (thickness),m,0,0.3048,0,1
+484,./HSPF90/RCHRESTS.SEQ,RCHRES,SEDTRN,SUM,DEPSCR,4,1,4,1,2,0,5,0,0,15043,tn/iv,0,32040000,0,35310000,Sediment deposition (pos) or scour (neg),tne/iv,0,907400,0,1000000
+479,./HSPF90/RCHRESTS.SEQ,RCHRES,SEDTRN,SUM,ISED,4,1,4,1,2,0,5,0,0,14896,tn/iv,0,32040000,0,35310000,Inflows of sediments to RCHRES,tne/iv,0,907400,0,1000000
+486,./HSPF90/RCHRESTS.SEQ,RCHRES,SEDTRN,SUM,OSED,5,4,-75,4,2,0,5,0,0,15151,tn/iv,0,32040000,0,35310000,Outflows of sediment through indiv exits,tne/iv,0,907400,0,1000000
+485,./HSPF90/RCHRESTS.SEQ,RCHRES,SEDTRN,SUM,ROSED,4,1,4,1,2,0,5,0,0,15047,tn/iv,0,32040000,0,35310000,Total outflows of sediment from RCHRES,tne/iv,0,907400,0,1000000
+480,./HSPF90/RCHRESTS.SEQ,RCHRES,SEDTRN,LAST,RSED,10,1,10,1,1,0,5,0,0,14985,tn,0,32040000,0,35310000,Sediment storages,tne,0,907400,0,1000000
+481,./HSPF90/RCHRESTS.SEQ,RCHRES,SEDTRN,LAST,SSED,4,1,4,1,1,0,5,1,0,14995,mg/l,0,1,0,1,Suspended sediment concentrations,mg/l,0,1,0,1
+482,./HSPF90/RCHRESTS.SEQ,RCHRES,SEDTRN,LAST,TSED,3,1,3,1,1,0,5,0,0,14999,tn,0,32040000,0,35310000,Total sediment storages by fraction,tne,0,907400,0,1000000
+624,./HSPF90/REPORTTS.SEQ,REPORT,INPUT,ANY,TIMSER,50,99,-17,-18,2,0,0,2,0,12476,any,0,1,0,1,Input time series,any,0,1,0,1

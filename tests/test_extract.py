@@ -5,12 +5,15 @@ catalog
 Tests for `hspfbintoolbox` module.
 """
 
+# Standard library imports
 from io import StringIO
 from unittest import TestCase
 
+# Third party imports
 import pandas as pd
 from pandas.testing import assert_frame_equal
 
+# First party imports
 from toolbox_utils import tsutils
 
 

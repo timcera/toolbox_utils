@@ -38,7 +38,6 @@ class TestDescribe(TestCase):
 1976-10,0.003539
 1976-11,0.0
 1976-12,0.007189
-1977-01,0.007183
 """
         self.extract = tsutils.asbestfreq(
             pd.read_csv(BytesIO(self.extract), header=0, index_col=0, parse_dates=True)

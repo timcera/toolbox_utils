@@ -1,5 +1,6 @@
 """For reading HSPF plotgen files."""
 
+# Third party imports
 import pandas as pd
 
 
@@ -14,9 +15,8 @@ def plotgen_extract(filename):
                 continue
             if line[5:].startswith("Time series"):
                 break
-            if found_column_names:
-                if column_name := line[4:30].strip():
-                    column_names.append(column_name)
+            if found_column_names and (column_name := line[4:30].strip()):
+                column_names.append(column_name)
         pgdf = pd.read_fwf(
             fpointer,
             colspecs=[(5, 10), (10, 13), (13, 16), (16, 19), (19, 22)]

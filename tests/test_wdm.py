@@ -5,12 +5,15 @@ test_wdm
 Tests for `hspf_reader` module.
 """
 
+# Standard library imports
 from unittest import TestCase
 
+# Third party imports
 import numpy as np
 import pandas as pd
 from pandas.testing import assert_frame_equal
 
+# First party imports
 from toolbox_utils import tsutils
 
 
