@@ -1,3 +1,9 @@
+## v5.7.1 (2026-09-02)
+
+### Fix
+
+- **hdf5**: fix aggregation statistics in hdf5 reader
+
 ## v5.7.0 (2026-06-29)
 
 ### Feat
