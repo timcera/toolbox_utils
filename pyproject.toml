@@ -15,7 +15,6 @@ classifiers = [
     "Intended Audience :: Developers",
     "Intended Audience :: End Users/Desktop",
     "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: BSD License",
     "Natural Language :: English",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3 :: Only",
@@ -36,8 +35,8 @@ dependencies = [
     "pint",
     "pint-pandas",
     "pydantic >=2",
-    "pytables",
     "scipy",
+    "tables",
     "tabulate"
 ]
 description = "Python toolbox for common utilities"
@@ -49,7 +48,7 @@ keywords = [
     "filter",
     "time-series"
 ]
-license = {text = "BSD-3-Clause"}
+license = "BSD-3-Clause"
 name = "toolbox_utils"
 requires-python = ">=3.10"
 
