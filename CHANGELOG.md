@@ -1,3 +1,9 @@
+## v5.7.2 (2026-11-14)
+
+### Fix
+
+- fix for single record series, fix for column name being stripped of trailing numbers
+
 ## v5.7.1 (2026-09-02)
 
 ### Fix
