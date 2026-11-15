@@ -36,6 +36,7 @@ dependencies = [
     "pint",
     "pint-pandas",
     "pydantic >=2",
+    "pytables",
     "scipy",
     "tabulate"
 ]

@@ -26,6 +26,8 @@ jobs:
                 numpy-versions: [numpy==1.*, numpy==2.*]
 
                 exclude:
+                    - python-versions: '3.10'
+                      pandas-versions: pandas==3.*
                     - python-versions: '3.12'
                       pandas-versions: pandas==1.*
                     - python-versions: '3.13'
@@ -40,8 +42,6 @@ jobs:
                       numpy-versions: numpy==1.*
                     - pandas-versions: pandas==1.*
                       numpy-versions: numpy==2.*
-                    - python-versions: '3.10'
-                      pandas-versions: pandas==3.*
 
         steps:
             - name: Checkout repository
