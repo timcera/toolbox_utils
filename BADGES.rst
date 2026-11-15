@@ -1,8 +1,3 @@
-.. image:: https://github.com/timcera/toolbox_utils/actions/workflows/pypi-package.yml/badge.svg
-    :alt: Tests
-    :target: https://github.com/timcera/toolbox_utils/actions/workflows/pypi-package.yml
-    :height: 20
-
 .. image:: https://img.shields.io/coveralls/github/timcera/toolbox_utils
     :alt: Test Coverage
     :target: https://coveralls.io/r/timcera/toolbox_utils?branch=master

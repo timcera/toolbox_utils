@@ -143,11 +143,11 @@ def _get_data(binfilename, interval="daily", labels=None, catalog_only=True):
                         labeltest.add(tuple(lbl))
                         nres = res[0][1]
                         ndates.add(ndate)
-                        if catalog_only is False:
+                        if catalog_only:
+                            collect_dict[nres] = level
+                        else:
                             if intervalcode == level:
                                 collect_dict.setdefault(nres, []).append(vals[i])
-                        else:
-                            collect_dict[nres] = level
             else:
                 # there was a problem with unexpected record length
                 # back up almost all the way and try again

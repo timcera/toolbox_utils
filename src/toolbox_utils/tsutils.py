@@ -1621,7 +1621,7 @@ def _date_slice(
 
     Returns
     -------
-    _data_slice
+    _date_slice
         Sliced DataFrame.
     """
     if input_tsd.index.inferred_type == "datetime64":
@@ -1740,6 +1740,9 @@ def asbestfreq(data: DataFrame, force_freq: str | None = None) -> DataFrame:
         with suppress(ValueError):
             return _replace_nan_with_na(data, freq=data.index.inferred_freq)
 
+    if len(ndata) < 2:
+        return ndata
+
     # pd.infer_freq would fail if given a large dataset
     slic = slice(None, 999) if len(ndata.index) > 1000 else slice(None, None)
     try:
@@ -1764,7 +1767,7 @@ def asbestfreq(data: DataFrame, force_freq: str | None = None) -> DataFrame:
                 "{data.index[:-1][ndiff <= 0][0]}".
 
                 Perhaps use the "--clean" keyword on the CLI or "clean=True" if
-                using Python or edit the input data..
+                using Python API or edit the input data..
                 """
             )
         )
@@ -2510,17 +2513,16 @@ def read_iso_ts(
 
     for col in res.columns:
         words = [i.strip() for i in str(col).split(":")]
-        nwords = [i.strip("0123456789") for i in words]
 
         first.append(fstr.format(fname, words[0].strip()))
 
         if len(words) > 1:
-            second.append([nwords[1]])
+            second.append([words[1]])
         else:
             second.append([])
 
-        if len(nwords) > 2:
-            rest.append(nwords[2:])
+        if len(words) > 2:
+            rest.append(words[2:])
         else:
             rest.append([])
     first = [[i.strip()] for i in dedup_index(first)]
